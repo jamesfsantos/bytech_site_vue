@@ -62,8 +62,8 @@
     </div>
     <div class="nav desktop-only">
       <ul>
-        <li><a href="computadores.html"> Computadores </a></li>
-        <li><a href="videogames.html"> Videogames </a></li>
+        <li><RouterLink to="/produtos/categoria/video-games">Videogames</RouterLink></li>
+        <li><RouterLink to="/produtos/categoria/computadores">Computador</RouterLink></li>
         <li><RouterLink to="/contato">Contato</RouterLink></li>
         <li><RouterLink to="/servicos">Serviços</RouterLink></li>
       </ul>

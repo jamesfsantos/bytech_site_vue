@@ -6,6 +6,7 @@ import Login from '@/views/Login/LoginView.vue'
 import Cadastro from '@/views/Login/CadastroView.vue'
 import Carrinho from '@/views/Carrinho/CarrinhoView.vue'
 import Produto from '@/views/Produto/ProdutoView.vue'
+import ProdutosCategorias from '@/views/Produto/ProdutoCategoriasView.vue'
 
 const routes = [
   {path: '/', name: 'home',component: Home },
@@ -15,6 +16,7 @@ const routes = [
   {path: '/cadastro', name: 'cadastro',component: Cadastro },
   {path: '/carrinho', name: 'carrinho',component: Carrinho },
   {path: '/produto', name: 'produto',component: Produto },
+  {path: '/produtos/categoria/:categoriaId', name: 'produtos',component: ProdutosCategorias },
 ]
 
 const router = createRouter({

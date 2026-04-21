@@ -20,7 +20,7 @@
 
     <div class="descricao-produto">
       <h2 class="titulo-produto">Playstation 5 PRO 2TB c/ 1 controle </h2>
-      <p>
+
         <ul class="Lista-Descricao">
           <li>Marca: Sony</li>
           <li>Modelo: CFI-ZCT1W12X</li>
@@ -36,7 +36,7 @@
           <li>Jogos Inclusos: Astro’s Playroom</li>
         </ul>
 
-      </p>
+
 
     </div>
 
