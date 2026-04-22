@@ -31,7 +31,6 @@ async function buscarProdutos() {
 watch(
   () => route.params.categoriaId,
   async () => {
-    temCategoria.value = categoriaId.value! > 0;
     await buscarProdutos();
   },
   { immediate: true },
@@ -52,7 +51,7 @@ watch(
               <span class="preco">R$ {{ produto.precoVenda }}</span>
             </div>
             <div class="botao">
-              <RouterLink :to="`/produto/categoria/{{produto.id}}`">Detalhes</RouterLink>
+              <RouterLink :to="`/produto/categoria/${produto.id}`">Detalhes</RouterLink>
             </div>
           </div>
         </div>
