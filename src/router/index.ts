@@ -15,8 +15,8 @@ const routes = [
   {path: '/login', name: 'login',component: Login },
   {path: '/cadastro', name: 'cadastro',component: Cadastro },
   {path: '/carrinho', name: 'carrinho',component: Carrinho },
-  {path: '/produto', name: 'produto',component: Produto },
   {path: '/produtos/categoria/:categoriaId', name: 'produtos',component: ProdutosCategorias },
+  {path: '/produto/categoria/:produtoId', name: 'produto',component: Produto },
 ]
 
 const router = createRouter({
