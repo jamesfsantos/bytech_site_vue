@@ -15,7 +15,7 @@
       <section class="avatar"><i class="fa-regular fa-circle-user"></i></section>
       <section class="logintext">
         Olá! Entre <br />
-        ou <RouterLink to="cadastro">Cadastre-se</RouterLink>
+        ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
       </section>
       <RouterLink to="/login"
         ><button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button
