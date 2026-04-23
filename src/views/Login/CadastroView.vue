@@ -1,6 +1,35 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import usuarioService from '@/services/usuarioService';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const formularioConta = ref({
+  nome: "",
+  email: "",
+  celular: "",
+  senha: "",
+  confirmarSenha: "",
+  tipoUsuarioId: 2
+});
+
+async function realizarCadastro(){
+  if(formularioConta.value.senha !== formularioConta.value.confirmarSenha){
+    alert('As senhas não conferem!')
+    return;
+  }
+  const {confirmarSenha, ...dados} = formularioConta.value;
+
+  const cadastro = await usuarioService.cadastrarUsuario(dados);
+
+  if(cadastro){
+    alert("Cadastro feito com sucesso!");
+    router.push('/login');
+  } else{
+    alert('Erro ao criar a conta. Verifique os dados!');
+  }
+}
 
 </script>
 
@@ -12,26 +41,15 @@ import { ref } from 'vue';
       <p>informe seus dados para continuar a criação da conta</p>
       <br />
 
-      <form action="post">
+      <form @submit.prevent="realizarCadastro">
         <fieldset>
           <legend>Dados Pessoais</legend>
           <label for="nome">Nome:</label><br />
-          <input type="text" id="nome" name="nome" placeholder="Insira seu nome" required /><br />
-
-          <label for="sobrenome">Sobrenome:</label><br />
-          <input
-            type="text"
-            id="sobrenome"
-            name="sobrenome"
-            placeholder="Insira seu sobrenome"
-            required
-          /><br />
-
-          <label for="datanasc">Data de nascimento:</label><br />
-          <input type="date" id="datanasc" name="datanasc" required /><br /><br />
+          <input v-model="formularioConta.nome" type="text" id="nome" name="nome" placeholder="Insira seu nome" required /><br />
 
           <label for="email">E-mail:</label>
           <input
+            v-model="formularioConta.email"
             type="email"
             id="email"
             name="email"
@@ -39,40 +57,26 @@ import { ref } from 'vue';
             required
           /><br />
 
-          <label for="email-confirma">Confirme seu E-mail:</label>
-          <input
-            type="email"
-            id="email-confirma"
-            name="email-confirma"
-            placeholder="Confirme seu E-mail"
-            required
-          /><br />
+          
 
           <label for="cel">Celular:</label><br />
           <input
+            v-model="formularioConta.celular"
             type="tel"
             id="cel"
             name="cel"
-            placeholder="xxxxx-xxxx"
-            pattern="[0-9]{5}-[0-9]{4}"
+            placeholder="(xx) xxxxx-xxxx"
             required
           /><br />
 
-          <label for="cpf">CPF:</label>
-          <input
-            type="text"
-            id="cpf"
-            name="cpf"
-            placeholder="xxx.xxx.xxx-xx"
-            pattern="[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}"
-            required
-          /><br />
+          
 
           <label for="senha">Senha:</label>
-          <input type="password" id="senha" name="senha" placeholder="Insira sua Senha" /><br />
+          <input v-model="formularioConta.senha" type="password" id="senha" name="senha" placeholder="Insira sua Senha" /><br />
 
           <label for="senha-confirma">Confirme sua Senha:</label>
           <input
+            v-model="formularioConta.confirmarSenha"
             type="password"
             id="senha-confirma"
             name="senha-confirma"

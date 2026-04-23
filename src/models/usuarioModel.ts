@@ -1,7 +1,8 @@
 export interface UsuarioModel {
-    id: number;
+    id?: number;
     nome: string;
     email: string;
-    senha: string;
-    tipoUsuario: string[]
+    senha: string; 
+    celular: string; 
+    tipoUsuarioId: number
 }

@@ -39,7 +39,7 @@ watch(() =>
 
     <div class="vitrine" >
       <div class="imagens-produto">
-        <img class="imagem-principal" src="@/assets/images/ps5pro.jpg" alt="" />
+        <img class="imagem-principal" :src="`${produto.imagem}`" alt="" />
 
         <div class="img-miniaturas">
           <img class="miniatura-1" src="@/assets/images/ps5pro.jpg" alt="" />

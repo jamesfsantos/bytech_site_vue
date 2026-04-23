@@ -51,7 +51,7 @@ watch(
               <span class="preco">R$ {{ produto.precoVenda }}</span>
             </div>
             <div class="botao">
-              <RouterLink :to="`/produto/categoria/${produto.id}`">Detalhes</RouterLink>
+              <RouterLink :to="`/produto/${produto.id}`">Detalhes</RouterLink>
             </div>
           </div>
         </div>
