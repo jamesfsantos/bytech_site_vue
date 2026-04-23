@@ -49,7 +49,7 @@ async function realizarCadastro(){
 
           <label for="email">E-mail:</label>
           <input
-            v-model="formularioConta.email"
+            v-model="formularioConta.email.trim"
             type="email"
             id="email"
             name="email"
@@ -61,7 +61,7 @@ async function realizarCadastro(){
 
           <label for="cel">Celular:</label><br />
           <input
-            v-model="formularioConta.celular"
+            v-model="formularioConta.celular.trim"
             type="tel"
             id="cel"
             name="cel"
