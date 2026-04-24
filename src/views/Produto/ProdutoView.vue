@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import produtoService from "@/services/produtoService";
 import { type ProdutoModel } from "@/models/produtoModel";
+import { adicionarAoCarrinho } from '@/stores/carrinhoStores'
 import { computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
+const router = useRouter();
+
+const handleAdicionarCarrinho = () => {
+  if(produto.value) {
+    adicionarAoCarrinho(produto.value)
+    router.push("/carrinho");
+  }
+}
 
 const route = useRoute();
 const temProduto = ref(false);
@@ -23,6 +32,8 @@ async function buscarProduto(){
   if(temProduto.value)
     produto.value = await produtoService.buscarProdutoPorId(produtoId.value);
 }
+
+
 
 watch(() =>
     route.params.produtoId,
@@ -74,11 +85,9 @@ watch(() =>
         </p>
 
         <div class="botoes">
-          <a href="/Pagamento.html"><button class="btn-compra">Comprar</button></a>
-          <button class="btn-formas-pagamento">Formas de pagamento</button>
-          <a href="/Carrinho.html"
-            ><button class="btn-add-carrinho">Adcionar ao carrinho</button></a
-          >
+          
+            <button class="btn-add-carrinho" @click="handleAdicionarCarrinho">Adicionar ao carrinho</button>
+          
         </div>
 
         <div class="frete">
