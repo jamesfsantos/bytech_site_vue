@@ -57,7 +57,7 @@ async function realizarCadastro(){
             required
           /><br />
 
-          
+
 
           <label for="cel">Celular:</label><br />
           <input
@@ -69,7 +69,7 @@ async function realizarCadastro(){
             required
           /><br />
 
-          
+
 
           <label for="senha">Senha:</label>
           <input v-model="formularioConta.senha" type="password" id="senha" name="senha" placeholder="Insira sua Senha" /><br />
