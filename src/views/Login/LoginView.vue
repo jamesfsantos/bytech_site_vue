@@ -1,41 +1,51 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { authService } from '@/services/authService';
-import { type AxiosError } from 'axios';
-import { type ErroResponse } from '@/types/auth';
-import { useAuth } from '@/composables/useAuth';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { authService } from "@/services/authService";
+import { type AxiosError } from "axios";
+import { type ErroResponse } from "@/types/auth";
+import { useAuth } from "@/composables/useAuth";
+import Swal from "sweetalert2";
 
-const {atualizarUsuario} = useAuth();
-const email = ref<string>('');
-const senha = ref<string>('');
-const erro = ref<string>('');
+const { atualizarUsuario } = useAuth();
+const email = ref<string>("");
+const senha = ref<string>("");
+const erro = ref<string>("");
 const carregando = ref<boolean>(false);
 const router = useRouter();
-
 
 const handleLogin = async () => {
   try {
     carregando.value = true;
-    erro.value = '';
+    erro.value = "";
 
-    const resultado = await authService.login(email.value, senha.value);
+    await authService.login(email.value, senha.value);
 
-    console.log("Dados do back:", resultado)
-    atualizarUsuario()
-
-    alert('Login efetuado com êxito!')
-    router.push('/')
+    Swal.fire({
+      title: "Sucesso",
+      text: "Login efetuado com sucesso",
+      icon: "success", // Isso aqui desenha o check verde animado
+      confirmButtonText: "Ok",
+      confirmButtonColor: "#7367F0", // Cor roxinha igual ao seu print
+    }).then(() => {
+      atualizarUsuario();
+      router.push("/");
+    });
   } catch (e) {
     const axiosError = e as AxiosError<ErroResponse>;
 
+    Swal.fire({
+      title: "Erro!",
+      text: "E-mail ou senha inválidos",
+      icon: "error",
+      confirmButtonText: "Tentar novamente",
+    });
     // Captura a mensagem que retorna "Não autorizada da API"
-    erro.value = axiosError.response?.data?.mensagem || 'Falha ao realizar login';
+    erro.value = axiosError.response?.data?.mensagem || "Falha ao realizar login";
   } finally {
     carregando.value = false;
   }
 };
-
 </script>
 
 <template>
@@ -46,12 +56,24 @@ const handleLogin = async () => {
       <br />
 
       <label for="email">E-mail:</label>
-      <input v-model="email" type="email" id="email" name="email" placeholder="Insira seu E-mail" /><br />
+      <input
+        v-model="email"
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Insira seu E-mail"
+      /><br />
 
       <label for="senha">Senha:</label>
-      <input v-model="senha" type="password" id="senha" name="senha" placeholder="Insira sua Senha" /><br />
+      <input
+        v-model="senha"
+        type="password"
+        id="senha"
+        name="senha"
+        placeholder="Insira sua Senha"
+      /><br />
 
-      <button :disabled="carregando"  type="submit" class="btnAcessar">Acessar Conta</button><br />
+      <button :disabled="carregando" type="submit" class="btnAcessar">Acessar Conta</button><br />
       <p v-if="erro" class="error-msg">{{ erro }}</p>
 
       <p class="esqSenha">Esqueceu sua senha?</p>
@@ -64,7 +86,7 @@ const handleLogin = async () => {
       <p>Clique no botão abaixo para criar sua conta:</p>
       <br />
 
-      <RouterLink to="/cadastro"><button class="btnCriar">Criar Conta</button></RouterLink><br>
+      <RouterLink to="/cadastro"><button class="btnCriar">Criar Conta</button></RouterLink><br />
     </div>
   </main>
 </template>
@@ -72,7 +94,7 @@ const handleLogin = async () => {
 .Login h1 {
   align-items: center;
   text-align: center;
-  background-color: #3B8CBE;
+  background-color: #3b8cbe;
   color: white;
   width: 100%;
 }
@@ -81,7 +103,7 @@ const handleLogin = async () => {
   align-items: center;
   display: flex;
   flex-direction: column;
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
   font-size: 1rem;
   /* padding: 50px; */
   border: 1px solid #3b8cbe;
@@ -102,16 +124,12 @@ const handleLogin = async () => {
   cursor: pointer;
 }
 
-
 .Login input:focus {
-
-  border: 3px solid #96E4FD;
-
+  border: 3px solid #96e4fd;
 }
 
 .Login button.btnAcessar,
 .Nova-Conta button {
-
   position: relative;
   display: flex;
   flex-direction: row;
@@ -130,7 +148,6 @@ const handleLogin = async () => {
   min-height: 40px;
   text-transform: uppercase;
   padding: 10px;
-
 }
 
 .Nova-Conta a,
@@ -162,7 +179,7 @@ a:visited {
 .Nova-Conta {
   display: flex;
   flex-direction: column;
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
   font-size: 1rem;
   /* padding: 50px; */
   border: 1px solid #3b8cbe;
@@ -172,7 +189,7 @@ a:visited {
 .Nova-Conta h2 {
   align-items: center;
   text-align: center;
-  background-color: #3B8CBE;
+  background-color: #3b8cbe;
   color: white;
   width: 100%;
 }

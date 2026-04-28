@@ -1,6 +1,32 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/useAuth';
+import Swal from 'sweetalert2';
 const { usuarioEmail, estaLogado, usuarioNome, logout } = useAuth();
+
+const handleDeslogar = () => {
+    Swal.fire({
+  title: "Deslogando",
+  text: "Você tem certeza que deseja sair?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Sim",
+  cancelButtonText: "Não"
+}).then((result) => {
+  if (result.isConfirmed)
+  {
+    Swal.fire({
+      title: "Saindo",
+      text: "Volte sempre",
+      icon: "success"
+    })
+    logout();
+  };
+});
+}
+
+
 </script>
 
 <template>
@@ -21,7 +47,7 @@ const { usuarioEmail, estaLogado, usuarioNome, logout } = useAuth();
       <section class="logintext" v-if="estaLogado">
         Olá! {{ usuarioNome }} <br />
 
-        <button class="btn btn-danger" v-on:click="logout">Sair</button>
+        <button class="btn btn-danger" v-on:click="handleDeslogar">Sair</button>
       </section>
       <section class="logintext" v-else>
         Entre ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
