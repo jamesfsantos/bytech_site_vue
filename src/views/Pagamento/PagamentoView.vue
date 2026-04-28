@@ -245,6 +245,7 @@ fieldset {
     gap: 20px;
     align-items: center;
     padding-bottom: 20px;
+    color: white;
 }
 
 .resumo-pedido h2 {

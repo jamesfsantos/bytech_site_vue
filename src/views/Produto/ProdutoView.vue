@@ -101,7 +101,7 @@ watch(() =>
               class="input-cep"
             /><br />
           </form>
-          <button class="btn-frete">Calcular o frete</button>
+          <button class="btn-frete">Calcular frete</button>
         </div>
       </div>
     </div>
@@ -313,13 +313,19 @@ watch(() =>
   background-color: #3b8cbe;
   border: none;
   border-radius: 10px;
-  height: 40px;
-  width: 100px;
+  height: 42px;
+  width: auto;
   color: white;
   font-weight: bold;
   cursor: pointer;
   /* margin-top: 20px; */
-  min-height: 40px;
+  min-height: 42px;
+  padding: 0px 5px;
+}
+
+button:hover {
+    background-color: #4ed0fc;
+    border: 1px solid #78c8f7;
 }
 
 .btn-compra {

@@ -217,6 +217,24 @@ div .login {
 
 }
 
+.btn-login {
+
+    background-color: transparent;
+    border: 0;
+    text-decoration: underline;
+    color: white;
+
+}
+
+.btn-sair {
+
+    background-color: transparent;
+    border: 0;
+    text-decoration: underline;
+    color: white;
+
+}
+
 .nav-login a {
     color: #3B8CBE;
     text-decoration: none;
@@ -243,7 +261,7 @@ div .logintext a:hover {
     color: #a9f9ff;
 }
 
-div button:hover {
+div button.login:hover {
     background-color: #93DFF8;
     border: 1px solid #0681c9;
 }
@@ -266,6 +284,17 @@ main {
     min-height: 100vh;
     /* width: 100vw; */
     padding: 20px;
+}
+
+.carousel-item img {
+    height: 576px;
+    object-fit: cover;
+    /* Faz a imagem cobrir a área sem esticar, cortando as bordas se necessário */
+}
+
+.carrousel-div{
+    height: 576px;
+    width: 1024px;
 }
 
 .coluna .imagens {
@@ -378,12 +407,11 @@ main {
 }
 
 .coluna button:hover {
-    box-shadow: 10px 10px 20px rgba(2, 149, 247, 0.5);
     border: 1px solid #93DFF8;
-    background-color: #005373;
+    background-color: #02678f;
     cursor: pointer;
     text-decoration: underline;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 
@@ -554,6 +582,42 @@ p {
 .fade {
     animation-name: fade;
     animation-duration: 1.5s;
+}
+
+/* Animação para as colunas subirem suavemente ao carregar */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.coluna {
+    /* ... seu código existente ... */
+    animation: fadeInUp 0.6s ease-out forwards;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transição suave para o hover */
+}
+
+/* Delay para cada coluna aparecer uma após a outra (opcional) */
+.coluna:nth-child(1) { animation-delay: 0.1s; }
+.coluna:nth-child(2) { animation-delay: 0.2s; }
+.coluna:nth-child(3) { animation-delay: 0.3s; }
+.coluna:nth-child(4) { animation-delay: 0.4s; }
+
+.coluna:hover {
+    transform: translateY(-10px); /* Faz a coluna "flutuar" */
+    box-shadow: 0 15px 30px rgba(2, 149, 247, 0.3); /* Sombra mais espalhada e azulada */
+    background-color: #f8f8f8; /* Mudança leve de cor para dar destaque */
+}
+
+/* Ajuste na imagem para acompanhar o movimento */
+.coluna:hover .imagens {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
 }
 
 @keyframes fade {

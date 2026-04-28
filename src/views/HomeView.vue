@@ -2,16 +2,17 @@
 
 <template>
   <main>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carrousel-div">
+    <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="@/assets/images/PC-gamer.jpg" class="d-block w-100" alt="..." />
+          <img src="@/assets/images/PC-gamer-1024.png" class="d-block w-100 h-100" style="object-fit: cover;" alt="..." />
         </div>
         <div class="carousel-item">
-          <img src="@/assets/images/consoles-pcs-img.jpg" class="d-block w-100" alt="..." />
+          <img src="@/assets/images/consoles-pcs-img.jpg" class="d-block w-100 h-100" style="object-fit: cover;" alt="..." />
         </div>
         <div class="carousel-item">
-          <img src="@/assets/images/ps5proprom.png" class="d-block w-100" alt="..." />
+          <img src="@/assets/images/ps5proprom.png" class="d-block w-100 h-100" style="object-fit: cover;" alt="..." />
         </div>
       </div>
       <button
@@ -33,6 +34,8 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
+</div>
+<br>
 
     <div class="conteudo">
       <div class="coluna">
