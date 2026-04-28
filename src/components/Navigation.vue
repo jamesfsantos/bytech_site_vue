@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { useAuth } from '@/composables/useAuth';
+const { usuarioEmail, estaLogado, usuarioNome, logout } = useAuth();
+</script>
+
 <template>
   <header>
     <div class="logo-img">
@@ -13,13 +18,18 @@
     <!-- Botões sempre visíveis -->
     <div class="nav-login">
       <section class="avatar"><i class="fa-regular fa-circle-user"></i></section>
-      <section class="logintext">
-        Olá! Entre <br />
-        ou <RouterLink to="cadastro">Cadastre-se</RouterLink>
+      <section class="logintext" v-if="estaLogado">
+        Olá! {{ usuarioNome }} <br />
+
+        <button class="btn btn-danger" v-on:click="logout">Sair</button>
       </section>
-      <RouterLink to="/login"
+      <section class="logintext" v-else>
+        Entre ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
+        <RouterLink to="/login"
         ><button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button
-      ></RouterLink>
+        ></RouterLink>
+      </section>
+
 
       <RouterLink to="/carrinho">
         <button class="login"><i class="fa-solid fa-cart-shopping"></i></button>

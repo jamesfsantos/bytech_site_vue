@@ -1,3 +1,5 @@
+
+
 <template>
   <main>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -34,7 +36,7 @@
 
     <div class="conteudo">
       <div class="coluna">
-        <router-link to="/videogames">
+        <router-link to="/produtos/categoria/video-games">
           <img
             class="imagens"
             src="@/assets/images/capa-consoles-1513704274993_v2_1920x1080.jpg"
@@ -46,20 +48,20 @@
           PlayStation, Xbox, Nintendo e muito mais. Novos e seminovos com garantia e procedência
           assegurada.
         </p>
-        <router-link to="/videogames">
+        <router-link to="/produtos/categoria/video-games">
           <button>Saiba mais</button>
         </router-link>
       </div>
 
       <div class="coluna">
-        <router-link to="/computadores">
+        <router-link to="/produtos/categoria/computadores">
           <img class="imagens" src="@/assets/images/pc-gamer-completo-preto.jpg" alt="PC Gamer" />
         </router-link>
         <h2>PC Gamer</h2>
         <p>
           PCs gamer montados com as melhores peças do mercado, desde a entrada ao high-end extremo.
         </p>
-        <router-link to="/computadores">
+        <router-link to="/produtos/categoria/computadores">
           <button>Saiba mais</button>
         </router-link>
       </div>

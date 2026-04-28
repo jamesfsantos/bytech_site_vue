@@ -6,7 +6,9 @@ import Login from '@/views/Login/LoginView.vue'
 import Cadastro from '@/views/Login/CadastroView.vue'
 import Carrinho from '@/views/Carrinho/CarrinhoView.vue'
 import Produto from '@/views/Produto/ProdutoView.vue'
+import Pagamento from '@/views/Pagamento/PagamentoView.vue'
 import ProdutosCategorias from '@/views/Produto/ProdutoCategoriasView.vue'
+import RevisaoPagamento from '@/views/Pagamento/RevisaoPagamentoView.vue'
 
 const routes = [
   {path: '/', name: 'home',component: Home },
@@ -14,9 +16,12 @@ const routes = [
   {path: '/servicos', name: 'servicos',component: Servico },
   {path: '/login', name: 'login',component: Login },
   {path: '/cadastro', name: 'cadastro',component: Cadastro },
-  {path: '/carrinho', name: 'carrinho',component: Carrinho },
-  {path: '/produto', name: 'produto',component: Produto },
+  {path: '/pagamento', name: 'pagamento', component: Pagamento},
+  {path: '/revisao-pagamento', name: 'revisao', component: RevisaoPagamento},
+  {path: '/carrinho/', name: 'carrinhoPrincipal',component: Carrinho },
+  {path: '/carrinho/:produtoId', name: 'carrinho',component: Carrinho },
   {path: '/produtos/categoria/:categoriaId', name: 'produtos',component: ProdutosCategorias },
+  {path: '/produto/:produtoId', name: 'produto',component: Produto },
 ]
 
 const router = createRouter({

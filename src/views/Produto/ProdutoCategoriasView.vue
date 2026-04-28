@@ -9,7 +9,7 @@ const temCategoria = ref(false);
 
 const categorias: Record<string, number> = {
   "video-games": 1,
-  computadores: 2,
+  "computadores": 2,
 };
 
 const categoriaId = computed(() => {
@@ -24,7 +24,6 @@ const produtos = ref<ProdutoModel[]>([]);
 
 async function buscarProdutos() {
   temCategoria.value = categoriaId.value! > 0;
-
   if (temCategoria.value)
     produtos.value = await produtoService.buscarPorCategoria(categoriaId.value!);
 }
@@ -32,7 +31,6 @@ async function buscarProdutos() {
 watch(
   () => route.params.categoriaId,
   async () => {
-    temCategoria.value = categoriaId.value! > 0;
     await buscarProdutos();
   },
   { immediate: true },
@@ -53,7 +51,7 @@ watch(
               <span class="preco">R$ {{ produto.precoVenda }}</span>
             </div>
             <div class="botao">
-              <a class="produtoSelecionado" href="">Detalhes</a>
+              <RouterLink :to="`/produto/${produto.id}`">Detalhes</RouterLink>
             </div>
           </div>
         </div>

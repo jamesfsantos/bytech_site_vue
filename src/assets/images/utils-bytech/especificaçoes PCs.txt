@@ -1,0 +1,43 @@
+
+**************
+especificaçoes:
+**************
+
+PC2-Bytech-SuperGamer:
+
+Processador: Intel core i7 14700f
+
+Cooler: Water Cooler TGT Spartel v3 Rainbow 120mm preto
+
+Placa mae: Asus B760M-AYW WIFI DDR5 LGA 1700 ATX
+
+Memoria RAM : 2x Corsair Vengeance (2x16GB) DDR5 5600MHz CL36 CMK32GX5M2B5600Z36
+
+Armazenamento : 1x SSD Kingston NV3 1TB m2.NVME SNV3S-1000G
+
+Placa de video: Nvidia Geforce RTX 5070 Ti PNY Epic-x OC 16Gb
+
+Fonte: Corsair Cx750, 750W, 80 Plus Bronze, PFC Ativo
+
+Gabinete : Mancer CV550 Mid-Tower lateral de vidro
+---------------------------------------------------------------------
+
+PC-Bytech-MainGamer:
+
+Processador: AMD Ryzen 7 5700G (8 núcleos, até 4.6GHz)
+
+Cooler: AMD Wraith Stealth
+
+Placa Mãe: Chipset AMD A520 (Socket AM4)
+
+Memória RAM : 16GB RAM DDR4 Kingston Fury Beast 3200MHz
+
+Armazenamento: SSD M.2 NVMe de 1TB Kingston NV3 (Alta Velocidade)
+
+Placa de Video: AMD Radeon Vega 8 (Integrado)
+
+Fonte: Corsair CX550 550W 80 Plus Bronze CP-9020277-BR
+
+Gabinete: Gamer Aquário com lateral em vidro e 3 fans inclusas 
+
+
