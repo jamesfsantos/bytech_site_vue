@@ -9,19 +9,45 @@ import Produto from '@/views/Produto/ProdutoView.vue'
 import Pagamento from '@/views/Pagamento/PagamentoView.vue'
 import ProdutosCategorias from '@/views/Produto/ProdutoCategoriasView.vue'
 import RevisaoPagamento from '@/views/Pagamento/RevisaoPagamentoView.vue'
+import ManagerLayout from '@/layout/ManagerLayout.vue'
+import ProdutoDashBoard from '@/views/Manager/ProdutoDashBoardView.vue'
+import LayoutPadrao from '@/layout/LayoutPadrao.vue'
+import path from 'path'
+import CadastroProduto from '@/views/Manager/CadastroProdutoDashBoardView.vue'
 
 const routes = [
-  {path: '/', name: 'home',component: Home },
-  {path: '/contato', name: 'contato',component: Contato },
-  {path: '/servicos', name: 'servicos',component: Servico },
-  {path: '/login', name: 'login',component: Login },
-  {path: '/cadastro', name: 'cadastro',component: Cadastro },
-  {path: '/pagamento', name: 'pagamento', component: Pagamento},
-  {path: '/revisao-pagamento', name: 'revisao', component: RevisaoPagamento},
-  {path: '/carrinho/', name: 'carrinhoPrincipal',component: Carrinho },
-  {path: '/carrinho/:produtoId', name: 'carrinho',component: Carrinho },
-  {path: '/produtos/categoria/:categoriaId', name: 'produtos',component: ProdutosCategorias },
-  {path: '/produto/:produtoId', name: 'produto',component: Produto },
+  {
+    path: '/',
+    component: LayoutPadrao,
+    children: [
+      {path: '/', name: 'home',component: Home },
+      {path: '/contato', name: 'contato',component: Contato },
+      {path: '/servicos', name: 'servicos',component: Servico },
+      {path: '/login', name: 'login',component: Login },
+      {path: '/cadastro', name: 'cadastro',component: Cadastro },
+      {path: '/pagamento', name: 'pagamento', component: Pagamento},
+      {path: '/revisao-pagamento', name: 'revisao', component: RevisaoPagamento},
+      {path: '/carrinho/', name: 'carrinhoPrincipal',component: Carrinho },
+      {path: '/carrinho/:produtoId', name: 'carrinho',component: Carrinho },
+      {path: '/produtos/categoria/:categoriaId', name: 'produtos',component: ProdutosCategorias },
+      {path: '/produto/:produtoId', name: 'produto', component: Produto }
+    ]
+  },
+
+  {
+    path: '/manager',
+    component: ManagerLayout,
+    children: [
+      {
+        path: '/manager/produto',
+        component: ProdutoDashBoard
+      },
+      {
+        path: '/manager/produto/cadastro',
+        component: CadastroProduto
+      }
+    ]
+  }
 ]
 
 const router = createRouter({

@@ -1,5 +1,5 @@
 import api from "@/api/api";
-import {type ProdutoModel} from "@/models/produtoModel";
+import { type ProdutoModel } from "@/models/produtoModel";
 
 class ProdutoService {
   async buscarPorCategoria(categoriaId: number): Promise<ProdutoModel[]> {
@@ -14,16 +14,26 @@ class ProdutoService {
   }
 
   async buscarProdutoPorId(produtoId: number): Promise<ProdutoModel> {
-    try{
+    try {
       const response = await api.get<ProdutoModel>(`/produto/${produtoId}`);
       const produtos = response.data;
       return produtos;
     }
-    catch(error: unknown)
-    {
+    catch (error: unknown) {
       console.error("Erro na chamada...", error);
       throw error;
     }
+  }
+
+  async buscarProdutos(): Promise<ProdutoModel[]> {
+    try {
+      const { data } = await api.get<ProdutoModel[]>('/Produto');
+      return data
+    }catch(erro: unknown){
+      console.error("Erro ao buscar os produtos na api!",erro)
+      throw erro
+    }
+
   }
 }
 
