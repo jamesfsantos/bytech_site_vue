@@ -4,7 +4,9 @@ import { useRouter } from 'vue-router';
 import { authService } from '@/services/authService';
 import { type AxiosError } from 'axios';
 import { type ErroResponse } from '@/types/auth';
+import { useAuth } from '@/composables/useAuth';
 
+const {atualizarUsuario} = useAuth();
 const email = ref<string>('');
 const senha = ref<string>('');
 const erro = ref<string>('');
@@ -18,14 +20,16 @@ const handleLogin = async () => {
     erro.value = '';
 
     const resultado = await authService.login(email.value, senha.value);
-    console.log('Login concluido', resultado)
+
+    console.log("Dados do back:", resultado)
+    atualizarUsuario()
 
     alert('Login efetuado com êxito!')
     router.push('/')
   } catch (e) {
     const axiosError = e as AxiosError<ErroResponse>;
 
-    // Captura a mensagem que você definiu no return Unauthorized do .NET
+    // Captura a mensagem que retorna "Não autorizada da API"
     erro.value = axiosError.response?.data?.mensagem || 'Falha ao realizar login';
   } finally {
     carregando.value = false;

@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { useAuth } from '@/composables/useAuth';
+const { usuarioEmail, estaLogado, usuarioNome } = useAuth();
+</script>
+
 <template>
   <header>
     <div class="logo-img">
@@ -14,8 +19,8 @@
     <div class="nav-login">
       <section class="avatar"><i class="fa-regular fa-circle-user"></i></section>
       <section class="logintext">
-        Olá! Entre <br />
-        ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
+        Olá! {{ usuarioNome }} <br />
+        Entre ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
       </section>
       <RouterLink to="/login"
         ><button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button

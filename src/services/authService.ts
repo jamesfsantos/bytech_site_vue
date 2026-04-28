@@ -11,6 +11,8 @@ export const authService = {
     if (data.token) {
       localStorage.setItem('user_token', data.token)
       localStorage.setItem('user_email', data.usuarioEmail)
+      localStorage.setItem('user_nome', data.usuarioNome)
+      localStorage.setItem('user_role', data.role)
     }
 
     return data
