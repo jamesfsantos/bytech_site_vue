@@ -71,14 +71,11 @@
 
       <div class="coluna">
         <router-link to="/servicos">
-          <img class="imagens" src="@/assets/images/playstation-5.webp" alt="Manutenção" />
+          <img class="imagens" src="@/assets/images/playstation-5-612x612.webp" alt="Manutenção" />
         </router-link>
         <h2>Conserto e manutenção</h2>
         <p>
-          Reparo e manutenção preventiva e corretiva de PS4, PS5, Xbox One, Series S|X e Nintendo
-          Switch.<br /><br />
-          Em computadores: limpeza, troca de pasta térmica, upgrade de componentes, formatação e
-          muito mais.
+          Reparo, limpeza e manutenção preventiva/corretiva de PCs, Notebooks e consoles.
         </p>
         <router-link to="/servicos">
           <button>Saiba mais</button>

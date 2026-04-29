@@ -275,7 +275,8 @@ flex-direction: column;
 
 
 main {
-    background-color: #353535;
+    /* background-color: #353535; */
+    background: radial-gradient(circle at top, #1a2a33 0%, #111 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -293,8 +294,8 @@ main {
 }
 
 .carrousel-div{
-    height: 576px;
-    width: 1024px;
+    height: 100%;
+    width: 50%;
 }
 
 .coluna .imagens {
@@ -330,15 +331,16 @@ main {
     margin: auto;
     /* margin-bottom: 50px; */
     width: 100%;
+    /* background-color: lightgray; */
+    border-radius: 20px;
 
 }
 
 
-
-
 .coluna {
 
-    background-color: lightgrey;
+    /* background-color: lightgrey; */
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -353,7 +355,7 @@ main {
     width: 25%;
     height: auto;
     padding: 2%;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5); */
 
 
 }
@@ -611,7 +613,7 @@ p {
 .coluna:hover {
     transform: translateY(-10px); /* Faz a coluna "flutuar" */
     box-shadow: 0 15px 30px rgba(2, 149, 247, 0.3); /* Sombra mais espalhada e azulada */
-    background-color: #f8f8f8; /* Mudança leve de cor para dar destaque */
+    /*background-color: #f8f8f8; /* Mudança leve de cor para dar destaque */
 }
 
 /* Ajuste na imagem para acompanhar o movimento */
@@ -691,6 +693,11 @@ p {
         justify-content: center;
         align-items: center;
     }
+
+        .carrousel-div{
+    height: 100%;
+    width: 100%;
+}
 
     .coluna {
         width: auto;
@@ -851,4 +858,25 @@ p {
         flex-direction: column;
     }
 
+}
+
+.coluna {
+    background: rgba(255, 255, 255, 0.05); /* Fundo quase transparente */
+    backdrop-filter: blur(10px); /* Desfoca o que está atrás */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white; /* Mude o texto para branco */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.coluna h2, .coluna p {
+    color: #fff; /* Texto branco para ler no fundo escuro */
+}
+
+/* Adicione uma máscara escura sobre as imagens do carrossel */
+.carousel-item::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.7));
 }
