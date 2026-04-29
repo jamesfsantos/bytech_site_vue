@@ -52,7 +52,7 @@
           assegurada.
         </p>
         <router-link to="/produtos/categoria/video-games">
-          <button>Saiba mais</button>
+          <button>saiba mais</button>
         </router-link>
       </div>
 
@@ -65,7 +65,7 @@
           PCs gamer montados com as melhores peças do mercado, desde a entrada ao high-end extremo.
         </p>
         <router-link to="/produtos/categoria/computadores">
-          <button>Saiba mais</button>
+          <button>saiba mais</button>
         </router-link>
       </div>
 
@@ -78,7 +78,7 @@
           Reparo, limpeza e manutenção preventiva/corretiva de PCs, Notebooks e consoles.
         </p>
         <router-link to="/servicos">
-          <button>Saiba mais</button>
+          <button>saiba mais</button>
         </router-link>
       </div>
     </div>

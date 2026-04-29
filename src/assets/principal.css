@@ -410,10 +410,11 @@ main {
 
 .coluna button:hover {
     border: 1px solid #93DFF8;
-    background-color: #02678f;
+    background-color: #005f96;
     cursor: pointer;
     text-decoration: underline;
     font-size: 16px;
+box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.308);
 }
 
 
@@ -613,7 +614,7 @@ p {
 .coluna:hover {
     transform: translateY(-10px); /* Faz a coluna "flutuar" */
     box-shadow: 0 15px 30px rgba(2, 149, 247, 0.3); /* Sombra mais espalhada e azulada */
-    /*background-color: #f8f8f8; /* Mudança leve de cor para dar destaque */
+    background-color: #f8f8f8; /* Mudança leve de cor para dar destaque */
 }
 
 /* Ajuste na imagem para acompanhar o movimento */
@@ -864,12 +865,14 @@ p {
     background: rgba(255, 255, 255, 0.05); /* Fundo quase transparente */
     backdrop-filter: blur(10px); /* Desfoca o que está atrás */
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white; /* Mude o texto para branco */
+    /*color: white; /* Mude o texto para branco */
     transition: transform 0.3s ease, border-color 0.3s ease;
+    background-color: lightgrey;
 }
 
 .coluna h2, .coluna p {
-    color: #fff; /* Texto branco para ler no fundo escuro */
+   /* color: #fff; /* Texto branco para ler no fundo escuro */
+    color: rgb(31, 31, 31)
 }
 
 /* Adicione uma máscara escura sobre as imagens do carrossel */
