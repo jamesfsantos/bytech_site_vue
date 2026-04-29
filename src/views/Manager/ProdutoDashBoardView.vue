@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import produtoService from '@/services/produtoService.ts';
-import { ProdutoModel } from '@/models/produtoModel.ts';
+import { type ProdutoModel } from '@/models/produtoModel.ts';
 import {ref, onMounted} from 'vue'
 import Swal from 'sweetalert2';
 
@@ -11,6 +11,7 @@ const carregando = ref(false);
 
 
 const carregarProdutos = async () => {
+  console.log("Buscando produtos!")
   try {
     carregando.value = true;
     produtos.value = await produtoService.buscarProdutos();

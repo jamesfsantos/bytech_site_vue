@@ -35,6 +35,18 @@ class ProdutoService {
     }
 
   }
+
+  async cadastrarProduto(dados: Omit<ProdutoModel, 'id' | 'categoria'>): Promise<boolean>{
+    try{
+        const response = await api.post("/Produto", dados)
+
+        return response.status === 201 || response.status === 200
+    }
+    catch(erro: unknown){
+      console.error(erro)
+    }
+
+  }
 }
 
 
