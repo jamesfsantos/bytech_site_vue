@@ -270,15 +270,16 @@ watch(() =>
 }
 
 .descricao-compra {
-  background-color: #005373;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  width: 500px;
-  height: 250px;
-  flex-wrap: nowrap;
+    background-color: #005373;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    flex-wrap: nowrap;
+    border-radius: 5px;
 }
 
 .titulo-produto {
@@ -350,14 +351,15 @@ button:hover {
 }
 
 .frete {
-  background-color: lightgray;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  width: 100%;
-  padding: 20px 0px;
+    background-color: lightgray;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px 0px;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .btn-frete {
