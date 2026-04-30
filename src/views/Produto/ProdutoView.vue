@@ -8,7 +8,7 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 
 const handleAdicionarCarrinho = () => {
-  if(produto.value) {
+  if (produto.value) {
     adicionarAoCarrinho(produto.value)
     router.push("/carrinho");
   }
@@ -27,20 +27,20 @@ const produtoId = computed(() => {
 
 const produto = ref<ProdutoModel>();
 
-async function buscarProduto(){
+async function buscarProduto() {
   temProduto.value = produtoId.value > 0;
-  if(temProduto.value)
+  if (temProduto.value)
     produto.value = await produtoService.buscarProdutoPorId(produtoId.value);
 }
 
 
 
 watch(() =>
-    route.params.produtoId,
-    async () => {
-      await buscarProduto()
-    },
-    {immediate: true}
+  route.params.produtoId,
+  async () => {
+    await buscarProduto()
+  },
+  { immediate: true }
 );
 
 </script>
@@ -48,7 +48,7 @@ watch(() =>
 <template>
   <main v-if="produto">
 
-    <div class="vitrine" >
+    <div class="vitrine">
       <div class="imagens-produto">
         <img class="imagem-principal" :src="`${produto.imagem}`" alt="" />
 
@@ -60,7 +60,7 @@ watch(() =>
       </div>
 
       <div class="descricao-produto">
-        <h2 class="titulo-produto">{{produto.nome}}</h2>
+        <h2 class="titulo-produto">{{ produto.nome }}</h2>
 
         <ul class="Lista-Descricao">
           <li>Marca: Sony</li>
@@ -80,26 +80,22 @@ watch(() =>
 
       <div class="descricao-compra">
         <p class="preco">
-          Preço R$ 5999,00 a vista <br />
+          <br>
+          Preço R$ 5999,00 a vista
+          <br />
           ou até 12x de R$ 599 sem juros
         </p>
 
         <div class="botoes">
-          
-            <button class="btn-add-carrinho" @click="handleAdicionarCarrinho">Adicionar ao carrinho</button>
-          
+
+          <button class="btn-add-carrinho" @click="handleAdicionarCarrinho">Adicionar ao carrinho</button>
+
         </div>
 
         <div class="frete">
           <h3>Entrega</h3>
           <form>
-            <input
-              type="text"
-              id="CEP"
-              name="CEP"
-              placeholder="Insira seu CEP"
-              class="input-cep"
-            /><br />
+            <input type="text" id="CEP" name="CEP" placeholder="Insira seu CEP" class="input-cep" /><br />
           </form>
           <button class="btn-frete">Calcular frete</button>
         </div>
@@ -206,6 +202,7 @@ watch(() =>
   align-content: center;
 }
 
+
 .imagens-produto {
   display: flex;
   width: auto;
@@ -219,8 +216,12 @@ watch(() =>
 }
 
 .imagem-principal {
-  display: flex;
-  flex-shrink: 1;
+    display: flex;
+    flex-shrink: 1;
+    max-width: 100%;
+    max-height: 600px;
+    width: 600px;
+    height: auto;
 }
 
 .img-miniaturas {
@@ -230,6 +231,8 @@ watch(() =>
   flex-shrink: 0;
   width: 100px;
   height: 100px;
+  max-width: 100px;
+  max-height: 100px;
   gap: 20px;
   align-content: flex-start;
   justify-content: center;
@@ -270,16 +273,18 @@ watch(() =>
 }
 
 .descricao-compra {
-    background-color: #005373;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
-    height: 100%;
-    flex-wrap: nowrap;
-    border-radius: 5px;
+  background-color: #005373;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  max-width: 450px;
+  max-height: 350px;
+  flex-wrap: nowrap;
+  border-radius: 5px;
 }
 
 .titulo-produto {
@@ -325,8 +330,8 @@ watch(() =>
 }
 
 button:hover {
-    background-color: #4ed0fc;
-    border: 1px solid #78c8f7;
+  background-color: #4ed0fc;
+  border: 1px solid #78c8f7;
 }
 
 .btn-compra {
@@ -351,15 +356,15 @@ button:hover {
 }
 
 .frete {
-    background-color: lightgray;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
-    padding: 20px 0px;
-    border-radius: 0px 0px 5px 5px;
+  background-color: lightgray;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  padding: 20px 0px;
+  border-radius: 0px 0px 5px 5px;
 }
 
 .btn-frete {
@@ -430,6 +435,12 @@ button:hover {
   align-items: center;
 }
 
+@media (max-width: 1800px) {
+  .vitrine {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 1400px) {
   .vitrine {
     flex-wrap: wrap;
@@ -445,6 +456,15 @@ button:hover {
     align-items: center;
     margin: 40px auto;
   }
+
+  .imagens-produto {
+    flex-direction: column;
+  }
+
+  .img-miniaturas {
+    flex-direction: row;
+  }
+
 }
 
 @media (max-width: 900px) {
@@ -510,6 +530,7 @@ button:hover {
   .descricao-compra {
     width: 100%;
     height: auto;
+    max-height: 100%;
   }
 
   .imagens-produto {
