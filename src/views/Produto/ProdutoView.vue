@@ -210,18 +210,18 @@ watch(() =>
   gap: 20px;
   object-fit: cover;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   align-content: center;
   flex-wrap: nowrap;
 }
 
 .imagem-principal {
-    display: flex;
-    flex-shrink: 1;
-    max-width: 100%;
-    max-height: 600px;
-    width: 600px;
-    height: auto;
+  display: flex;
+  flex-shrink: 1;
+  max-width: 100%;
+  max-height: 600px;
+  width: 600px;
+  height: auto;
 }
 
 .img-miniaturas {
@@ -294,6 +294,8 @@ watch(() =>
   align-items: center;
   color: white;
   text-transform: uppercase;
+  text-align: center;
+  width: 80%;
 }
 
 .botoes {

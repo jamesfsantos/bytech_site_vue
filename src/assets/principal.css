@@ -628,6 +628,14 @@ p {
     }
 }
 
+@media (max-width: 1400px) {
+    .nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+
+}
+
 @media (max-width: 1280px) {
 
     .nav ul {
