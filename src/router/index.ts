@@ -45,6 +45,10 @@ const routes = [
       {
         path: '/manager/produto/cadastro',
         component: CadastroProduto
+      },
+      {
+        path: '/manager/produto/editar/:id',
+        component: CadastroProduto
       }
     ]
   }

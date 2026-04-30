@@ -2,7 +2,6 @@
 
 import categoriaService from '@/services/categoriaService';
 import produtoService from '@/services/produtoService';
-
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 

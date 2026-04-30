@@ -55,7 +55,10 @@ onMounted(() => {
                 <td>{{ item.precoVenda }}</td>
                 <td>{{ item.categoria.nome }}</td>
                 <td>{{ item.estoqueAtual }}</td>
-                <td><button class="btn btn-warning">Editar</button></td>
+                <td>
+                  <RouterLink class="btn btn-warning" :to="{ name: 'EditarProduto', params: { id: item.id } }">Editar</RouterLink>
+
+                </td>
             </tr>
           </tbody>
       </table>
