@@ -90,7 +90,7 @@ h2 {
   color: #ececec;
 }
 
-a.btnfinalizar,
+.btnfinalizar,
 button.btnFrete {
   position: relative;
   display: flex;
@@ -110,6 +110,7 @@ button.btnFrete {
 button.btnFrete {
   background-color: #3b8cbe;
 }
+
 
 button.btn-Remover-Carrinho {
   width: 16px;
