@@ -1,32 +1,29 @@
 <script setup lang="ts">
-import { useAuth } from '@/composables/useAuth';
-import Swal from 'sweetalert2';
+import { useAuth } from "@/composables/useAuth";
+import Swal from "sweetalert2";
 const { usuarioEmail, estaLogado, usuarioNome, logout } = useAuth();
 
 const handleDeslogar = () => {
-    Swal.fire({
-  title: "Deslogando",
-  text: "Você tem certeza que deseja sair?",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Sim",
-  cancelButtonText: "Não"
-}).then((result) => {
-  if (result.isConfirmed)
-  {
-    Swal.fire({
-      title: "Saindo",
-      text: "Volte sempre",
-      icon: "success"
-    })
-    logout();
-  };
-});
-}
-
-
+  Swal.fire({
+    title: "Deslogando",
+    text: "Você tem certeza que deseja sair?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sim",
+    cancelButtonText: "Não",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Saindo",
+        text: "Volte sempre",
+        icon: "success",
+      });
+      logout();
+    }
+  });
+};
 </script>
 
 <template>
@@ -52,10 +49,9 @@ const handleDeslogar = () => {
       <section class="logintext" v-else>
         Entre ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
         <RouterLink to="/login"
-        ><button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button
+          ><button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button
         ></RouterLink>
       </section>
-
 
       <RouterLink to="/carrinho">
         <button class="login"><i class="fa-solid fa-cart-shopping"></i></button>
