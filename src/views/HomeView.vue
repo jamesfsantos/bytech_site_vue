@@ -9,16 +9,17 @@ import Navigation from '@/components/Navigation.vue';
 <template>
 
   <main>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carrousel-div">
+    <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="@/assets/images/PC-gamer.jpg" class="d-block w-100" alt="..." />
+          <img src="@/assets/images/PC-gamer-1024.png" class="d-block w-100 h-100" style="object-fit: cover;" alt="..." />
         </div>
         <div class="carousel-item">
-          <img src="@/assets/images/consoles-pcs-img.jpg" class="d-block w-100" alt="..." />
+          <img src="@/assets/images/consoles-pcs-img.jpg" class="d-block w-100 h-100" style="object-fit: cover;" alt="..." />
         </div>
         <div class="carousel-item">
-          <img src="@/assets/images/ps5proprom.png" class="d-block w-100" alt="..." />
+          <img src="@/assets/images/ps5proprom.png" class="d-block w-100 h-100" style="object-fit: cover;" alt="..." />
         </div>
       </div>
       <button
@@ -40,6 +41,8 @@ import Navigation from '@/components/Navigation.vue';
         <span class="visually-hidden">Next</span>
       </button>
     </div>
+</div>
+<br>
 
     <div class="conteudo">
       <div class="coluna">
@@ -56,7 +59,7 @@ import Navigation from '@/components/Navigation.vue';
           assegurada.
         </p>
         <router-link to="/produtos/categoria/video-games">
-          <button>Saiba mais</button>
+          <button>saiba mais</button>
         </router-link>
       </div>
 
@@ -69,23 +72,20 @@ import Navigation from '@/components/Navigation.vue';
           PCs gamer montados com as melhores peças do mercado, desde a entrada ao high-end extremo.
         </p>
         <router-link to="/produtos/categoria/computadores">
-          <button>Saiba mais</button>
+          <button>saiba mais</button>
         </router-link>
       </div>
 
       <div class="coluna">
         <router-link to="/servicos">
-          <img class="imagens" src="@/assets/images/playstation-5.webp" alt="Manutenção" />
+          <img class="imagens" src="@/assets/images/playstation-5-612x612.webp" alt="Manutenção" />
         </router-link>
         <h2>Conserto e manutenção</h2>
         <p>
-          Reparo e manutenção preventiva e corretiva de PS4, PS5, Xbox One, Series S|X e Nintendo
-          Switch.<br /><br />
-          Em computadores: limpeza, troca de pasta térmica, upgrade de componentes, formatação e
-          muito mais.
+          Reparo, limpeza e manutenção preventiva/corretiva de PCs, Notebooks e consoles.
         </p>
         <router-link to="/servicos">
-          <button>Saiba mais</button>
+          <button>saiba mais</button>
         </router-link>
       </div>
     </div>
