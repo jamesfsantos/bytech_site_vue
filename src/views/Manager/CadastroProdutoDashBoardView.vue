@@ -1,25 +1,28 @@
 <script setup lang="ts">
+import type { CategoriaModel } from "@/models/categoriaModel";
+import categoriaService from "@/services/categoriaService";
+import produtoService from "@/services/produtoService";
+import Swal from "sweetalert2";
+import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-import categoriaService from '@/services/categoriaService';
-import produtoService from '@/services/produtoService';
-import Swal from 'sweetalert2';
-import { onMounted, ref } from 'vue';
+const categorias = ref<CategoriaModel[]>([]);
+const formularioValido = ref(false);
 
+const route = useRoute();
+const router = useRouter();
 
-const categorias = ref<CategoriaModel[]>([])
-const formularioValido = ref(false)
+const idProduto = computed(() => route.params.id);
+const isEdicao = computed(() => !!idProduto.value);
 
-const categoriaSelecionada = ref<number | string>('');
 const carregarCategorias = async () => {
   try {
-    categorias.value = await categoriaService.ObterCategorias()
-  }
-  catch (erro: unknown) {
+    categorias.value = await categoriaService.ObterCategorias();
+  } catch (erro: unknown) {
     console.error("Erro ao carregar categorias:", erro);
-    Swal.fire('Erro', 'Não foi possível carregar a lista de categorias', 'error');
+    Swal.fire("Erro", "Não foi possível carregar a lista de categorias", "error");
   }
 };
-
 
 const formularioConta = ref({
   nome: "",
@@ -31,119 +34,165 @@ const formularioConta = ref({
   marca: "",
 });
 
+const carregarProduto = async () => {
+  if (isEdicao.value) {
+    try {
+      const produto = await produtoService.buscarProdutoPorId(Number(idProduto.value));
+      if (produto) {
+        formularioConta.value = { ...produto };
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produto", error);
+      Swal.fire("Erro", "Não foi possível buscar o produto", "error");
+    }
+  }
+};
 
 const cadastrarProduto = async (event: Event) => {
-  const form = event.target as HTMLFormElement
+  const form = event.target as HTMLFormElement;
   formularioValido.value = true;
 
-  if(!form.checkValidity())
-    return
+  if (!form.checkValidity()) return;
 
-    console.log('Iniciando cadastro de produto!')
+  console.log("Iniciando cadastro de produto!");
   try {
     const dados = {
       ...formularioConta.value,
-      categoriaId: Number(formularioConta.value.categoriaId)
+      categoriaId: Number(formularioConta.value.categoriaId),
+    };
+
+    let sucesso = false;
+
+    if (isEdicao.value) {
+      sucesso = await produtoService.atualizarProduto(Number(idProduto.value), dados);
+    } else {
+      sucesso = await produtoService.cadastrarProduto(dados);
     }
-    const cadastroProduto = await produtoService.cadastrarProduto(dados);
 
-    if (cadastroProduto) {
-
-      Swal.fire({
-        title: "Cadastro realizado com sucesso!",
-        text: "",
+    if (sucesso) {
+      const result = await Swal.fire({
+        title: isEdicao.value ? "Atualizado com sucesso!" : "Cadastrado com sucesso!",
         icon: "success",
-        draggable: true
+         allowEscapeKey: false,
+         allowOutsideClick: false,
       });
-      formularioValido.value = false
-    }
-    else {
-      Swal.fire({
-        icon: "error",
-        title: "Erro",
-        text: "Erro ao cadastrar o produto!",
-      });
-    }
-  }
-  catch (erro: unknown) {
-    console.error(erro)
-  }
-}
 
-// Nome = produtoDto.Nome,
-// Marca = produtoDto.Marca,
-// CategoriaId = produtoDto.CategoriaId,
-// Descricao = produtoDto.Descricao,
-// EstoqueAtual = produtoDto.EstoqueAtual,
-// PrecoVenda = produtoDto.PrecoVenda,
-// Imagem = produtoDto.Imagem,
+      console.log(result);
 
+      if (result.isConfirmed)
+        router.push("/manager/produto");
+    }
+  } catch (erro: unknown) {
+    console.error(erro);
+  }
+};
 
 onMounted(() => {
-  carregarCategorias()
-})
+  carregarCategorias();
+  carregarProduto();
+});
 </script>
 
 <template>
   <div class="container">
-    <h1>Cadastro de Produto!</h1>
-    <section class="cadastro">
+    <h1>{{ isEdicao ? "Editar Produto" : "Cadastro de Produto" }}</h1>
+    <section class="form">
       <form
-
         class="row g-3"
-        :class="{'was-validated': formularioValido}"
+        :class="{ 'was-validated': formularioValido }"
         @submit.prevent="cadastrarProduto"
         novalidate
       >
         <div class="col-12">
           <label for="nome" class="form-label">Nome</label>
-          <input v-model="formularioConta.nome" type="text" class="form-control" id="nome" placeholder="Digite o nome do produto..." required>
+          <input
+            v-model="formularioConta.nome"
+            type="text"
+            class="form-control"
+            id="nome"
+            placeholder="Digite o nome do produto..."
+            required
+          />
           <div class="invalid-feedback">O nome é obrigatório</div>
         </div>
         <div class="col-12">
           <label for="imagem" class="form-label">Imagem</label>
-          <input v-model="formularioConta.imagem" type="text" class="form-control" id="inputAddress" placeholder="Insira a URL da sua imagem" required>
+          <input
+            v-model="formularioConta.imagem"
+            type="text"
+            class="form-control"
+            id="inputAddress"
+            placeholder="Insira a URL da sua imagem"
+            required
+          />
           <div class="invalid-feedback">Insira uma URL válida para a sua imagem</div>
         </div>
         <div class="col-12">
           <label for="precoVenda" class="form-label">Preço venda</label>
-          <input v-model="formularioConta.precoVenda" type="number" step="0.01" class="form-control" id="preco" placeholder="Informe o preço do produto" required>
+          <input
+            v-model="formularioConta.precoVenda"
+            type="number"
+            step="0.01"
+            class="form-control"
+            id="preco"
+            placeholder="Informe o preço do produto"
+            required
+          />
           <div class="invalid-feedback">Informe um preço válido</div>
         </div>
         <div class="col-md-4">
           <label for="estoqueAtual" class="form-label">Estoque atual</label>
-          <input v-model="formularioConta.estoqueAtual" type="text" class="form-control" id="estoque">
+          <input
+            v-model="formularioConta.estoqueAtual"
+            type="text"
+            class="form-control"
+            id="estoque"
+          />
         </div>
         <div class="col-md-4">
           <label for="marca" class="form-label">Marca</label>
-          <input v-model="formularioConta.marca" type="text" class="form-control" id="marca" required>
+          <input
+            v-model="formularioConta.marca"
+            type="text"
+            class="form-control"
+            id="marca"
+            required
+          />
         </div>
         <div class="col-md-4">
           <label for="categoria" class="form-label">Categoria</label>
           <select id="categoria" class="form-select" v-model="formularioConta.categoriaId">
             <option value="" disabled>Selecione uma opção</option>
-            <option  v-for="categoria in categorias" :key="categoria.id" :value="categoria.id" required>
+            <option
+              v-for="categoria in categorias"
+              :key="categoria.id"
+              :value="categoria.id"
+              required
+            >
               {{ categoria.nome }}
             </option>
-            <div class="invalid-feedback">Informe um categoria</div>
           </select>
+          <div class="invalid-feedback">Informe um categoria</div>
         </div>
         <div class="col-md-12">
           <label for="descricao" class="form-label">Descrição</label>
-          <textarea v-model="formularioConta.descricao" class="form-control" id="descricao" rows="5"></textarea>
+          <textarea
+            v-model="formularioConta.descricao"
+            class="form-control"
+            id="descricao"
+            rows="5"
+            required
+          ></textarea>
         </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Salvar Produto</button>
+        <div class="col-12 d-flex justify-content-between">
+          <button type="submit" class="btn btn-success">
+            {{ isEdicao ? "Salvar Alterações" : "Cadastrar Produto" }}
+          </button>
+          <RouterLink class="btn btn-primary" to="/manager/produto">Voltar</RouterLink>
         </div>
       </form>
     </section>
-
   </div>
 </template>
 
-<style scoped>
-.cadastro {
-  border: 1px dashed black;
-  padding: 10px;
-}
-</style>
+<style scoped></style>

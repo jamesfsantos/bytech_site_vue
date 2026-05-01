@@ -12,7 +12,6 @@ import RevisaoPagamento from '@/views/Pagamento/RevisaoPagamentoView.vue'
 import ManagerLayout from '@/layout/ManagerLayout.vue'
 import ProdutoDashBoard from '@/views/Manager/ProdutoDashBoardView.vue'
 import LayoutPadrao from '@/layout/LayoutPadrao.vue'
-import path from 'path'
 import CadastroProduto from '@/views/Manager/CadastroProdutoDashBoardView.vue'
 
 const routes = [
@@ -49,6 +48,10 @@ const routes = [
       {
         path: '/manager/produto/editar/:id',
         component: CadastroProduto
+      },
+      {
+        path: '/manager/produto/deletar/:id',
+        component: ProdutoDashBoard
       }
     ]
   }

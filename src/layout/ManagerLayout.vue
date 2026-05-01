@@ -1,9 +1,4 @@
-<script setup>
-
-
-
-
-
+<script setup lang="ts">
 </script>
 
 <template>
@@ -11,7 +6,7 @@
     <div class="row">
       <nav class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar vh-100 p-0 border-end">
         <div class="p-4">
-          <div class="logo-img">
+          <div class="logo-img d-flex align-items-center">
             <img  src="@/assets/images/logo/bytech_logo.svg" >
           </div>
           <ul class="nav nav-pills flex-column">
@@ -39,7 +34,6 @@
           </ul>
         </div>
       </nav>
-
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 bg-light">
           <RouterView />
       </main>
@@ -88,5 +82,9 @@ main {
     cursor: pointer;
     transform: scale(1.1);
     transition: all 0.3s ease-in-out;
+}
+
+.boas-vindas {
+  font-size: 70px;
 }
 </style>

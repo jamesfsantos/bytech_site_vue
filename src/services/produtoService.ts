@@ -18,8 +18,7 @@ class ProdutoService {
       const response = await api.get<ProdutoModel>(`/produto/${produtoId}`);
       const produtos = response.data;
       return produtos;
-    }
-    catch (error: unknown) {
+    } catch (error: unknown) {
       console.error("Erro na chamada...", error);
       throw error;
     }
@@ -27,26 +26,42 @@ class ProdutoService {
 
   async buscarProdutos(): Promise<ProdutoModel[]> {
     try {
-      const { data } = await api.get<ProdutoModel[]>('/Produto');
-      return data
-    }catch(erro: unknown){
-      console.error("Erro ao buscar os produtos na api!",erro)
-      throw erro
+      const { data } = await api.get<ProdutoModel[]>("/Produto");
+      return data;
+    } catch (erro: unknown) {
+      console.error("Erro ao buscar os produtos na api!", erro);
+      throw erro;
     }
-
   }
 
-  async cadastrarProduto(dados: Omit<ProdutoModel, 'id' | 'categoria'>): Promise<boolean>{
-    try{
-        const response = await api.post("/Produto", dados)
-        return response.status === 201 || response.status === 200
+  async cadastrarProduto(dados: Omit<ProdutoModel, "id" | "categoria">): Promise<boolean> {
+    try {
+      const response = await api.post("/Produto", dados);
+      return response.status === 201 || response.status === 200;
+    } catch (erro: unknown) {
+      console.error(erro);
     }
-    catch(erro: unknown){
-      console.error(erro)
-    }
+  }
 
+  async atualizarProduto(produtoId: number, dados: ProdutoModel): Promise<boolean> {
+    try {
+      const response = await api.put(`/Produto/${produtoId}`, dados);
+      return response.status >= 200 && response.status < 300;
+    } catch (error) {
+      console.error("Erro ao atualizar produto:", error);
+      return false;
+    }
+  }
+
+  async excluirProduto(produtoId: number): Promise<boolean> {
+    try {
+      const response = await api.delete(`/Produto/${produtoId}`);
+      return response.status >= 200 && response.status < 300;
+    } catch (error) {
+      console.error("Erro ao excluir o produto: ", error);
+      return false;
+    }
   }
 }
-
 
 export default new ProdutoService();
