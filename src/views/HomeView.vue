@@ -1,6 +1,13 @@
+<script setup lang="ts">
+import Navigation from '@/components/Navigation.vue';
+
+
+</script>
+
 
 
 <template>
+
   <main>
     <div class="carrousel-div">
     <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">

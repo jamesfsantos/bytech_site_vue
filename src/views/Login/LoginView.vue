@@ -24,9 +24,9 @@ const handleLogin = async () => {
     Swal.fire({
       title: "Sucesso",
       text: "Login efetuado com sucesso",
-      icon: "success", // Isso aqui desenha o check verde animado
+      icon: "success",
       confirmButtonText: "Ok",
-      confirmButtonColor: "#7367F0", // Cor roxinha igual ao seu print
+      confirmButtonColor: "#7367F0",
     }).then(() => {
       atualizarUsuario();
       router.push("/");
@@ -40,7 +40,6 @@ const handleLogin = async () => {
       icon: "error",
       confirmButtonText: "Tentar novamente",
     });
-    // Captura a mensagem que retorna "Não autorizada da API"
     erro.value = axiosError.response?.data?.mensagem || "Falha ao realizar login";
   } finally {
     carregando.value = false;
