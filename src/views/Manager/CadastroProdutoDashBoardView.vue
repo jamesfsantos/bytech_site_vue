@@ -172,7 +172,7 @@ onMounted(() => {
               {{ categoria.nome }}
             </option>
           </select>
-          <div class="invalid-feedback">Informe um categoria</div>
+          <div class="invalid-feedback">Informe uma categoria</div>
         </div>
         <div class="col-md-12">
           <label for="descricao" class="form-label">Descrição</label>
@@ -195,4 +195,16 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+h1 {
+  color: white;
+
+}
+
+.form {
+  padding: 20px;
+  background-color: lightgray;
+  border-radius: 5px;
+}
+</style>

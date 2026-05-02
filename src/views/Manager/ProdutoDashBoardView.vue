@@ -75,7 +75,7 @@ onMounted(() => {
           <th>Categoria</th>
           <th>Marca</th>
           <th>Quantidade</th>
-          <td></td>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -105,10 +105,13 @@ onMounted(() => {
 .container {
   padding: 20px;
 }
+
 .tabela {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  background-color: lightgray;
+  overflow: hidden;
 }
 
 th,
@@ -121,4 +124,24 @@ td {
 th {
   background-color: #f4f4f4;
 }
+
+h2 {
+  color: white;
+}
+
+/* zebra striping */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e6f2ff;
+  transition: 0.2s;
+}
+
+td:last-child {
+  text-align: center;
+}
+
+
 </style>
