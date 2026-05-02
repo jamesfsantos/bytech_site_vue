@@ -108,6 +108,7 @@ onMounted(() => {
 
 .tabela {
   width: 100%;
+  border-radius: 5px;
   border-collapse: collapse;
   margin-top: 10px;
   background-color: lightgray;
