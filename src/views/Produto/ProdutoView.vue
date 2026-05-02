@@ -185,21 +185,22 @@ watch(() =>
 
 <style scoped>
 .vitrine {
-  background-color: #353535;
-  display: flex;
-  /* grid-template-columns: 1fr 2fr 1fr; */
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  display: flex;
-  gap: 40px;
-  padding: 40px 40px;
-  max-width: fit-content;
-  margin: 0 auto;
-  justify-items: center;
-  grid-auto-flow: row;
-  align-content: center;
+    background-color: #353535;
+    display: flex;
+    /* grid-template-columns: 1fr 2fr 1fr; */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    display: flex;
+    gap: 40px;
+    padding: 40px 40px;
+    /* max-width: fit-content; */
+    width: 100%;
+    margin: 10px auto;
+    justify-items: center;
+    grid-auto-flow: row;
+
 }
 
 
