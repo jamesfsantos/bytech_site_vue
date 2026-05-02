@@ -9,5 +9,8 @@ export interface ProdutoModel{
   precoVenda: number;
   estoqueAtual: number;
   marca: string;
+  dataCadastro: Date;
+  dataAtualizacao: Date;
+  ativo: boolean;
   categoria: CategoriaModel;
 };

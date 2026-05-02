@@ -31,6 +31,7 @@ const formularioConta = ref({
   estoqueAtual: 0,
   descricao: "",
   categoriaId: "" as string | number,
+  ativo: false,
   marca: "",
 });
 
