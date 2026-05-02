@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
-const { usuarioEmail, estaLogado, usuarioNome, logout } = useAuth();
+const { usuarioEmail, estaLogado, usuarioNome, logout, tipoUsuario } = useAuth();
 
 const handleDeslogar = () => {
   Swal.fire({
@@ -16,8 +16,7 @@ const handleDeslogar = () => {
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
-        title: "Saindo",
-        text: "Volte sempre",
+        title: "Saindo...",
         icon: "success",
       });
       logout();
@@ -57,6 +56,10 @@ const handleDeslogar = () => {
         <button class="login"><i class="fa-solid fa-cart-shopping"></i></button>
       </RouterLink>
 
+      <RouterLink to="/manager" v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
+        <button class="login">Manager<i class="fa fa-pencil" aria-hidden="true"></i></button>
+      </RouterLink>
+
       <!-- Botão hamburguer (visível apenas em mobile) -->
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span>
@@ -76,8 +79,8 @@ const handleDeslogar = () => {
       </div>
       <div class="nav">
         <ul>
-          <li><a href="computadores.html"> Computadores </a></li>
-          <li><a href="videogames.html"> Videogames </a></li>
+          <li><RouterLink to="/produtos/categoria/video-games">Videogames</RouterLink></li>
+          <li><RouterLink to="/produtos/categoria/computadores">Computador</RouterLink></li>
           <li><RouterLink to="/contato">Contato</RouterLink></li>
           <li><RouterLink to="/servicos">Serviços</RouterLink></li>
         </ul>
