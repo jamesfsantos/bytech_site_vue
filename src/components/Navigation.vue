@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {ref} from 'vue'
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
 const { usuarioEmail, estaLogado, usuarioNome, logout, tipoUsuario } = useAuth();
@@ -39,19 +40,19 @@ const handleDeslogar = () => {
         <img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial" />
       </RouterLink>
     </div>
-    
+
     <div class="nav-login">
       <section class="avatar"><i class="fa-regular fa-circle-user"></i></section>
-      
+
       <section class="logintext" v-if="estaLogado">
         Olá! {{ usuarioNome }} <br />
         <button class="btn-sair" @click="handleDeslogar">Sair</button>
       </section>
-      
+
       <section class="logintext" v-else>
         Entre ou <RouterLink to="/cadastro"><br>Cadastre-se</RouterLink>
       </section>
-      
+
       <section class="logintext" v-if="!estaLogado">
         <RouterLink to="/login">
           <button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
@@ -73,7 +74,7 @@ const handleDeslogar = () => {
         <span></span>
       </button>
     </div>
-    
+
     <div class="mobile-menu" :class="{ 'open': isMenuOpen }">
       <div class="nav-pesquisa">
         <section class="pesquisa">
@@ -97,7 +98,7 @@ const handleDeslogar = () => {
         <i class="fa-solid fa-magnifying-glass"></i>
       </section>
     </div>
-    
+
     <div class="nav desktop-only">
       <ul>
         <li><RouterLink to="/produtos/categoria/video-games">Videogames</RouterLink></li>

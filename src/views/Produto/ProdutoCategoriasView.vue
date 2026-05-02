@@ -102,7 +102,7 @@ main {
   padding: 20px;
   transition: all 0.3s ease;
   max-width: 400px;
-  max-height: 600px;
+
   width: 100%;
   margin: 0 auto;
 
