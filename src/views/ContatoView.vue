@@ -88,6 +88,7 @@ fieldset {
   display: flex;
   flex-direction: column;
   min-width: 30px;
+  border: 1px solid #3b8cbe;
 }
 
 fieldset textarea {
@@ -133,6 +134,15 @@ div.contato input {
 
 div.contato input:focus {
   border: 3px solid #96e4fd;
+}
+
+.btn-feedback:hover {
+    border: 1px solid #93DFF8;
+    background-color: #005f96;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 16px;
+box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.308);
 }
 
 @media (max-width: 600px) {

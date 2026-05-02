@@ -3,6 +3,13 @@ import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
 const { usuarioEmail, estaLogado, usuarioNome, logout, tipoUsuario } = useAuth();
 
+// Controle reativo do menu hambúrguer
+const isMenuOpen = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
 const handleDeslogar = () => {
   Swal.fire({
     title: "Deslogando",
@@ -12,7 +19,7 @@ const handleDeslogar = () => {
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Sim",
-    cancelButtonText: "Não",
+    cancelButtonText: "Não"
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
@@ -20,36 +27,35 @@ const handleDeslogar = () => {
         icon: "success",
       });
       logout();
-    }
+    };
   });
-};
+}
 </script>
 
 <template>
   <header>
     <div class="logo-img">
       <RouterLink to="/">
-        <img
-          src="@/assets/images/logo/bytech_logo.svg"
-          alt="logo"
-          title="Voltar a pagina inicial"
-        />
+        <img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial" />
       </RouterLink>
     </div>
-
-    <!-- Botões sempre visíveis -->
+    
     <div class="nav-login">
       <section class="avatar"><i class="fa-regular fa-circle-user"></i></section>
+      
       <section class="logintext" v-if="estaLogado">
         Olá! {{ usuarioNome }} <br />
-
-        <button class="btn btn-danger" v-on:click="handleDeslogar">Sair</button>
+        <button class="btn-sair" @click="handleDeslogar">Sair</button>
       </section>
+      
       <section class="logintext" v-else>
-        Entre ou <RouterLink to="/cadastro">Cadastre-se</RouterLink>
-        <RouterLink to="/login"
-          ><button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button
-        ></RouterLink>
+        Entre ou <RouterLink to="/cadastro"><br>Cadastre-se</RouterLink>
+      </section>
+      
+      <section class="logintext" v-if="!estaLogado">
+        <RouterLink to="/login">
+          <button class="login">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+        </RouterLink>
       </section>
 
       <RouterLink to="/carrinho">
@@ -67,14 +73,12 @@ const handleDeslogar = () => {
         <span></span>
       </button>
     </div>
-
-    <!-- Menu mobile (pesquisa + nav ficam aqui no mobile) -->
-    <div class="mobile-menu" id="mobileMenu">
+    
+    <div class="mobile-menu" :class="{ 'open': isMenuOpen }">
       <div class="nav-pesquisa">
         <section class="pesquisa">
-          <input class="pesquisa" type="text" placeholder="Pesquisar" /><i
-            class="fa-solid fa-magnifying-glass"
-          ></i>
+          <input class="pesquisa" type="text" placeholder="Pesquisar" />
+          <i class="fa-solid fa-magnifying-glass"></i>
         </section>
       </div>
       <div class="nav">
@@ -87,14 +91,13 @@ const handleDeslogar = () => {
       </div>
     </div>
 
-    <!-- Pesquisa e nav normais (visíveis apenas acima de 768px) -->
     <div class="nav-pesquisa desktop-only">
       <section class="pesquisa">
-        <input class="pesquisa" type="text" placeholder="Pesquisar" /><i
-          class="fa-solid fa-magnifying-glass"
-        ></i>
+        <input class="pesquisa" type="text" placeholder="Pesquisar" />
+        <i class="fa-solid fa-magnifying-glass"></i>
       </section>
     </div>
+    
     <div class="nav desktop-only">
       <ul>
         <li><RouterLink to="/produtos/categoria/video-games">Videogames</RouterLink></li>
