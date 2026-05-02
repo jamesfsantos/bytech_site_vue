@@ -20,9 +20,13 @@ export const authService = {
   logout(): void {
     localStorage.removeItem('user_token')
     localStorage.removeItem('user_email')
-    route.push('/login')
+    localStorage.removeItem('user_role')
+    localStorage.removeItem('user_token')
+
   },
   estaAutenticado(): boolean {
-    return !!localStorage.getItem('user_token')
+    return !!localStorage.getItem('user_token') && !!localStorage.getItem('user_role')
   },
+
+
 }

@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useAuth } from "@/composables/useAuth";
 import { useRouter } from "vue-router";
 import { authService } from "@/services/authService";
 import { type AxiosError } from "axios";
 import { type ErroResponse } from "@/types/auth";
-import { useAuth } from "@/composables/useAuth";
+
 import Swal from "sweetalert2";
 
-const { atualizarUsuario } = useAuth();
+const {login} = useAuth();
+
 const email = ref<string>("");
 const senha = ref<string>("");
 const erro = ref<string>("");
@@ -19,7 +21,11 @@ const handleLogin = async () => {
     carregando.value = true;
     erro.value = "";
 
-    await authService.login(email.value, senha.value);
+    const response = await authService.login(email.value, senha.value);
+
+    if (response && response.token) {
+        login(response.token);
+    }
 
     Swal.fire({
       title: "Sucesso",
@@ -28,7 +34,6 @@ const handleLogin = async () => {
       confirmButtonText: "Ok",
       confirmButtonColor: "#7367F0",
     }).then(() => {
-      atualizarUsuario();
       router.push("/");
     });
   } catch (e) {

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'; // Importação necessária para o estado do menu
-import { useAuth } from '@/composables/useAuth';
-import Swal from 'sweetalert2';
-
-const { usuarioEmail, estaLogado, usuarioNome, logout } = useAuth();
+import { useAuth } from "@/composables/useAuth";
+import Swal from "sweetalert2";
+const { usuarioEmail, estaLogado, usuarioNome, logout, tipoUsuario } = useAuth();
 
 // Controle reativo do menu hambúrguer
 const isMenuOpen = ref(false);
@@ -25,9 +23,8 @@ const handleDeslogar = () => {
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
-        title: "Saindo",
-        text: "Volte sempre",
-        icon: "success"
+        title: "Saindo...",
+        icon: "success",
       });
       logout();
     };
@@ -64,13 +61,13 @@ const handleDeslogar = () => {
       <RouterLink to="/carrinho">
         <button class="login"><i class="fa-solid fa-cart-shopping"></i></button>
       </RouterLink>
-      
-      <button 
-        class="hamburger" 
-        :class="{ 'open': isMenuOpen }" 
-        @click="toggleMenu" 
-        aria-label="Menu"
-      >
+
+      <RouterLink to="/manager" v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
+        <button class="login">Manager<i class="fa fa-pencil" aria-hidden="true"></i></button>
+      </RouterLink>
+
+      <!-- Botão hamburguer (visível apenas em mobile) -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span>
         <span></span>
         <span></span>
@@ -86,8 +83,8 @@ const handleDeslogar = () => {
       </div>
       <div class="nav">
         <ul>
-          <li><RouterLink to="/produtos/categoria/computadores"> Computadores </RouterLink></li>
-          <li><RouterLink to="/produtos/categoria/video-games"> Videogames </RouterLink></li>
+          <li><RouterLink to="/produtos/categoria/video-games">Videogames</RouterLink></li>
+          <li><RouterLink to="/produtos/categoria/computadores">Computador</RouterLink></li>
           <li><RouterLink to="/contato">Contato</RouterLink></li>
           <li><RouterLink to="/servicos">Serviços</RouterLink></li>
         </ul>
