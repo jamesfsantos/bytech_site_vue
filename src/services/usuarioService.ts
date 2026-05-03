@@ -13,7 +13,16 @@ class UsuarioService {
     }
   }
 
-
+  async buscarUsuario(email: string): Promise<UsuarioModel>{
+    try{
+      const response = await api.get(`/email/${email}`)
+      return response.data;
+    }
+    catch(erro: unknown){
+      console.error("Erro ao buscar usuario: ", erro)
+      throw erro
+    }
+  }
 }
 
 export default new UsuarioService()

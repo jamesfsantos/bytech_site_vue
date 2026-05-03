@@ -1,224 +1,299 @@
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import usuarioService from "@/services/usuarioService";
+import { onMounted, ref } from "vue";
+import { listaCarrinho, removerDoCarrinho } from "@/stores/carrinhoStores";
+
+
+const router = useRouter();
+
+const usuario = ref();
+
+const email = localStorage.getItem('user_email') || ''
+
+const buscarUsuario = async () => {
+  try{
+    const dados = await usuarioService.buscarUsuario(email);
+    usuario.value = dados;
+  }catch(error){
+    throw error;
+  }
+}
+
+console.log('Usuario:', usuario.value)
+
+const irParaPagamento = () => {
+  router.push("/pagamento");
+};
+
+
+
+onMounted(async () => {await buscarUsuario()});
+</script>
+
 <template>
-    <main class="main-revisao">
+  <main class="main-revisao" v-if="usuario">
+    <div class="rev-background">
+      <h1 class="h1-rev">Revisao do Pedido</h1>
+      <br />
 
-        <div class="rev-background">
-            <h1 class="h1-rev">Revisao do Pedido</h1><br>
-
-            <div class="rev-grid">
-
-
-                <div class="inf-nf">
-                    <h2>Informações na nota fiscal do pedido:</h2>
-                    <p>Nome:</p>
-                    <p>CPF:</p>
-                    <P>E-Mail:</P>
-                    <p>Celular:</p>
-                </div>
-
-                <div class="end-envio">
-                    <h2>Seu pedido será entregue em:</h2>
-                    <p>Endereço:</p>
-                    <p>Complemento:</p>
-                    <p>Cidade:</p>
-                    <p>CEP:</p>
-                </div>
-
-                <div class="rev-produto">
-                    <h2>Produtos:</h2>
-
-                </div>
-
-                <div class="forma-pagamento">
-                    <h2>Forma de pagamento:</h2>
-                    <p></p>
-                </div>
-
-                <div class="resumo-compra">
-                    <h2>Resumo do pedido:</h2><br>
-                    <p>Valor dos produtos:</p><br>
-                    <p>Descontos:</p><br>
-                    <p>Frete:</p><br>
-                    <h2>Total:</h2><br>
-                    <p>Deseja finalizar a compra ?</p><br>
-
-                    <div class="btn-finalizar-div">
-                        <a href="concluido.html"><button class="btn-finalizar-compra">Finalizar Compra</button></a>
-                        <a href="Pagamento.html"><button class="btn-voltar-compra">Voltar</button></a>
-                    </div>
-
-                </div>
-
-
-
+      <div class="rev-grid">
+        <form class="form">
+          <div class="inf-nf">
+            <h2>Informações na nota fiscal do pedido:</h2>
+            <div class="mb-3 col-md-8">
+              <label>Nome:</label><br>
+              <input type="text" class="form-control" v-model="usuario.nome" disabled>
             </div>
+            <div class="mb-3 col-md-3 ">
+              <label>CPF:</label>
+              <input type="text" class="form-control " v-model="usuario.cpf" placeholder="xxx.xxx.xxx-xx" maxlength="14" disabled />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label>Email:</label>
+              <input type="email" v-model="usuario.email" class="form-control " disabled/>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label>Celular:</label>
+              <input type="text" v-model="usuario.celular" class="form-control " disabled/>
+            </div>
+          </div>
+
+          <div class="end-envio">
+            <h2>Seu pedido será entregue em:</h2>
+            <div class="mb-3 col-md-12">
+              <label>Endereço:</label>
+              <input type="text" class="form-control " />
+            </div>
+            <div class="mb-3 col-md-12 ">
+              <label>Complemento:</label>
+              <input type="text" class="form-control " />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label>Cidade:</label>
+              <input type="text" class="form-control " />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label>CEP:</label>
+              <input type="text" class="form-control " />
+            </div>
+          </div>
+        </form>
+
+        <div class="rev-produto">
+          <h2 class="p-3">Produtos:</h2>
+          <div class="lista-produtos">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Quantidade</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Marca</th>
+                  <th scope="col">Preço Unidade</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody v-for="produto in listaCarrinho" :key="produto.id">
+                <tr>
+                  <td>{{ produto.quantidade }}</td>
+                  <td>{{ produto.nome }}</td>
+                  <td>{{ produto.marca }}</td>
+                  <td>{{ produto.precoVenda }}</td>
+                  <td @click="removerDoCarrinho(produto.id)">
+                    <i class="fa-solid fa-trash lixeira" style="color: rgb(255, 0, 0)"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </main>
+
+        <div class="resumo-compra">
+          <h2>Resumo do pedido:</h2>
+          <br />
+          <p>Valor dos produtos:</p>
+          <br />
+          <p>Descontos:</p>
+          <br />
+          <p>Frete:</p>
+          <br />
+          <h2>Total:</h2>
+          <br />
+          <p>Deseja finalizar a compra ?</p>
+          <br />
+
+          <div class="btn-finalizar-div">
+            <RouterLink to="/pagamento" class="btn btn-success">Finalizar Compra</RouterLink>
+            <RouterLink to="/carrinho" class="btn btn-primary">Voltar para o carrinho</RouterLink>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped>
+
+
+
+.lixeira:hover {
+  cursor: pointer;
+}
 .main-revisao {
-    background-color: #353535;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    flex-wrap: wrap;
-    min-height: 100vh;
-    /* padding: 20px; */
-    justify-content: center;
-    align-content: center;
+  background-color: #353535;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  /* padding: 20px; */
+  justify-content: center;
+  align-content: center;
 }
 
 .rev-background {
-
-    background-color: lightgray;
-    padding-bottom: 20px;
-    width: 100%;
-
+  background-color: lightgray;
+  padding-bottom: 20px;
+  width: 100%;
 }
 
 .h1-rev {
-    background-color: #3B8CBE;
-    color: rgb(255, 255, 255);
-    width: 100%;
-    text-align: center;
+  background-color: #3b8cbe;
+  color: rgb(255, 255, 255);
+  width: 100%;
+  text-align: center;
 }
 
 .rev-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    max-width: 90%;
-    margin: auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  max-width: 90%;
+  margin: auto;
 }
 
-
 .rev-grid h2 {
-    background-color: #3B8CBE;
-    color: rgb(255, 255, 255);
-    width: 100%;
-    text-align: center;
-
+  background-color: #3b8cbe;
+  color: rgb(255, 255, 255);
+  width: 100%;
+  text-align: center;
 }
 
 /* cards padrão */
-.rev-grid>div {
-    border: 1px solid #7e9aab;
-    border-radius: 5px;
-    background-color: lightgray;
-    /* padding: 15px; */
-    min-height: 90px;
-    /* para garantir que os cards tenham uma altura mínima consistente */
+.rev-grid > div {
+  border: 1px solid #7e9aab;
+  border-radius: 5px;
+  background-color: lightgray;
+  /* padding: 15px; */
+  min-height: 90px;
+  /* para garantir que os cards tenham uma altura mínima consistente */
 }
 
 /* TOPO - ocupa tudo */
 .inf-nf {
-    grid-column: 1 / 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+  grid-column: 1 / 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    align-items: flex-start;
+  display: flex;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 /* endereço (esquerda) */
 .end-envio {
-    grid-column: 1 / 2;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: center;
-    align-items: flex-start;
+  grid-column: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 /* produtos ocupa esquerda inteira */
 .rev-produto {
-    grid-column: 1 / 2;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
+  grid-column: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 /* forma pagamento esquerda */
 .forma-pagamento {
-    grid-column: 1 / 2;
+  grid-column: 1 / 2;
 }
 
 /* botão finalizar esquerda */
 .btn-finalizar-div {
-    grid-column: 1 / 3;
-    display: flex;
-    justify-content: center;
-    max-width: 500px;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    align-items: center;
-    gap: 10px;
-
+  grid-column: 1 / 3;
+  display: flex;
+  justify-content: center;
+  max-width: 500px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 /* SIDEBAR (igual Kabum) */
 .resumo-compra {
-    grid-column: 2 / 3;
-    grid-row: 1 / 6;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
+  grid-column: 2 / 3;
+  grid-row: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .btn-finalizar-compra {
-    width: 200px;
-    background-color: #006E1D;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+  width: 200px;
+  background-color: #006e1d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .btn-voltar-compra {
-
-    width: 200px;
-    background-color: #3B8CBE;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-
+  width: 200px;
+  background-color: #3b8cbe;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-
 .btn-finalizar-compra:hover {
-    background-color: #96E4FD;
+  background-color: #96e4fd;
 }
 
 @media only screen and (max-width: 600px) {
-    .rev-grid {
-        grid-template-columns: 1fr;
-    }
+  .rev-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .resumo-compra {
-        grid-column: 1 / 2;
-        grid-row: 6 / 7;
-    }
+  .resumo-compra {
+    grid-column: 1 / 2;
+    grid-row: 6 / 7;
+  }
 
-    .btn-finalizar-div {
-        grid-column: 1 / 2;
-    }
+  .btn-finalizar-div {
+    grid-column: 1 / 2;
+  }
 }
 </style>

@@ -41,6 +41,7 @@ const carregarProduto = async () => {
       const produto = await produtoService.buscarProdutoPorId(Number(idProduto.value));
       if (produto) {
         formularioConta.value = { ...produto };
+
       }
     } catch (error) {
       console.error("Erro ao buscar produto", error);
@@ -74,14 +75,13 @@ const cadastrarProduto = async (event: Event) => {
       const result = await Swal.fire({
         title: isEdicao.value ? "Atualizado com sucesso!" : "Cadastrado com sucesso!",
         icon: "success",
-         allowEscapeKey: false,
-         allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
       });
 
       console.log(result);
 
-      if (result.isConfirmed)
-        router.push("/manager/produto");
+      if (result.isConfirmed) router.push("/manager/produto");
     }
   } catch (erro: unknown) {
     console.error(erro);
@@ -163,7 +163,7 @@ onMounted(() => {
         <div class="col-md-4">
           <label for="categoria" class="form-label">Categoria</label>
           <select id="categoria" class="form-select" v-model="formularioConta.categoriaId">
-            <option value="" disabled>Selecione uma opção</option>
+            <option value="" disabled>Selecione uma opção...</option>
             <option
               v-for="categoria in categorias"
               :key="categoria.id"
@@ -185,6 +185,12 @@ onMounted(() => {
             required
           ></textarea>
         </div>
+        <div class="col-md-12">
+          <div class="form-check">
+            <input v-model="formularioConta.ativo" class="form-check-input" type="checkbox" id="gridCheck" />
+            <label class="form-check-label" for="gridCheck"> Ativo </label>
+          </div>
+        </div>
         <div class="col-12 d-flex justify-content-between">
           <button type="submit" class="btn btn-success">
             {{ isEdicao ? "Salvar Alterações" : "Cadastrar Produto" }}
@@ -197,10 +203,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 h1 {
   color: white;
-
 }
 
 .form {

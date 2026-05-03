@@ -14,6 +14,7 @@ const carregarProdutos = async () => {
   try {
     carregando.value = true;
     produtos.value = await produtoService.buscarProdutos();
+
   } catch (erro: unknown) {
     console.error("Erro ao carregar produtos:", erro);
     Swal.fire("Erro", "Não foi possível carregar a lista de produtos", "error");
@@ -75,6 +76,7 @@ onMounted(() => {
           <th>Categoria</th>
           <th>Marca</th>
           <th>Quantidade</th>
+          <th>Ativo?</th>
           <th></th>
         </tr>
       </thead>
@@ -85,6 +87,7 @@ onMounted(() => {
           <td>{{ item.categoria.nome }}</td>
           <td>{{ item.marca }}</td>
           <td>{{ item.estoqueAtual }}</td>
+          <td>{{ item.ativo ? 'Sim' : 'Não' }}</td>
           <td class="d-flex justify-content-evenly">
             <RouterLink class="btn btn-warning" :to="`/manager/produto/editar/${item.id}`"
               >Editar</RouterLink

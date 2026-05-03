@@ -1,13 +1,16 @@
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import { type ProdutoModel } from '@/models/produtoModel';
-
-
 
 export interface ItemCarrinho extends ProdutoModel {
     quantidade: number
 }
 
-export const listaCarrinho = ref<ItemCarrinho[]>([]);
+const dadosSalvo = localStorage.getItem('carrinho_usuario')
+export const listaCarrinho = ref<ItemCarrinho[]>(dadosSalvo ? JSON.parse(dadosSalvo) : []);
+
+watch(listaCarrinho, (novaLista) => {
+  localStorage.setItem('carrinho_usuario', JSON.stringify(novaLista))
+}, {deep: true})
 
 export function adicionarAoCarrinho(produto: ProdutoModel){
     const itemExistente = listaCarrinho.value.find(p => p.id === produto.id)
@@ -21,7 +24,7 @@ export function adicionarAoCarrinho(produto: ProdutoModel){
             listaCarrinho.value.push({ ...produto, quantidade: 1});
         }
     }
-    
+
 }
 
 export function removerDoCarrinho(id: number) {
