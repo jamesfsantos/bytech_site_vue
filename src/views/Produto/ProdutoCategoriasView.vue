@@ -50,8 +50,8 @@ watch(
             <div>
               <span class="preco">R$ {{ produto.precoVenda }}</span>
             </div>
-            <div class="botao">
-              <RouterLink :to="`/produto/${produto.id}`">Detalhes</RouterLink>
+            <div>
+              <RouterLink :to="`/produto/${produto.id}`"><button class="botao">Detalhes</button></RouterLink>
             </div>
           </div>
         </div>
@@ -149,6 +149,8 @@ p {
   padding: 10px;
   font-weight: bold;
   border-radius: 5px;
+  color: white;
+  border: 0px;
 }
 
 .botao a {
