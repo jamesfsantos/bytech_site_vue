@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import produtoService from "@/services/produtoService.ts";
 import { type ProdutoModel } from "@/models/produtoModel.ts";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import Swal from "sweetalert2";
 import { formatarMoeda } from "@/utils/utils";
 
@@ -23,6 +23,17 @@ const carregarProdutos = async () => {
     carregando.value = false;
   }
 };
+
+const produtosAtivos = computed(() =>
+  produtos.value.filter(p => p.ativo)
+)
+
+const produtosInativos = computed(() =>
+  produtos.value.filter(p => !p.ativo)
+)
+
+const abaAtual = ref('ativos');
+
 
 const deletarProduto = async (id: number) => {
   const result = await Swal.fire({
@@ -67,41 +78,60 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <h2>Lista de Produtos</h2>
-    <div v-if="carregando">Carregando...</div>
-    <table v-else-if="produtos.length > 0" class="tabela">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Preço</th>
-          <th>Categoria</th>
-          <th>Marca</th>
-          <th>Quantidade</th>
-          <th>Ativo?</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in produtos" :key="item.id">
-          <td>{{ item.nome }}</td>
-          <td>{{ formatarMoeda(item.precoVenda) }}</td>
-          <td>{{ item.categoria.nome }}</td>
-          <td>{{ item.marca }}</td>
-          <td>{{ item.estoqueAtual }}</td>
-          <td>{{ item.ativo ? 'Sim' : 'Não' }}</td>
-          <td class="d-flex justify-content-evenly">
-            <RouterLink class="btn btn-warning" :to="`/manager/produto/editar/${item.id}`"
-              >Editar</RouterLink
-            >
-            &nbsp;
-            <button class="btn btn-danger" @click="deletarProduto(item.id)">Deletar</button>
-          </td>
-        </tr>
-      </tbody>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Gerenciamento de Produtos</h2>
 
-      <RouterLink class="mt-2 btn btn-primary" to="/manager/produto/cadastro">Novo Produto</RouterLink>
-    </table>
-    <div v-else>Nenhum produto encontrado</div>
+    </div>
+
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button class="nav-link  border-0" :class="{ active: abaAtual === 'ativos' }" @click="abaAtual = 'ativos'">
+          Ativos <span class="badge bg-success">{{ produtosAtivos.length }}</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link  border-0" :class="{ active: abaAtual === 'inativos' }" @click="abaAtual = 'inativos'">
+          Inativos <span class="badge bg-danger">{{ produtosInativos.length }}</span>
+        </button>
+      </li>
+    </ul>
+
+    <div v-if="carregando">Carregando...</div>
+
+    <div v-else>
+      <table v-if="(abaAtual === 'ativos' ? produtosAtivos : produtosInativos).length > 0" class="tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Categoria</th>
+            <th>Marca</th>
+            <th>Estoque</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in (abaAtual === 'ativos' ? produtosAtivos : produtosInativos)" :key="item.id">
+            <td>{{ item.nome }}</td>
+            <td>{{ formatarMoeda(item.precoVenda) }}</td>
+            <td>{{ item.categoria?.nome }}</td>
+            <td>{{ item.marca }}</td>
+            <td>{{ item.estoqueAtual }}</td>
+            <td class="d-flex justify-content-evenly">
+              <RouterLink class="btn btn-warning btn-sm" :to="`/manager/produto/editar/${item.id}`">Editar</RouterLink>
+              <button class="btn btn-danger btn-sm" @click="deletarProduto(item.id)">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <RouterLink class="btn btn-primary m-2" to="/manager/produto/cadastro">Novo Produto</RouterLink>
+        </tfoot>
+      </table>
+
+      <div v-else class="text-white text-center mt-4">
+        Nenhum produto {{ abaAtual }} encontrado.
+      </div>
+    </div>
   </div>
 </template>
 
@@ -147,6 +177,4 @@ tbody tr:hover {
 td:last-child {
   text-align: center;
 }
-
-
 </style>
