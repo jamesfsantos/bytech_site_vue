@@ -5,6 +5,17 @@ import produtoService from "@/services/produtoService";
 import Swal from "sweetalert2";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { Money3Component as Money } from 'v-money3'
+
+
+const configMoeda = {
+  prefix: 'R$ ',
+  suffix: '',
+  thousands: '.',
+  decimal: ',',
+  precision: 2,
+  masked: false // IMPORTANTE: false para o v-model guardar 1000.50 e não "R$ 1.000,50"
+}
 
 const categorias = ref<CategoriaModel[]>([]);
 const formularioValido = ref(false);
@@ -132,6 +143,7 @@ onMounted(() => {
           <label for="precoVenda" class="form-label">Preço venda</label>
           <input
             v-model="formularioConta.precoVenda"
+            v-bind="configMoeda"
             type="number"
             step="0.01"
             class="form-control"

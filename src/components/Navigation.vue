@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import { ref } from "vue";
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
 const { usuarioEmail, estaLogado, usuarioNome, logout, tipoUsuario } = useAuth();
@@ -20,7 +20,7 @@ const handleDeslogar = () => {
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Sim",
-    cancelButtonText: "Não"
+    cancelButtonText: "Não",
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
@@ -28,16 +28,20 @@ const handleDeslogar = () => {
         icon: "success",
       });
       logout();
-    };
+    }
   });
-}
+};
 </script>
 
 <template>
   <header>
     <div class="logo-img">
       <RouterLink to="/">
-        <img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial" />
+        <img
+          src="@/assets/images/logo/bytech_logo.svg"
+          alt="logo"
+          title="Voltar a pagina inicial"
+        />
       </RouterLink>
     </div>
 
@@ -50,7 +54,7 @@ const handleDeslogar = () => {
       </section>
 
       <section class="logintext" v-else>
-        Entre ou <RouterLink to="/cadastro"><br>Cadastre-se</RouterLink>
+        Entre ou <RouterLink to="/cadastro"><br />Cadastre-se</RouterLink>
       </section>
 
       <section class="logintext" v-if="!estaLogado">
@@ -66,6 +70,9 @@ const handleDeslogar = () => {
       <RouterLink to="/manager" v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
         <button class="login">Manager<i class="fa fa-pencil" aria-hidden="true"></i></button>
       </RouterLink>
+      <RouterLink to="/pedidos">
+        <button class="lista login"><i class="fa-solid fa-list"></i></button>
+      </RouterLink>
 
       <!-- Botão hamburguer (visível apenas em mobile) -->
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
@@ -75,7 +82,7 @@ const handleDeslogar = () => {
       </button>
     </div>
 
-    <div class="mobile-menu" :class="{ 'open': isMenuOpen }">
+    <div class="mobile-menu" :class="{ open: isMenuOpen }">
       <div class="nav-pesquisa">
         <section class="pesquisa">
           <input class="pesquisa" type="text" placeholder="Pesquisar" />

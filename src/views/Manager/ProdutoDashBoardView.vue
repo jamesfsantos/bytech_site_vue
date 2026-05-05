@@ -3,6 +3,7 @@ import produtoService from "@/services/produtoService.ts";
 import { type ProdutoModel } from "@/models/produtoModel.ts";
 import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
+import { formatarMoeda } from "@/utils/utils";
 
 
 
@@ -83,7 +84,7 @@ onMounted(() => {
       <tbody>
         <tr v-for="item in produtos" :key="item.id">
           <td>{{ item.nome }}</td>
-          <td>{{ item.precoVenda }}</td>
+          <td>{{ formatarMoeda(item.precoVenda) }}</td>
           <td>{{ item.categoria.nome }}</td>
           <td>{{ item.marca }}</td>
           <td>{{ item.estoqueAtual }}</td>

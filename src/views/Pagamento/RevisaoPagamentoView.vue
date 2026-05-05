@@ -1,34 +1,77 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import usuarioService from "@/services/usuarioService";
-import { onMounted, ref } from "vue";
-import { listaCarrinho, removerDoCarrinho } from "@/stores/carrinhoStores";
-
+import { computed, onMounted, ref } from "vue";
+import { limparCarrinho, listaCarrinho, removerDoCarrinho } from "@/stores/carrinhoStores";
+import type { PedidoModel } from "@/models/pedidoModel";
+import { formatarMoeda } from "@/utils/utils";
+import pedidoService from "@/services/pedidoService";
 
 const router = useRouter();
-
 const usuario = ref();
+const email = localStorage.getItem("user_email") || "";
 
-const email = localStorage.getItem('user_email') || ''
 
 const buscarUsuario = async () => {
-  try{
+  try {
     const dados = await usuarioService.buscarUsuario(email);
     usuario.value = dados;
-  }catch(error){
+  } catch (error) {
     throw error;
+  }
+};
+
+const entrega = ref({
+  endereco: "",
+  complemento: "",
+  cidade: "",
+  cep: "",
+});
+
+const totalCarrinho = computed(() => {
+  return listaCarrinho.value.reduce((acc, item) => acc + item.precoVenda * item.quantidade, 0);
+});
+
+async function registrarPedido() {
+  const pedido: PedidoModel = {
+    id: 0,
+    usuarioId: usuario.value.id,
+    dataPedido: new Date(),
+    valorTotalPedido: totalCarrinho.value,
+    nomeUsuario: usuario.value.nome,
+    email: email,
+    celular: usuario.value.celular,
+    cpf: usuario.value.cpf,
+    endereco: entrega.value.endereco,
+    cep: entrega.value.cep,
+    cidade: entrega.value.cidade,
+    complemento: entrega.value.complemento,
+    itens: listaCarrinho.value.map((item) => ({
+      id: 0,
+      produtoId: item.id,
+      quantidade: item.quantidade,
+      valor: item.precoVenda,
+      valorTotal: item.precoVenda * item.quantidade,
+      nome: item.nome,
+    })),
+  };
+
+  try {
+    const sucesso = await pedidoService.criarPedido(pedido);
+
+    if (sucesso) {
+      alert("Pedido cadastrado com êxito!");
+      limparCarrinho();
+    }
+  } catch (error) {
+    console.error("Erro ao registrar pedido:", error);
+    alert("Ocorreu um erro ao registrar o pedido");
   }
 }
 
-console.log('Usuario:', usuario.value)
-
-const irParaPagamento = () => {
-  router.push("/pagamento");
-};
-
-
-
-onMounted(async () => {await buscarUsuario()});
+onMounted(async () => {
+  await buscarUsuario();
+});
 </script>
 
 <template>
@@ -42,20 +85,27 @@ onMounted(async () => {await buscarUsuario()});
           <div class="inf-nf">
             <h2>Informações na nota fiscal do pedido:</h2>
             <div class="mb-3 col-md-8">
-              <label>Nome:</label><br>
-              <input type="text" class="form-control" v-model="usuario.nome" disabled>
+              <label>Nome:</label><br />
+              <input type="text" class="form-control" v-model="usuario.nome" disabled />
             </div>
-            <div class="mb-3 col-md-3 ">
+            <div class="mb-3 col-md-3">
               <label>CPF:</label>
-              <input type="text" class="form-control " v-model="usuario.cpf" placeholder="xxx.xxx.xxx-xx" maxlength="14" disabled />
+              <input
+                type="text"
+                class="form-control"
+                v-model="usuario.cpf"
+                placeholder="xxx.xxx.xxx-xx"
+                maxlength="14"
+                disabled
+              />
             </div>
             <div class="mb-3 col-md-6">
               <label>Email:</label>
-              <input type="email" v-model="usuario.email" class="form-control " disabled/>
+              <input type="email" v-model="usuario.email" class="form-control" disabled />
             </div>
             <div class="mb-3 col-md-6">
               <label>Celular:</label>
-              <input type="text" v-model="usuario.celular" class="form-control " disabled/>
+              <input type="text" v-model="usuario.celular" class="form-control" disabled />
             </div>
           </div>
 
@@ -63,19 +113,19 @@ onMounted(async () => {await buscarUsuario()});
             <h2>Seu pedido será entregue em:</h2>
             <div class="mb-3 col-md-12">
               <label>Endereço:</label>
-              <input type="text" class="form-control " />
+              <input type="text" v-model="entrega.endereco" class="form-control" />
             </div>
-            <div class="mb-3 col-md-12 ">
+            <div class="mb-3 col-md-12">
               <label>Complemento:</label>
-              <input type="text" class="form-control " />
+              <input type="text" v-model="entrega.complemento" class="form-control" />
             </div>
             <div class="mb-3 col-md-6">
               <label>Cidade:</label>
-              <input type="text" class="form-control " />
+              <input type="text" v-model="entrega.cidade" class="form-control" />
             </div>
             <div class="mb-3 col-md-6">
               <label>CEP:</label>
-              <input type="text" class="form-control " />
+              <input type="text" v-model="entrega.cep" class="form-control" />
             </div>
           </div>
         </form>
@@ -98,7 +148,7 @@ onMounted(async () => {await buscarUsuario()});
                   <td>{{ produto.quantidade }}</td>
                   <td>{{ produto.nome }}</td>
                   <td>{{ produto.marca }}</td>
-                  <td>{{ produto.precoVenda }}</td>
+                  <td>{{ formatarMoeda(produto.precoVenda) }}</td>
                   <td @click="removerDoCarrinho(produto.id)">
                     <i class="fa-solid fa-trash lixeira" style="color: rgb(255, 0, 0)"></i>
                   </td>
@@ -108,22 +158,22 @@ onMounted(async () => {await buscarUsuario()});
           </div>
         </div>
 
-        <div class="resumo-compra">
+        <div class="resumo-compra" v-for="produto in listaCarrinho" :key="produto.id">
           <h2>Resumo do pedido:</h2>
           <br />
           <p>Valor dos produtos:</p>
+          {{ produto.nome }} = R${{ produto.precoVenda * produto.quantidade }}
           <br />
           <p>Descontos:</p>
           <br />
           <p>Frete:</p>
           <br />
-          <h2>Total:</h2>
+          <h2>Total: {{ formatarMoeda(totalCarrinho) }}</h2>
           <br />
-          <p>Deseja finalizar a compra ?</p>
+          <p>Deseja finalizar o pedido ?</p>
           <br />
-
           <div class="btn-finalizar-div">
-            <RouterLink to="/pagamento" class="btn btn-success">Finalizar Compra</RouterLink>
+            <button class="btn btn-success" @click="registrarPedido()">Registrar Pedido</button>
             <RouterLink to="/carrinho" class="btn btn-primary">Voltar para o carrinho</RouterLink>
           </div>
         </div>
@@ -133,9 +183,6 @@ onMounted(async () => {await buscarUsuario()});
 </template>
 
 <style scoped>
-
-
-
 .lixeira:hover {
   cursor: pointer;
 }

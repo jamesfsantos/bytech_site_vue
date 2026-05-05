@@ -20,6 +20,7 @@
     "bootstrap": "^5.3.8",
     "jwt-decode": "^4.0.0",
     "sweetalert2": "^11.26.24",
+    "v-money3": "^3.24.1",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
   },

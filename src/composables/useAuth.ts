@@ -36,11 +36,12 @@ export function useAuth() {
   };
 
   const logout = () => {
+    token.value = ""
     localStorage.removeItem("user_token");
     localStorage.removeItem("user_nome");
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_role");
-    token.value = "";
+    localStorage.removeItem("ut")
     router.push("/")
   };
 
