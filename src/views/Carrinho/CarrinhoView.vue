@@ -10,8 +10,10 @@ const totalCompra = computed(() => {
 })
 
 
-const irParaPagamento = () => {
-  router.push("/pagamento");
+
+
+const irParaRevisao = () => {
+  router.push("/revisao-pagamento");
 }
 
 </script>
@@ -44,14 +46,13 @@ const irParaPagamento = () => {
         </div>
       </div>
       <p class="Limpar-Carrinho">
-        <button class="btn-Remover-Carrinho" @click="limparCarrinho">Limpar</button>
+        <button class="btn btn-danger" @click="limparCarrinho">Limpar Carrinho</button>
       </p>
 
       <h2>Resumo do Pedido</h2>
       <div class="Total">
         <p class="Valor-Total-Compra">Total: R$ {{ totalCompra.toFixed(2) }}</p>
-
-        <button class="btnfinalizar" @click="irParaPagamento">Finalizar Compra</button>
+        <button class="btnfinalizar" @click="irParaRevisao">Ir para a revisão...</button>
       </div>
     </div>
   </main>

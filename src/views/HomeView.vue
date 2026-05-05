@@ -91,3 +91,7 @@ import Navigation from '@/components/Navigation.vue';
     </div>
   </main>
 </template>
+
+<style scoped>
+
+</style>

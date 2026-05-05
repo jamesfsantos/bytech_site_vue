@@ -2,7 +2,7 @@
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
 
-const { tipoUsuario, usuarioNome, logout} = useAuth();
+const { tipoUsuario, usuarioNome, logout } = useAuth();
 
 const handleDeslogar = () => {
   Swal.fire({
@@ -24,7 +24,7 @@ const handleDeslogar = () => {
       logout();
     }
   });
-}
+};
 
 console.log("Tipo user " + tipoUsuario.value);
 </script>
@@ -34,18 +34,17 @@ console.log("Tipo user " + tipoUsuario.value);
     <div class="row">
       <nav class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar vh-100 p-0 border-end">
         <div class="p-4">
-          <div class="logo-img d-flex align-items-center">
-            <img src="@/assets/images/logo/bytech_logo.svg" />
+          <div >
+            <RouterLink to="/" class="logo-img d-flex align-items-center">
+              <img src="@/assets/images/logo/bytech_logo.svg" />
+            </RouterLink>
           </div>
           <ul class="nav nav-pills flex-column">
             <li class="nav-item">
               <RouterLink class="nav-link mb-2" to="/manager/produto"> Produto </RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link mb-2" to="/">Voltar</RouterLink>
-            </li>
-            <li class="nav-item">
-              <button class="btn btn-danger" @click="handleDeslogar">Sair</button>
+              <button class="btn btn-danger" @click="handleDeslogar">Deslogar</button>
             </li>
           </ul>
         </div>
@@ -68,9 +67,7 @@ console.log("Tipo user " + tipoUsuario.value);
             <li>
               <RouterLink class="nav-link mb-2" to="/manager/produto"> Produto </RouterLink>
             </li>
-            <li>
-
-            </li>
+            <li></li>
           </ul>
         </div>
       </nav>
