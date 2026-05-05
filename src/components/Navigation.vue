@@ -85,7 +85,7 @@ const handleDeslogar = () => {
     <div class="mobile-menu" :class="{ open: isMenuOpen }">
       <div class="nav-pesquisa">
         <section class="pesquisa">
-          <input class="pesquisa" type="text" placeholder="Pesquisar" />
+          <input class="pesquisa" type="text" placeholder="Pesquisar um produto..." />
           <i class="fa-solid fa-magnifying-glass"></i>
         </section>
       </div>
@@ -101,7 +101,7 @@ const handleDeslogar = () => {
 
     <div class="nav-pesquisa desktop-only">
       <section class="pesquisa">
-        <input class="pesquisa" type="text" placeholder="Pesquisar" />
+        <input class="pesquisa" type="text" placeholder="Pesquisar um produto..." />
         <i class="fa-solid fa-magnifying-glass"></i>
       </section>
     </div>

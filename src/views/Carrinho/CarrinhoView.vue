@@ -52,7 +52,6 @@ const irParaRevisao = () => {
       <h2>Resumo do Pedido</h2>
       <div class="Total">
         <p class="Valor-Total-Compra">Total: R$ {{ totalCompra.toFixed(2) }}</p>
-
         <button class="btnfinalizar" @click="irParaRevisao">Ir para a revisão...</button>
       </div>
     </div>
