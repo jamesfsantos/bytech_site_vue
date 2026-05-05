@@ -85,12 +85,12 @@ onMounted(() => {
 
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item">
-        <button class="nav-link  border-0" :class="{ active: abaAtual === 'ativos' }" @click="abaAtual = 'ativos'">
+        <button class="nav-link  " :class="{ active: abaAtual === 'ativos' }" @click="abaAtual = 'ativos'">
           Ativos <span class="badge bg-success">{{ produtosAtivos.length }}</span>
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link  border-0" :class="{ active: abaAtual === 'inativos' }" @click="abaAtual = 'inativos'">
+        <button class="nav-link " :class="{ active: abaAtual === 'inativos' }" @click="abaAtual = 'inativos'">
           Inativos <span class="badge bg-danger">{{ produtosInativos.length }}</span>
         </button>
       </li>
@@ -177,4 +177,12 @@ tbody tr:hover {
 td:last-child {
   text-align: center;
 }
+
+.nav-tabs .nav-link {
+
+  background-color: lightgray;
+  color: black;
+  
+}
+
 </style>
