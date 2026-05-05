@@ -46,7 +46,7 @@ const irParaRevisao = () => {
         </div>
       </div>
       <p class="Limpar-Carrinho">
-        <button class="btn-Remover-Carrinho" @click="limparCarrinho">Limpar</button>
+        <button class="btn btn-danger" @click="limparCarrinho">Limpar Carrinho</button>
       </p>
 
       <h2>Resumo do Pedido</h2>
