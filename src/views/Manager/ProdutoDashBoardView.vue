@@ -35,40 +35,7 @@ const produtosInativos = computed(() =>
 const abaAtual = ref('ativos');
 
 
-const deletarProduto = async (id: number) => {
-  const result = await Swal.fire({
-    title: "Excluir Produto?",
-    text: "Esta ação não pode ser desfeita!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Sim",
-    cancelButtonText: "Cancelar",
-  });
 
-  if (result.isConfirmed) {
-    try {
-
-      const sucesso = await produtoService.excluirProduto(id);
-
-      if (sucesso) {
-        await Swal.fire({
-          title: "Atenção",
-          text: "O produto foi removido com sucesso.",
-          icon: "success",
-        });
-
-        produtos.value = produtos.value.filter(p => p.id !== id);
-      } else {
-        throw new Error("Falha na exclusão");
-      }
-    } catch (error) {
-      console.error("Erro ao excluir produto", error);
-      Swal.fire("Erro", "Não foi possível excluir o produto.", "error");
-    }
-  }
-};
 
 
 onMounted(() => {
@@ -80,17 +47,16 @@ onMounted(() => {
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2>Gerenciamento de Produtos</h2>
-
     </div>
 
-    <ul class="nav nav-tabs mb-3">
+    <ul class="nav nav-tabs">
       <li class="nav-item">
-        <button class="nav-link  border-0" :class="{ active: abaAtual === 'ativos' }" @click="abaAtual = 'ativos'">
+        <button class="nav-link" :class="{ active: abaAtual === 'ativos' }" @click="abaAtual = 'ativos'">
           Ativos <span class="badge bg-success">{{ produtosAtivos.length }}</span>
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link  border-0" :class="{ active: abaAtual === 'inativos' }" @click="abaAtual = 'inativos'">
+        <button class="nav-link" :class="{ active: abaAtual === 'inativos' }" @click="abaAtual = 'inativos'">
           Inativos <span class="badge bg-danger">{{ produtosInativos.length }}</span>
         </button>
       </li>
@@ -119,7 +85,6 @@ onMounted(() => {
             <td>{{ item.estoqueAtual }}</td>
             <td class="d-flex justify-content-evenly">
               <RouterLink class="btn btn-warning btn-sm" :to="`/manager/produto/editar/${item.id}`">Editar</RouterLink>
-              <button class="btn btn-danger btn-sm" @click="deletarProduto(item.id)">Excluir</button>
             </td>
           </tr>
         </tbody>
