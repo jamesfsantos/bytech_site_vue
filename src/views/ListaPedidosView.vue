@@ -28,7 +28,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="background">
-    <div class="container mt-5 vh-100 " v-if="estaLogado">
+    <div class="pedidos " v-if="estaLogado">
       <h1 class="mb-4">Meus Pedidos</h1>
 
       <div v-if="pedidos.length === 0" class="alert alert-info">
@@ -86,15 +86,42 @@ onMounted(() => {
   </div>
 </template>
 <style scoped>
-.background,html {
-    background: radial-gradient(circle at top, #1a2a33 0%, #111 100%);
+.background,
+html {
+  background: radial-gradient(circle at top, #1a2a33 0%, #111 100%);
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+
+.pedidos {
+  width: 75%;
+
 }
 
 h1 {
   color: white;
 }
 
-.card-header{
-background-color: #3B8CBE !important;
+.card-header {
+  background-color: #3B8CBE !important;
+}
+
+@media (max-width: 900px) {
+.pedidos {
+  width: 90%;
+}
+}
+
+@media (max-width: 768px) {
+.pedidos {
+  width: 100%;
+}
 }
 </style>
