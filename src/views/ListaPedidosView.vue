@@ -27,19 +27,20 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="container mt-5 vh-100 " v-if="estaLogado">
+  <div class="container mt-5  " v-if="estaLogado">
     <h1 class="mb-4">Meus Pedidos</h1>
 
     <div v-if="pedidos.length === 0" class="alert alert-info">
       Você ainda não realizou nenhum pedido.
     </div>
 
-    <div v-for="(pedido) in pedidos" :key="pedido.id" class="card mb-4 shadow-sm">
+    <div v-for="pedido in pedidos" :key="pedido.id" class="card mb-4 shadow-sm">
       <div class="card-header bg-dark text-white d-flex justify-content-between">
         <span
           ><strong>Pedido #{{ pedido.id }}</strong></span
         >
         <span>Data: {{ new Date(pedido.dataPedido).toLocaleDateString() }}</span>
+        <span>Status: {{ pedido.statusPedido.statusAtual }}</span>
       </div>
 
       <div class="card-body">
@@ -85,4 +86,8 @@ onMounted(() => {
     <RouterLink class="btn btn-primary" to="/login">Ir para o Login...</RouterLink>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+footer{
+
+}
+</style>
