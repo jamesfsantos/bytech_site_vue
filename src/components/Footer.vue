@@ -1,12 +1,8 @@
 <template>
   <footer>
-    <div class="logo-img">
-      <RouterLink to="/"><img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial">
-      </RouterLink>
-    </div>
-
-    <div class="rodape-colunas">
-
+    
+    
+    
     <div class="rodape-nav">
       <ul>
         <li>
@@ -22,9 +18,13 @@
         <li><a href="#">Voltar ao topo</a></li>
       </ul>
     </div>
- 
-
-
+    <br>
+    
+    <div class="logo-img">
+      <RouterLink to="/"><img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial">
+      </RouterLink>
+    </div>
+    
     <div class="contato">
       <h4>Canais de atendimento</h4>
       <a href=""><i class="fa-brands fa-whatsapp"></i>(11) 99999-9999</a>
@@ -33,13 +33,13 @@
       <a href=""><i class="fa-regular fa-comments"></i>Chatbot</a>
     </div>
 
-</div>
+
   </footer>
 </template>
 <style scoped>
 footer {
   position: relative;
-  display: block;
+  display: flex;
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
@@ -60,12 +60,13 @@ footer {
 }
 
 .rodape-nav {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .contato {
@@ -83,16 +84,17 @@ h4 {
 }
 
 ul {
-  display: flex;
-  list-style: none;
-  text-decoration: none;
-  color: rgb(245, 245, 245);
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
+display: flex;
+    list-style: none;
+    text-decoration: none;
+    color: rgb(245, 245, 245);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin: auto;
 }
 
 a {
@@ -106,6 +108,10 @@ a:hover {
 }
 
 @media (max-width: 600px) {
+
+  ul {
+        gap: 20px;
+  }
 
   footer {
     flex-direction: column;
