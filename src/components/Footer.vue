@@ -1,5 +1,11 @@
 <template>
   <footer>
+    <div class="logo-img">
+      <RouterLink to="/"><img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial">
+      </RouterLink>
+    </div>
+
+    <div class="rodape-colunas">
 
     <div class="rodape-nav">
       <ul>
@@ -16,11 +22,8 @@
         <li><a href="#">Voltar ao topo</a></li>
       </ul>
     </div>
+ 
 
-    <div class="logo-img">
-      <RouterLink to="/"><img src="@/assets/images/logo/bytech_logo.svg" alt="logo" title="Voltar a pagina inicial">
-      </RouterLink>
-    </div>
 
     <div class="contato">
       <h4>Canais de atendimento</h4>
@@ -30,12 +33,13 @@
       <a href=""><i class="fa-regular fa-comments"></i>Chatbot</a>
     </div>
 
+</div>
   </footer>
 </template>
 <style scoped>
 footer {
   position: relative;
-  display: flex;
+  display: block;
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
@@ -44,6 +48,15 @@ footer {
   height: auto;
   width: 100%;
   bottom: 0;
+  flex-direction: column;
+}
+
+.rodape-colunas{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
 }
 
 .rodape-nav {
