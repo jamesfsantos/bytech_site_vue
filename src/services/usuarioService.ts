@@ -23,6 +23,19 @@ class UsuarioService {
       throw erro
     }
   }
+
+  async atualizarUsuario(id: number, dados: UsuarioModel): Promise<boolean>{
+    try{
+      const response = await api.put(`/Usuarios/${id}`, dados)
+
+      return response.status >= 200 && response.status < 300;
+    }
+    catch(error)
+    {
+      console.error("Erro ao atualizar usuario:", error);
+      return false;
+    }
+  }
 }
 
 export default new UsuarioService()
