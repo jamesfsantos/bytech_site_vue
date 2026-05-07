@@ -34,7 +34,7 @@ console.log("Tipo user " + tipoUsuario.value);
     <div class="row">
       <nav class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar vh-100 p-0 border-end">
         <div class="p-4">
-          <div >
+          <div>
             <RouterLink to="/" class="logo-img d-flex align-items-center">
               <img src="@/assets/images/logo/bytech_logo.svg" />
             </RouterLink>
@@ -54,12 +54,7 @@ console.log("Tipo user " + tipoUsuario.value);
         <div class="logo-img">
           <img src="@/assets/images/logo/bytech_logo.svg" />
         </div>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mobileMenu"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mobileMenu">
@@ -71,10 +66,8 @@ console.log("Tipo user " + tipoUsuario.value);
           </ul>
         </div>
       </nav>
-      <main
-        class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 bg-light"
-        v-if="['Administrador', 'Admin'].includes(tipoUsuario)"
-      >
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 bg-light"
+        v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
         <RouterView />
       </main>
     </div>
@@ -87,6 +80,7 @@ console.log("Tipo user " + tipoUsuario.value);
 * {
   font-size: 16px;
 }
+
 main {
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -104,7 +98,8 @@ main {
 
 /* Ajuste para o item de menu ativo */
 .nav-pills .nav-link.active {
-  background-color: #337ab7; /* Azul clássico do BS3 */
+  background-color: #337ab7;
+  /* Azul clássico do BS3 */
 }
 
 .nav-link {
@@ -126,5 +121,17 @@ main {
 
 .boas-vindas {
   font-size: 70px;
+}
+
+.nav-pills .nav-link {
+  border-radius: var(--bs-nav-pills-border-radius);
+  background-color: #D3D3D3 !important;
+  border-radius: 5px !important;
+}
+
+.nav-pills .nav-link:hover {
+  border: 1px solid #93DFF8;
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>
