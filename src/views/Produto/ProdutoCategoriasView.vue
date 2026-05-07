@@ -9,7 +9,7 @@ const temCategoria = ref(false);
 
 const categorias: Record<string, number> = {
   "video-games": 1,
-  computadores: 2,
+  "computadores": 2,
 };
 
 const categoriaId = computed(() => {
@@ -24,7 +24,6 @@ const produtos = ref<ProdutoModel[]>([]);
 
 async function buscarProdutos() {
   temCategoria.value = categoriaId.value! > 0;
-
   if (temCategoria.value)
     produtos.value = await produtoService.buscarPorCategoria(categoriaId.value!);
 }
@@ -32,7 +31,6 @@ async function buscarProdutos() {
 watch(
   () => route.params.categoriaId,
   async () => {
-    temCategoria.value = categoriaId.value! > 0;
     await buscarProdutos();
   },
   { immediate: true },
@@ -52,14 +50,14 @@ watch(
             <div>
               <span class="preco">R$ {{ produto.precoVenda }}</span>
             </div>
-            <div class="botao">
-              <a class="produtoSelecionado" href="">Detalhes</a>
+            <div>
+              <RouterLink :to="`/produto/${produto.id}`"><button class="botao">Detalhes</button></RouterLink>
             </div>
           </div>
         </div>
       </div>
       <div v-else>
-        <h2>Categoria não localizada</h2>
+        <h2 class="ErroMensagem">Categoria não localizada</h2>
       </div>
     </div>
   </main>
@@ -70,16 +68,31 @@ main {
   display: flex;
 }
 
+.ErroMensagem {
+  color: white;
+}
+
 .catalogo {
   width: 95vw;
   height: auto;
 }
 
+
+
+/*.card-produto {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  margin: 0 auto;
+}
+*/
+
 .card-produto {
-  /* border: 1px solid red; */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: center;
 }
 
 .detalhes-produto {
@@ -88,6 +101,11 @@ main {
   margin: 10px;
   padding: 20px;
   transition: all 0.3s ease;
+  max-width: 400px;
+
+  width: 100%;
+  margin: 0 auto;
+
 }
 
 .detalhes-produto:hover {
@@ -98,13 +116,15 @@ main {
 .detalhes-produto img,
 span,
 p {
-  text-align: left;
+  text-align: center;
 }
 
 .imagem {
-  width: 300px;
+  width: 100%;
   height: 250px;
   text-align: center;
+  align-items: center;
+  object-fit: contain; /* ou cover se quiser cortar */
 }
 
 .descricao {
@@ -129,6 +149,8 @@ p {
   padding: 10px;
   font-weight: bold;
   border-radius: 5px;
+  color: white;
+  border: 0px;
 }
 
 .botao a {
@@ -139,5 +161,24 @@ p {
 .botao:hover {
   cursor: pointer;
   background-color: rgba(58, 214, 58, 0.562);
+}
+
+@media (max-width: 1200px) {
+  .card-produto {
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .card-produto {
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .card-produto {
+    grid-template-columns: 1fr;
+  }
+
 }
 </style>

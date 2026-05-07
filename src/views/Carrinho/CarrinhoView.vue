@@ -1,55 +1,58 @@
+<script setup lang="ts">
+import router from '@/router';
+import { listaCarrinho, removerDoCarrinho, limparCarrinho } from '@/stores/carrinhoStores';
+import { computed } from 'vue';
+
+const totalCompra = computed(() => {
+  return listaCarrinho.value.reduce((soma, produto) => {
+    return soma + (produto.precoVenda * produto.quantidade);
+  }, 0)
+})
+
+
+
+
+const irParaRevisao = () => {
+  router.push("/revisao-pagamento");
+}
+
+</script>
+
 <template>
   <main>
     <div class="Carrinho">
       <h1>Seu Carrinho</h1>
       <p class="item">Itens adicionados ao carrinho:</p>
+      <div class="Resumo" v-for="produto in listaCarrinho" :key="produto.id">
 
-      <div class="Resumo">
-        <span>
-          <img src="@/assets/images/ps5pro.jpg" alt="PS5 Pro" />
+        <div class="produto-selecionado">
+          <p>{{ produto.nome }}</p>
+          <span>
+            <img class="imagem-miniatura" :src="produto.imagem" :alt="produto.nome" />
 
-          <label for="Quantidade">Quantidade:</label>
+            <div class="controles">
+              <label>Qtd:</label>
+              <select v-model="produto.quantidade">
+                <option v-for="n in produto.estoqueAtual" :key="n" :value="n">
+                  {{ n }}
+                </option>
+              </select>
+            </div>
 
-          <select id="Quantidade" name="Quantidade">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <br />
-          <p class="preco">Preco: R$ 5999,00</p>
-          <button class="btn-Remover-Carrinho">X</button>
-        </span>
+            <p class="preco">Unitário: R$ {{ produto.precoVenda.toFixed(2) }}</p>
+            <p class="subtotal">Subtotal: R$ {{ (produto.precoVenda * produto.quantidade).toFixed(2) }}</p>
+            <button class="btn-Remover-Carrinho" @click="removerDoCarrinho(produto.id)">X</button>
+          </span>
+        </div>
       </div>
-      <p class="Limpar-Carrinho">Limpar carrinho <button class="btn-Remover-Carrinho">X</button></p>
-
-      <h2>Entrega</h2>
-      <div class="frete">
-        <form>
-          <input
-            type="text"
-            id="CEP"
-            name="CEP"
-            placeholder="Insira seu CEP"
-            class="input-cep"
-          /><br />
-        </form>
-        <button class="btnFrete">Calcular o frete</button>
-      </div>
+      <p class="Limpar-Carrinho">
+        <button class="btn btn-danger" @click="limparCarrinho">Limpar Carrinho</button>
+      </p>
 
       <h2>Resumo do Pedido</h2>
       <div class="Total">
-        <p class="Valor-Itens">Total dos Itens: R$ 0,00</p>
-        <p class="Valor-Frete">Frete: R$ 0,00</p>
-        <p class="Valor-Total-Compra">Total: R$ 0,00</p>
-
-        <a href="Pagamento.html" class="btnfinalizar">Finalizar Compra</a>
+        <p class="Valor-Total-Compra">Total: R$ {{ totalCompra.toFixed(2) }}</p>
+        <button class="btnfinalizar" @click="irParaRevisao">Ir para a revisão...</button>
       </div>
     </div>
   </main>
@@ -88,7 +91,7 @@ h2 {
   color: #ececec;
 }
 
-a.btnfinalizar,
+.btnfinalizar,
 button.btnFrete {
   position: relative;
   display: flex;
@@ -108,6 +111,7 @@ button.btnFrete {
 button.btnFrete {
   background-color: #3b8cbe;
 }
+
 
 button.btn-Remover-Carrinho {
   width: 16px;
@@ -131,7 +135,7 @@ button.btn-Remover-Carrinho:hover {
   gap: 10px;
 }
 
-div.Resumo span {
+.produto-selecionado span {
   background-color: lightgray;
   display: flex;
   flex-direction: row;
@@ -177,6 +181,11 @@ div.frete {
   align-items: center;
   text-align: center;
   height: 40px;
+}
+
+.imagem-miniatura {
+  width: 30px;
+  height: 30px;
 }
 
 @media (max-width: 900px) {

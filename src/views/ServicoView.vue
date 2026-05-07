@@ -4,11 +4,10 @@
       <div class="contato">
         <h2>Serviços</h2>
 
-        <br />
+
 
         <h3>Reparo e Manutenção</h3>
 
-        <br />
 
         <ul>
           <p>
@@ -17,14 +16,11 @@
           </p>
         </ul>
 
-        <br />
-
         <p>
           Nossa equipe técnica cuida do seu console ou PC com diagnóstico completo, peças originais
           e garantia no serviço
         </p>
 
-        <br />
 
         <h2>Serviços de manutenção:</h2>
 
