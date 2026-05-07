@@ -110,15 +110,6 @@ watch(() =>
       </p>
     </div>
 
-    <div class="contato">
-      <div class="contatoArea">
-        <h2>Canais de atendimento</h2>
-        <a href=""><i class="fa-brands fa-whatsapp"></i>(11) 99999-9999</a>
-        <a href=""><i class="fa-solid fa-phone-volume"></i>(11) 3999-9999</a>
-        <a href=""><i class="fa-solid fa-envelope"></i>Bytech.Senac@Email.com.br</a>
-        <a href=""><i class="fa-regular fa-comments"></i>Chatbot</a>
-      </div>
-    </div>
   </main>
   <div v-else>
     <h1>Produto não existe!</h1>
@@ -329,28 +320,7 @@ button:hover {
   padding: 50px 200px;
 }
 
-.contato {
-  position: relative;
-  background-color: lightgray;
-  display: inline-block;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border: none;
-  border-radius: 0px;
-  width: 100%;
-  height: auto;
-  margin: auto;
-  margin-bottom: 50px;
-  margin-top: 20px;
-}
 
-.contato i {
-  font-size: 50px;
-  margin-top: 20px;
-  padding-bottom: 20px;
-  color: #3b8cbe;
-}
 
 .Lista-Descricao {
   color: rgb(46, 46, 46);
