@@ -38,6 +38,7 @@ onMounted(() => {
       <div v-for="(pedido) in pedidos" :key="pedido.id" class="card mb-4 shadow-sm">
         <div class="card-header bg-dark text-white d-flex justify-content-between">
           <span><strong>Pedido #{{ pedido.id }}</strong></span>
+          <span><b>Status: {{ pedido.statusPedido.statusAtual }}</b></span>
           <span>Data: {{ new Date(pedido.dataPedido).toLocaleDateString() }}</span>
         </div>
 
@@ -74,7 +75,7 @@ onMounted(() => {
             {{ pedido.cep }}
           </div><br>
           <div>
-            <RouterLink class="btn btn-success" to="/pagamento">Ir para pagamento</RouterLink>
+            <RouterLink class="btn btn-success" :to="`/pagamento/${ pedido.id }`">Ir para pagamento</RouterLink>
           </div>
         </div>
       </div>

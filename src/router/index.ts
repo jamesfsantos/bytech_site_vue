@@ -29,7 +29,7 @@ const routes = [
       {path: '/servicos', name: 'servicos',component: Servico },
       {path: '/login', name: 'login',component: Login },
       {path: '/cadastro', name: 'cadastro',component: Cadastro },
-      {path: '/pagamento', name: 'pagamento', component: Pagamento},
+      {path: '/pagamento/:id', name: 'pagamento', component: Pagamento},
       {path: '/revisao-pagamento', name: 'revisao', component: RevisaoPagamento},
       {path: '/carrinho/', name: 'carrinhoPrincipal',component: Carrinho },
       {path: '/carrinho/:produtoId', name: 'carrinho',component: Carrinho },

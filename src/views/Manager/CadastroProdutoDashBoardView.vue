@@ -14,7 +14,7 @@ const configMoeda = {
   thousands: '.',
   decimal: ',',
   precision: 2,
-  masked: false // IMPORTANTE: false para o v-model guardar 1000.50 e não "R$ 1.000,50"
+  masked: false
 }
 
 const categorias = ref<CategoriaModel[]>([]);
