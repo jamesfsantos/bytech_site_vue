@@ -1,3 +1,5 @@
+import type { StatusPedidoModel } from "./statusPedidoModel"
+
 export interface PedidoModel {
   id: number
   usuarioId: number
@@ -12,6 +14,7 @@ export interface PedidoModel {
   complemento: string
   cidade: string
   itens: ItemPedidoModel[]
+  statusPedido: StatusPedidoModel
 }
 
 export interface ItemPedidoModel {
