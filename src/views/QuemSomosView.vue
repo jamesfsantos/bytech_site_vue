@@ -65,7 +65,7 @@
     align-items: center;
     text-align: center;
     border: none;
-    width: 50%;
+    width: 75%;
     height: auto;
     margin: auto;
     margin-bottom: 50px;
@@ -108,7 +108,12 @@ display: inline-flex;
     align-items: center;
 }
 
-@media (max-width:600px) {  
+@media (max-width:768px) {  
+
+  .quem-somos {
+    width: 100%;
+  }
+
     .contato {
         width: auto;
         height: auto;
