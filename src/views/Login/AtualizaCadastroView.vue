@@ -54,7 +54,7 @@ onMounted(async () => {
         </div>
         <div class="col-6">
           <label for="celular" class="form-label">Celular</label>
-          <input type="text" class="form-control" id="celular" placeholder="Insira o celular..." required />
+          <input type="text" v-model="usuario.celular" class="form-control" id="celular" placeholder="Insira o celular..." required />
           <div class="invalid-feedback">Informe um número de celular válido</div>
         </div>
         <div class="col-md-4">
