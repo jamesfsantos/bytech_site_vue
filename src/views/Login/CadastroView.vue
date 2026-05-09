@@ -1,251 +1,310 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import usuarioService from '@/services/usuarioService';
-import { useRouter } from 'vue-router';
+import { ref, watch } from "vue";
+import usuarioService from "@/services/usuarioService";
+import { useRouter } from "vue-router";
+
+const mensagemErroUI = ref("");
+const carregando = ref(false);
 
 const router = useRouter();
-
 const formularioConta = ref({
   nome: "",
   email: "",
-  celular: "",
   senha: "",
+  celular: "",
+  cpf: "",
+  endereco: "",
+  cidade: "",
+  complemento: "",
+  cep: "",
   confirmarSenha: "",
-  tipoUsuarioId: 2
+  tipoUsuarioId: 2,
 });
 
+watch(
+  () => formularioConta.value.cpf,
+  (novoValor) => {
+    let v = novoValor.replace(/\D/g, ""); // Remove tudo que não é número
+    if (v.length > 11) v = v.slice(0, 11); // Não permite mais que 11 digitos!
+
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+    formularioConta.value.cpf = v;
+  },
+);
+
+watch(
+  () => formularioConta.value.celular,
+  (novoValor) => {
+    let v = novoValor.replace(/\D/g, "");
+    if (v.length > 11) v = v.slice(0, 11);
+
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    v = v.replace(/(\d{5})(\d)/, "$1-$2");
+
+    formularioConta.value.celular = v;
+  },
+);
+
+watch(
+  () => formularioConta.value.cep,
+  (novoValor) => {
+    let v = novoValor.replace(/\D/g, "");
+    if (v.length > 8) v = v.slice(0, 8);
+
+    v = v.replace(/(\d{5})(\d)/, "$1-$2");
+
+    formularioConta.value.cep = v;
+  },
+);
+
 async function realizarCadastro() {
-  if (formularioConta.value.senha !== formularioConta.value.confirmarSenha) {
-    alert('As senhas não conferem!')
-    return;
-  }
-  const { confirmarSenha, ...dados } = formularioConta.value;
+  mensagemErroUI.value = "";
+  carregando.value = true;
+  try {
+    if (!formularioConta.value) {
+      alert("Insira os campos!");
+      return;
+    }
 
-  const cadastro = await usuarioService.cadastrarUsuario(dados);
+    if (formularioConta.value.senha !== formularioConta.value.confirmarSenha) {
+      alert("As senhas não conferem!");
+      return;
+    }
 
-  if (cadastro) {
-    alert("Cadastro feito com sucesso!");
-    router.push('/login');
-  } else {
-    alert('Erro ao criar a conta. Verifique os dados!');
+    const dadosParaEnviar = {
+      ...formularioConta.value,
+      cpf: formularioConta.value.cpf.replace(/\D/g, ""),
+      celular: formularioConta.value.celular.replace(/\D/g, ""),
+      cep: formularioConta.value.cep.replace(/\D/g, ""),
+    };
+
+    const { confirmarSenha, ...dados } = dadosParaEnviar;
+
+    const cadastro = await usuarioService.cadastrarUsuario(dados);
+
+    if (cadastro) {
+      alert("Cadastro feito com sucesso!");
+      router.push("/login");
+    } else {
+      alert("Erro ao criar a conta. Verifique os dados!");
+    }
+  } catch (error: any) {
+    if (error.data && error.data.message) {
+      mensagemErroUI.value = error.data.message;
+    } else if (error.response?.data?.message) {
+      mensagemErroUI.value = error.response.data.message;
+    } else {
+      mensagemErroUI.value = "Erro ao tentar cadastrar usuário.";
+    }
+  } finally {
+    carregando.value = false;
   }
 }
-
 </script>
 
 <template>
-  <main>
-    <div class="Criar-Conta">
-      <h1>Criar Conta</h1>
-      <br />
-      <h5>Informe seus dados para continuar a criação da conta</h5>
-      <br />
-
-      <form @submit.prevent="realizarCadastro">
-        <fieldset>
-          <legend>Dados Pessoais</legend>
-          <label for="nome">Nome:</label>
-          <input v-model="formularioConta.nome" type="text" id="nome" name="nome" placeholder="Insira seu nome"
-            required /><br />
-
-            <label for="nome">CPF:</label>
-          <input v-model="formularioConta.nome" type="text" id="CPF" name="CPF" placeholder="Insira seu CPF"
-            required /><br /> <!-- mudar V model -->
-
-            <label for="nome">Endereço:</label>
-          <input v-model="formularioConta.nome" type="text" id="endereo" name="endereco" placeholder="Insira seu Endereço"
-            required /><br /><!-- mudar V model -->
-
-                <label for="nome">Cidade:</label>
-          <input v-model="formularioConta.nome" type="text" id="cidade" name="cidade" placeholder="Insira sua Cidade"
-            required /><br /><!-- mudar V model -->
-            
-            <label for="nome">CEP:</label>
-            <input v-model="formularioConta.nome" type="text" id="endereo" name="endereco" placeholder="Insira seu CEP"
-            required /><br /><!-- mudar V model -->
-            
-            <label for="nome">Complemento:</label>
-      <input v-model="formularioConta.nome" type="text" id="endereo" name="endereco" placeholder="Insira seu Endereço"
-        required /><br /><!-- mudar V model -->
-
-          <label for="email">E-mail:</label>
-          <input v-model.trim="formularioConta.email" type="email" id="email" name="email"
-            placeholder="Insira seu E-mail" required /><br />
-
-
-
-          <label for="cel">Celular:</label>
-          <input v-model.trim="formularioConta.celular" type="tel" id="cel" name="cel" placeholder="(xx) xxxxx-xxxx"
-            required /><br />
-
-
-
-          <label for="senha">Senha:</label>
-          <input v-model="formularioConta.senha" type="password" id="senha" name="senha"
-            placeholder="Insira sua Senha" /><br />
-
-          <label for="senha-confirma">Confirme sua Senha:</label>
-          <input v-model="formularioConta.confirmarSenha" type="password" id="senha-confirma" name="senha-confirma"
-            placeholder="Confirme sua Senha" /><br />
-
-          <input type="submit" class="btnAcessar" value="Criar Conta" />
-        </fieldset>
-      </form>
-
-      <p class="esqSenha">Esqueceu sua senha?</p>
-      <br />
+  <main class="container py-5">
+    <div v-if="mensagemErroUI" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ mensagemErroUI }}
+      <button type="button" class="btn-close" @click="mensagemErroUI = ''"></button>
     </div>
+    <div class="criar-conta mx-auto">
+      <h1 class="mb-4 text-center">Criar Conta</h1>
 
+      <section class="form shadow">
+        <form class="row g-3" @submit.prevent="realizarCadastro()" novalidate>
+          <div class="col-12">
+            <label for="nome" class="form-label">Nome completo</label>
+            <input
+              v-model="formularioConta.nome"
+              type="text"
+              class="form-control"
+              id="nome"
+              placeholder="Digite seu nome completo"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label for="email" class="form-label">E-mail</label>
+            <input
+              v-model="formularioConta.email"
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="Digite seu e-mail"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label for="celular" class="form-label">Celular</label>
+            <input
+              v-model="formularioConta.celular"
+              type="tel"
+              class="form-control"
+              maxlength="15"
+              id="celular"
+              placeholder="(11) 99999-9999"
+              required
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="cep" class="form-label">CEP</label>
+            <input
+              v-model="formularioConta.cep"
+              type="text"
+              class="form-control"
+              maxlength="9"
+              id="cep"
+              placeholder="00000-000"
+              required
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="cpf" class="form-label">CPF</label>
+            <input
+              v-model="formularioConta.cpf"
+              type="text"
+              class="form-control"
+              maxlength="14"
+              id="cpf"
+              placeholder="000.000.000-00"
+              required
+            />
+          </div>
+          <!-- Cidade -->
+          <div class="col-md-4">
+            <label for="cidade" class="form-label">Cidade</label>
+            <input
+              v-model="formularioConta.cidade"
+              type="text"
+              class="form-control"
+              id="cidade"
+              placeholder="Digite sua cidade"
+              required
+            />
+          </div>
+
+          <!-- Endereço -->
+          <div class="col-12">
+            <label for="endereco" class="form-label">Endereço</label>
+            <input
+              v-model="formularioConta.endereco"
+              type="text"
+              class="form-control"
+              id="endereco"
+              placeholder="Rua, número e bairro"
+              required
+            />
+          </div>
+
+          <!-- Complemento -->
+          <div class="col-12">
+            <label for="complemento" class="form-label"> Complemento </label>
+
+            <input
+              v-model="formularioConta.complemento"
+              type="text"
+              class="form-control"
+              id="complemento"
+              placeholder="Apartamento, bloco, referência..."
+            />
+          </div>
+
+          <!-- Senha -->
+          <div class="col-md-6">
+            <label for="senha" class="form-label">Senha</label>
+            <input
+              v-model="formularioConta.senha"
+              type="password"
+              class="form-control"
+              id="senha"
+              placeholder="Digite sua senha"
+              required
+            />
+          </div>
+
+          <!-- Confirmar Senha -->
+          <div class="col-md-6">
+            <label for="confirmarSenha" class="form-label"> Confirmar senha </label>
+
+            <input
+              v-model="formularioConta.confirmarSenha"
+              type="password"
+              class="form-control"
+              id="confirmarSenha"
+              placeholder="Confirme sua senha"
+              required
+            />
+          </div>
+
+          <!-- Botões -->
+          <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+            <button type="reset" class="btn btn-outline-secondary px-4">
+              <RouterLink to="/">Cancelar</RouterLink>
+            </button>
+
+            <button type="submit" class="btn btn-primary" :disabled="carregando">
+              <span v-if="carregando" class="spinner-border spinner-border-sm me-2"></span>
+              {{ carregando ? "Processando..." : "Criar Conta" }}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <p class="text-center mt-4 text-secondary">
+        Já possui uma conta?
+        <RouterLink to="/login">Entrar</RouterLink>
+      </p>
+    </div>
   </main>
 </template>
+
 <style scoped>
-div.Criar-Conta h1 {
-  align-items: center;
-  text-align: center;
-  background-color: #3B8CBE;
-  color: white;
-  width: 100%;
+main {
+  min-height: 100vh;
+  background: #fff;
 }
 
-div.Criar-Conta {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  background-color: #D3D3D3;
-  font-size: 1rem;
-  /* padding: 50px; */
-  border: 1px solid #3b8cbe;
-  width: 70%;
+.criar-conta {
+  max-width: 850px;
 }
 
-div.Criar-Conta fieldset {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  width: 80%;
-  padding: 50px 0;
+h1 {
+  font-weight: 700;
+  color: #212529;
 }
 
-div.Criar-Conta form {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  width: 80%;
+.form {
+  background-color: white;
+  padding: 35px;
+  border-radius: 16px;
 }
 
-
-
-div.Criar-Conta label {
-  font-weight: bold;
+.form-label {
+  font-weight: 600;
+  color: #495057;
 }
 
-div.Criar-Conta input {
-  height: 2rem;
-  width: 50%;
-  padding: 0.6rem;
-  border: 2px solid #3b8cbe;
-  outline: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-
-div.Criar-Conta input:focus {
-
-  border: 3px solid #96E4FD;
-
-}
-
-fieldset .btnAcessar,
-div.Nova-Conta button {
-
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  background-color: #3b8cbe;
-  border: none;
+.form-control {
+  height: 48px;
   border-radius: 10px;
-  height: 40px;
-  width: fit-content;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  min-height: 40px;
-  text-transform: uppercase;
-  padding: 10px;
-
 }
 
-fieldset {
-  border: 1px solid #0681c9;
-  border-radius: 5px;
+.btn {
+  height: 45px;
+  border-radius: 10px;
+  font-weight: 600;
 }
 
-div.Criar-Conta fieldset .btnAcessar:hover {
-  background-color: #005373;
-  border: 1px solid #0681c9;
-}
-
-div.Nova-Conta button:hover {
-  background-color: #005373;
-  border: 1px solid #0681c9;
-}
-
-div.Criar-Conta .esqSenha {
-  font-size: 14px;
-  text-decoration: underline;
-}
-
-div.Criar-Conta .esqSenha:hover {
-  color: #3b8cbe;
-  cursor: pointer;
-}
-
-div.Nova-Conta {
-  display: flex;
-  flex-direction: column;
-  background-color: #D3D3D3;
-  font-size: 1rem;
-  /* padding: 50px; */
-  border: 1px solid #3b8cbe;
-  width: 50%;
-}
-
-div.Nova-Conta h2 {
-  align-items: center;
-  text-align: center;
-  background-color: #3B8CBE;
-  color: white;
-  width: 100%;
-}
-
-div.Nova-Conta p {
-  align-items: center;
-  text-align: center;
-  font-size: 14px;
-}
-
-@media (max-width: 900px) {
-  div.Criar-Conta {
-    width: 90%;
-  }
-
-  div.Criar-Conta input {
-    width: 80%;
-  }
-
-  div.Nova-Conta {
-    width: 90%;
-  }
+a {
+  text-decoration: none;
+  font-weight: 600;
 }
 </style>

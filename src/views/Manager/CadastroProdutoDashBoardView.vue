@@ -5,17 +5,16 @@ import produtoService from "@/services/produtoService";
 import Swal from "sweetalert2";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Money3Component as Money } from 'v-money3'
-
+import { Money3Component as Money } from "v-money3";
 
 const configMoeda = {
-  prefix: 'R$ ',
-  suffix: '',
-  thousands: '.',
-  decimal: ',',
+  prefix: "R$ ",
+  suffix: "",
+  thousands: ".",
+  decimal: ",",
   precision: 2,
-  masked: false
-}
+  masked: false,
+};
 
 const categorias = ref<CategoriaModel[]>([]);
 const formularioValido = ref(false);
@@ -35,7 +34,7 @@ const carregarCategorias = async () => {
   }
 };
 
-const formularioConta = ref({
+const formularioProduto = ref({
   nome: "",
   imagem: "",
   precoVenda: 0,
@@ -51,8 +50,7 @@ const carregarProduto = async () => {
     try {
       const produto = await produtoService.buscarProdutoPorId(Number(idProduto.value));
       if (produto) {
-        formularioConta.value = { ...produto };
-
+        formularioProduto.value = { ...produto };
       }
     } catch (error) {
       console.error("Erro ao buscar produto", error);
@@ -70,8 +68,8 @@ const cadastrarProduto = async (event: Event) => {
   console.log("Iniciando cadastro de produto!");
   try {
     const dados = {
-      ...formularioConta.value,
-      categoriaId: Number(formularioConta.value.categoriaId),
+      ...formularioProduto.value,
+      categoriaId: Number(formularioProduto.value.categoriaId),
     };
 
     let sucesso = false;
@@ -118,7 +116,7 @@ onMounted(() => {
         <div class="col-12">
           <label for="nome" class="form-label">Nome</label>
           <input
-            v-model="formularioConta.nome"
+            v-model="formularioProduto.nome"
             type="text"
             class="form-control"
             id="nome"
@@ -130,7 +128,7 @@ onMounted(() => {
         <div class="col-12">
           <label for="imagem" class="form-label">Imagem</label>
           <input
-            v-model="formularioConta.imagem"
+            v-model="formularioProduto.imagem"
             type="text"
             class="form-control"
             id="inputAddress"
@@ -142,7 +140,7 @@ onMounted(() => {
         <div class="col-12">
           <label for="precoVenda" class="form-label">Preço venda</label>
           <input
-            v-model="formularioConta.precoVenda"
+            v-model="formularioProduto.precoVenda"
             v-bind="configMoeda"
             type="number"
             step="0.01"
@@ -156,7 +154,7 @@ onMounted(() => {
         <div class="col-md-4">
           <label for="estoqueAtual" class="form-label">Estoque atual</label>
           <input
-            v-model="formularioConta.estoqueAtual"
+            v-model="formularioProduto.estoqueAtual"
             type="text"
             class="form-control"
             id="estoque"
@@ -165,7 +163,7 @@ onMounted(() => {
         <div class="col-md-4">
           <label for="marca" class="form-label">Marca</label>
           <input
-            v-model="formularioConta.marca"
+            v-model="formularioProduto.marca"
             type="text"
             class="form-control"
             id="marca"
@@ -174,7 +172,7 @@ onMounted(() => {
         </div>
         <div class="col-md-4">
           <label for="categoria" class="form-label">Categoria</label>
-          <select id="categoria" class="form-select" v-model="formularioConta.categoriaId">
+          <select id="categoria" class="form-select" v-model="formularioProduto.categoriaId">
             <option value="" disabled>Selecione uma opção...</option>
             <option
               v-for="categoria in categorias"
@@ -190,7 +188,7 @@ onMounted(() => {
         <div class="col-md-12">
           <label for="descricao" class="form-label">Descrição</label>
           <textarea
-            v-model="formularioConta.descricao"
+            v-model="formularioProduto.descricao"
             class="form-control"
             id="descricao"
             rows="5"
@@ -199,7 +197,12 @@ onMounted(() => {
         </div>
         <div class="col-md-12">
           <div class="form-check">
-            <input v-model="formularioConta.ativo" class="form-check-input" type="checkbox" id="gridCheck" />
+            <input
+              v-model="formularioProduto.ativo"
+              class="form-check-input"
+              type="checkbox"
+              id="gridCheck"
+            />
             <label class="form-check-label" for="gridCheck"> Ativo </label>
           </div>
         </div>
@@ -223,5 +226,8 @@ h1 {
   padding: 20px;
   background-color: lightgray;
   border-radius: 5px;
+
 }
+
+
 </style>
