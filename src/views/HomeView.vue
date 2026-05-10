@@ -59,7 +59,7 @@ import Navigation from '@/components/Navigation.vue';
           assegurada.
         </p>
         <router-link to="/produtos/categoria/video-games">
-          <button>saiba mais</button>
+          <button>Saiba mais 👈</button>
         </router-link>
       </div>
 
@@ -67,12 +67,12 @@ import Navigation from '@/components/Navigation.vue';
         <router-link to="/produtos/categoria/computadores">
           <img class="imagens" src="@/assets/images/pc-gamer-completo-preto.jpg" alt="PC Gamer" />
         </router-link>
-        <h2>PC Gamer</h2>
+        <h2>Computadores</h2>
         <p>
           PCs gamer montados com as melhores peças do mercado, desde a entrada ao high-end extremo.
         </p>
         <router-link to="/produtos/categoria/computadores">
-          <button>saiba mais</button>
+          <button>Saiba mais 👈</button>
         </router-link>
       </div>
 
@@ -85,7 +85,7 @@ import Navigation from '@/components/Navigation.vue';
           Reparo, limpeza e manutenção preventiva/corretiva de PCs, Notebooks e consoles.
         </p>
         <router-link to="/servicos">
-          <button>saiba mais</button>
+          <button>Saiba mais 👈</button>
         </router-link>
       </div>
     </div>
@@ -94,9 +94,7 @@ import Navigation from '@/components/Navigation.vue';
 
 <style scoped>
 
-/* =========================
-   MAIN
-========================= */
+
 
 main {
   min-height: 100vh;
@@ -111,9 +109,7 @@ main {
   gap: 50px;
 }
 
-/* =========================
-   CARROSSEL
-========================= */
+
 
 .carrousel-div {
   width: 100%;
@@ -134,9 +130,7 @@ main {
   object-fit: cover;
 }
 
-/* =========================
-   CARDS
-========================= */
+
 
 .conteudo {
   width: 100%;
@@ -177,9 +171,7 @@ main {
   box-shadow: 0 18px 35px rgba(0, 83, 115, 0.14);
 }
 
-/* =========================
-   IMAGENS
-========================= */
+
 
 .coluna .imagens {
   width: 100%;
@@ -198,9 +190,7 @@ main {
   transform: scale(1.02);
 }
 
-/* =========================
-   TEXTOS
-========================= */
+
 
 .coluna h2 {
   color: #005373;
@@ -220,9 +210,6 @@ main {
   font-size: 1rem;
 }
 
-/* =========================
-   BOTÕES
-========================= */
 
 .coluna button,
 .btn-feedback {

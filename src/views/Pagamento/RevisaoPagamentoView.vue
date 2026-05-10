@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import usuarioService from "@/services/usuarioService";
 import { computed, onMounted, ref } from "vue";
 import { limparCarrinho, listaCarrinho, removerDoCarrinho } from "@/stores/carrinhoStores";
 import type { PedidoModel } from "@/models/pedidoModel";
 import { formatarMoeda } from "@/utils/utils";
 import pedidoService from "@/services/pedidoService";
+import Swal from "sweetalert2";
 
 const router = useRouter();
 const usuario = ref();
 const email = localStorage.getItem("user_email") || "";
-
 
 const buscarUsuario = async () => {
   try {
@@ -60,8 +60,14 @@ async function registrarPedido() {
     const sucesso = await pedidoService.criarPedido(pedido);
 
     if (sucesso) {
-      alert("Pedido cadastrado com êxito!");
+      Swal.fire({
+        title: "Sucesso",
+        text: 'Pedido realizado com sucesso!',
+        icon: "success",
+        confirmButtonText: 'Ver meu pedido.'
+      });
       limparCarrinho();
+      router.push('/pedidos')
     }
   } catch (error) {
     console.error("Erro ao registrar pedido:", error);
@@ -164,14 +170,9 @@ onMounted(async () => {
           <p>Valor dos produtos:</p>
           {{ produto.nome }} = R${{ produto.precoVenda * produto.quantidade }}
           <br />
-          <p>Descontos:</p>
-          <br />
-          <p>Frete:</p>
-          <br />
           <h2>Total: {{ formatarMoeda(totalCarrinho) }}</h2>
           <br />
           <p>Deseja finalizar o pedido ?</p>
-          <br />
           <div class="btn-finalizar-div">
             <button class="btn btn-success" @click="registrarPedido()">Registrar Pedido</button>
             <RouterLink to="/carrinho" class="btn btn-primary">Voltar para o carrinho</RouterLink>
@@ -183,164 +184,194 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.lixeira:hover {
-  cursor: pointer;
-}
+/* =========================
+   BASE
+========================= */
+
 .main-revisao {
-  background-color: #353535;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  flex-wrap: wrap;
+  background: #f4f8fb;
   min-height: 100vh;
-  /* padding: 20px; */
+  padding: 30px 15px;
+  display: flex;
   justify-content: center;
-  align-content: center;
 }
 
 .rev-background {
-  background-color: lightgray;
-  padding-bottom: 20px;
   width: 100%;
+  max-width: 1400px;
 }
 
+/* =========================
+   TITULO
+========================= */
+
 .h1-rev {
-  background-color: #3b8cbe;
-  color: rgb(255, 255, 255);
-  width: 100%;
+  background: #005373;
+  color: #fff;
   text-align: center;
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 25px;
 }
+
+/* =========================
+   GRID PRINCIPAL
+========================= */
 
 .rev-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 20px;
-  max-width: 90%;
-  margin: auto;
+  gap: 25px;
 }
+
+/* =========================
+   CARDS BASE
+========================= */
+
+.rev-grid > div,
+.form {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 83, 115, 0.08);
+  border: 1px solid #dcecf3;
+}
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inf-nf,
+.end-envio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* inputs */
+input {
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #cfe3ee;
+  padding: 0 12px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #005373;
+}
+
+/* =========================
+   TÍTULOS INTERNOS
+========================= */
 
 .rev-grid h2 {
-  background-color: #3b8cbe;
-  color: rgb(255, 255, 255);
-  width: 100%;
-  text-align: center;
+  background: #005373;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
 }
 
-/* cards padrão */
-.rev-grid > div {
-  border: 1px solid #7e9aab;
-  border-radius: 5px;
-  background-color: lightgray;
-  /* padding: 15px; */
-  min-height: 90px;
-  /* para garantir que os cards tenham uma altura mínima consistente */
-}
+/* =========================
+   PRODUTOS
+========================= */
 
-/* TOPO - ocupa tudo */
-.inf-nf {
-  grid-column: 1 / 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-
-  display: flex;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-/* endereço (esquerda) */
-.end-envio {
-  grid-column: 1 / 2;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-/* produtos ocupa esquerda inteira */
 .rev-produto {
-  grid-column: 1 / 2;
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: flex-start;
-  align-items: center;
 }
 
-/* forma pagamento esquerda */
-.forma-pagamento {
-  grid-column: 1 / 2;
+.table {
+  font-size: 14px;
 }
 
-/* botão finalizar esquerda */
-.btn-finalizar-div {
-  grid-column: 1 / 3;
-  display: flex;
-  justify-content: center;
-  max-width: 500px;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  align-items: center;
-  gap: 10px;
+.lixeira {
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* SIDEBAR (igual Kabum) */
+.lixeira:hover {
+  transform: scale(1.2);
+}
+
+/* =========================
+   SIDEBAR (RESUMO)
+========================= */
+
 .resumo-compra {
-  grid-column: 2 / 3;
-  grid-row: 1 / 6;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+
+  box-shadow: 0 8px 25px rgba(0, 83, 115, 0.12);
+  border: 1px solid #dcecf3;
+
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: flex-start;
-  align-items: center;
+  gap: 12px;
 }
 
-.btn-finalizar-compra {
-  width: 200px;
-  background-color: #006e1d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+/* =========================
+   BOTÕES
+========================= */
+
+.btn-finalizar-div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 }
 
-.btn-voltar-compra {
-  width: 200px;
-  background-color: #3b8cbe;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+button,
+.btn {
+  border-radius: 12px !important;
+  font-weight: 600;
 }
 
-.btn-finalizar-compra:hover {
-  background-color: #96e4fd;
+/* botão verde moderno */
+.btn-success {
+  background: #006e1d !important;
+  border: none !important;
 }
 
-@media only screen and (max-width: 600px) {
+.btn-success:hover {
+  background: #009a2a !important;
+}
+
+/* botão voltar */
+.btn-primary {
+  background: #005373 !important;
+  border: none !important;
+}
+
+.btn-primary:hover {
+  background: #0a6b92 !important;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 900px) {
   .rev-grid {
     grid-template-columns: 1fr;
   }
 
   .resumo-compra {
-    grid-column: 1 / 2;
-    grid-row: 6 / 7;
-  }
-
-  .btn-finalizar-div {
-    grid-column: 1 / 2;
+    position: relative;
+    top: auto;
   }
 }
 </style>

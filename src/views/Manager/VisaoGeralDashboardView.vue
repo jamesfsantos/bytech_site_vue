@@ -46,14 +46,20 @@ const pedidosCancelados = computed(() => {
   return pedidos.value.filter((p) => p.statusPedido.statusAtual === "Cancelado");
 });
 
+let graficoPedidosInstance: Chart | null = null;
+let graficoProdutosInstance: Chart | null = null;
+
 function criarGraficos() {
   const pedidosCtx = document.getElementById("graficoPedidos") as HTMLCanvasElement;
-  new Chart(pedidosCtx, {
-    type: "doughnut",
 
+  if (graficoPedidosInstance) {
+    graficoPedidosInstance.destroy();
+  }
+
+  graficoPedidosInstance = new Chart(pedidosCtx, {
+    type: "doughnut",
     data: {
       labels: ["Em andamento", "Pagos", "Cancelados"],
-
       datasets: [
         {
           data: [
@@ -61,77 +67,59 @@ function criarGraficos() {
             pedidosPagos.value.length,
             pedidosCancelados.value.length,
           ],
-
           backgroundColor: ["#ffc107", "#198754", "#dc3545"],
-
           borderWidth: 0,
         },
       ],
     },
-
     options: {
       responsive: true,
-
       plugins: {
         legend: {
-          labels: {
-            color: "white",
-          },
+          labels: { color: "white" },
         },
       },
     },
   });
 
   const produtosCtx = document.getElementById("graficoProdutos") as HTMLCanvasElement;
-  new Chart(produtosCtx, {
-    type: "bar",
 
+  if (graficoProdutosInstance) {
+    graficoProdutosInstance.destroy();
+  }
+
+  graficoProdutosInstance = new Chart(produtosCtx, {
+    type: "bar",
     data: {
       labels: nomeProduto.value,
-
       datasets: [
         {
           label: "Produtos vendidos",
-
           data: quantidadeProduto.value,
-
           backgroundColor: "#0d6efd",
-
           borderRadius: 8,
         },
       ],
     },
-
     options: {
       responsive: true,
-
-      scales: {
-        x: {
-          ticks: {
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
             color: "white",
-          },
-
-          grid: {
-            color: "rgba(255,255,255,0.05)",
-          },
-        },
-
-        y: {
-          ticks: {
-            color: "white",
-          },
-
-          grid: {
-            color: "rgba(255,255,255,0.05)",
+            font: { size: 14 },
           },
         },
       },
-
-      plugins: {
-        legend: {
-          labels: {
-            color: "white",
-          },
+      scales: {
+        x: {
+          ticks: { color: "white" },
+          grid: { color: "rgba(255,255,255,0.05)" },
+        },
+        y: {
+          ticks: { color: "white" },
+          grid: { color: "rgba(255,255,255,0.05)" },
         },
       },
     },
@@ -206,7 +194,10 @@ onMounted(async () => {
 .dashboard {
   min-height: 100vh;
 }
-
+h4 {
+  color: white;
+  font-weight: bold;
+}
 .titulo {
   color: #005373;
   font-size: 2.2rem;
