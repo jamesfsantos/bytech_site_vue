@@ -213,12 +213,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
 .background {
-  background: radial-gradient(circle at top, #1a2a33 0%, #111 100%);
+  background: #f4f7fa;
+
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Melhor para listas longas */
-  padding-top: 50px;
+  align-items: flex-start;
+
+  padding: 50px 20px;
+
   width: 100%;
   min-height: 100vh;
 }
@@ -227,59 +231,244 @@ onMounted(() => {
   width: 75%;
 }
 
+
 h1 {
-  color: white;
+  color: #1f2937;
+
+  font-weight: bold;
 }
+
 
 .card {
-  border: none;
-  background-color: #f8f9fa;
+  border: 1px solid #d9e2ec;
+
+  border-radius: 18px;
+
   overflow: hidden;
+
+  background: white;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+
+  transition: .2s ease;
 }
 
+.card:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 15px 30px rgba(0,0,0,.08);
+}
+
+
 .card-header {
-  background-color: #3b8cbe !important;
+  background: #005373 !important;
+
   color: white !important;
+
+  border: none;
+
+  padding: 18px 24px;
+
+  font-size: .95rem;
+}
+
+
+
+.card-body {
+  padding: 25px;
+}
+
+
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: #eef3f7;
+
+  color: #1f2937;
+
+  border: none;
+
+  font-weight: 600;
+}
+
+.table tbody td {
+  vertical-align: middle;
+
+  color: #374151;
+}
+
+.table-hover tbody tr:hover {
+  background: #f8fafc;
+}
+
+tfoot td {
+  border-top: 2px solid #e5e7eb;
+}
+
+
+.nav-pills {
+  gap: 10px;
 }
 
 .nav-pills .nav-link {
-  color: #3b8cbe;
-  border: 1px solid #3b8cbe;
-  margin: 0 5px;
-  background: transparent;
-  transition: all 0.2s ease;
+  color: #005373;
+
+  border: 1px solid #00537330;
+
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 10px 18px;
+
+  font-weight: 600;
+
+  transition: .2s ease;
+}
+
+.nav-pills .nav-link:hover {
+  background: #eef6fa;
 }
 
 .nav-pills .nav-link.active {
-  background-color: #3b8cbe;
+  background: #005373;
+
   color: white;
-  border-color: #3b8cbe;
+
+  border-color: #005373;
 }
 
+
+
 .btn-cancelado.active {
-  background-color: #f11212;
-  border-color: #f11212;
+  background: #dc2626 !important;
+
+  border-color: #dc2626 !important;
 }
 
 .btn-cancelado:hover {
-  border-color: #f11212;
-  color: #f11212;
+  color: #dc2626;
+  border-color: #dc2626;
 }
 
+
+
+.btn {
+  border-radius: 10px;
+
+  font-weight: 600;
+
+  padding: 10px 18px;
+
+  border: none;
+
+  transition: .2s ease;
+}
+
+.btn-success {
+  background: #00a86b !important;
+}
+
+.btn-success:hover {
+  background: #00915d !important;
+}
+
+.btn-danger {
+  background: #dc2626 !important;
+}
+
+.btn-danger:hover {
+  background: #b91c1c !important;
+}
+
+.btn-primary {
+  background: #005373 !important;
+}
+
+.btn-primary:hover {
+  background: #00698f !important;
+}
+
+
+
+.badge {
+  border-radius: 10px;
+
+  font-size: .9rem;
+
+  font-weight: 600;
+}
+
+.bg-success {
+  background: #00a86b !important;
+}
+
+.bg-secondary {
+  background: #6b7280 !important;
+}
+
+
+.alert-info {
+  background: white;
+
+  border: 1px solid #d9e2ec;
+
+  color: #1f2937;
+
+  border-radius: 16px;
+
+  padding: 20px;
+}
+
+
+
+.text-muted {
+  color: #6b7280 !important;
+}
+
+
+
+.container h1 {
+  color: #1f2937;
+}
+
+
 @media (max-width: 900px) {
+
   .pedidos-container {
-    width: 90%;
+    width: 95%;
   }
+
 }
 
 @media (max-width: 768px) {
+
   .pedidos-container {
     width: 100%;
-    padding: 15px;
   }
+
+  .background {
+    padding: 20px 10px;
+  }
+
   .nav-pills .nav-link {
-    margin-bottom: 10px;
     width: 100%;
   }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .table {
+    font-size: .9rem;
+  }
+
 }
+
 </style>

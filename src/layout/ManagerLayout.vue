@@ -30,108 +30,118 @@ console.log("Tipo user " + tipoUsuario.value);
 </script>
 
 <template>
-  <div class="container-fluid" v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
+  <div class="container-fluid min-vh-100" v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
     <div class="row">
-      <nav class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar vh-100 p-0 border-end">
-        <div class="p-4">
-          <div>
-            <RouterLink to="/" class="logo-img d-flex align-items-center">
-              <img src="@/assets/images/logo/bytech_logo.svg" />
+      <nav class="col-md-3 col-lg-2 d-none d-md-flex flex-column bg-white sidebar vh-100 p-0 border-end sticky-top">
+        <div class="p-4 d-flex flex-column h-100">
+          <div class="mb-4 text-center">
+            <RouterLink to="/" class="logo-link">
+              <img src="@/assets/images/logo/bytech_logo.svg" class="img-fluid sidebar-logo" />
             </RouterLink>
           </div>
-          <ul class="nav nav-pills flex-column">
+
+          <ul class="nav nav-pills flex-column gap-2 flex-grow-1">
             <li class="nav-item">
-              <RouterLink class="nav-link mb-2" to="/manager/produto"> Produto </RouterLink>
+              <RouterLink class="nav-link custom-link" to="/manager/visao-geral">
+                <i class="fa-solid fa-chart-pie me-2"></i> Visão Geral
+              </RouterLink>
             </li>
             <li class="nav-item">
-              <button class="btn btn-danger" @click="handleDeslogar">Deslogar</button>
+              <RouterLink class="nav-link custom-link" to="/manager/produto">
+                <i class="fa-solid fa-box-open me-2"></i> Produtos
+              </RouterLink>
             </li>
           </ul>
+
+          <div class="mt-auto pt-4 border-top">
+            <button class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center" @click="handleDeslogar">
+              <i class="fa-solid fa-right-from-bracket me-2"></i> Sair
+            </button>
+          </div>
         </div>
       </nav>
 
-      <nav class="navbar navbar-light bg-light d-md-none p-3">
-        <div class="logo-img">
-          <img src="@/assets/images/logo/bytech_logo.svg" />
-        </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mobileMenu">
-          <ul class="navbar-nav pt-2">
-            <li>
-              <RouterLink class="nav-link mb-2" to="/manager/produto"> Produto </RouterLink>
-            </li>
-            <li></li>
-          </ul>
+      <nav class="navbar navbar-light bg-white d-md-none p-3 border-bottom w-100">
+        <div class="container-fluid">
+          <img src="@/assets/images/logo/bytech_logo.svg" height="40" />
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mobileMenu">
+            <ul class="navbar-nav pt-2">
+              <li class="nav-item">
+                <RouterLink class="nav-link" to="/manager/visao-geral">Visão Geral</RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink class="nav-link" to="/manager/produto">Produto</RouterLink>
+              </li>
+              <li class="nav-item">
+                <button class="btn btn-danger btn-sm mt-2" @click="handleDeslogar">Sair</button>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 bg-light"
-        v-if="['Administrador', 'Admin'].includes(tipoUsuario)">
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 bg-dashboard">
         <RouterView />
       </main>
     </div>
   </div>
-
-  <h1 v-else>Acesso Negado!</h1>
+  <div v-else class="vh-100 d-flex align-items-center justify-content-center">
+     <h1 class="text-danger">Acesso Negado!</h1>
+  </div>
 </template>
 
 <style scoped>
-* {
-  font-size: 16px;
+/* Estilo da Sidebar */
+.sidebar {
+  background-color: #ffffff !important;
+  position: fixed; /* Mantém a sidebar fixa enquanto o conteúdo rola */
 }
 
-main {
-  background-color: #f8f9fa;
+.bg-dashboard {
+  background-color: #f4f7f9; /* Um cinza bem claro para o fundo do gráfico */
   min-height: 100vh;
 }
 
-.sidebar {
-  background-color: #f1f1f1 !important;
+/* Customização dos Links */
+.custom-link {
+  color: #64748b !important; /* Cinza moderno */
+  background-color: transparent !important;
+  font-weight: 500;
+  padding: 12px 15px;
+  transition: all 0.2s ease;
+  border-radius: 8px !important;
 }
 
-/* Simula o visual do 'well' do Bootstrap 3 usando cards do BS5 */
-.card {
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
+.custom-link:hover {
+  background-color: #f1f5f9 !important;
+  color: #005373 !important;
+  transform: translateX(5px);
 }
 
-/* Ajuste para o item de menu ativo */
-.nav-pills .nav-link.active {
-  background-color: #337ab7;
-  /* Azul clássico do BS3 */
+
+.router-link-active.custom-link {
+  background-color: #005373 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 83, 115, 0.2);
 }
 
-.nav-link {
-  color: #337ab7;
+
+.sidebar-logo {
+  max-height: 80px;
+  transition: transform 0.3s ease;
 }
 
-.logo-img img {
-  position: relative;
-  height: 120px;
-  width: 190px;
-  flex: 1;
+.logo-link:hover .sidebar-logo {
+  transform: scale(1.05);
 }
 
-.logo-img img:hover {
-  cursor: pointer;
-  transform: scale(1.1);
-  transition: all 0.3s ease-in-out;
-}
 
-.boas-vindas {
-  font-size: 70px;
-}
-
-.nav-pills .nav-link {
-  border-radius: var(--bs-nav-pills-border-radius);
-  background-color: #D3D3D3 !important;
-  border-radius: 5px !important;
-}
-
-.nav-pills .nav-link:hover {
-  border: 1px solid #93DFF8;
-  cursor: pointer;
-  text-decoration: underline;
+@media (min-width: 768px) {
+  main {
+    margin-left: auto;
+  }
 }
 </style>

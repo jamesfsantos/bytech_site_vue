@@ -46,78 +46,145 @@
 
 <style scoped>
 footer {
-  background-color: #005373;
+  background: #005373;
+
   width: 100%;
-  padding: 30px 20px;
-  text-align: center;
+
+  padding: 60px 25px 40px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  gap: 40px;
+
+  border-top: 1px solid rgba(255,255,255,.12);
 }
 
 
-.logo-img {
-  margin-bottom: 20px;
-}
 
 .logo-img img {
-  max-width: 150px;
+  width: 190px;
+
+  transition: .25s ease;
 }
+
+.logo-img img:hover {
+  transform: scale(1.05);
+}
+
 
 
 .footer-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
   width: 100%;
-  max-width: 900px;
-}
+  max-width: 1300px;
 
+  display: grid;
 
-.rodape-nav {
-  display: flex;
-  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 60px;
 }
 
 
 .contato,
-.redes-sociais {
+.redes-sociais,
+.rodape-nav {
   display: flex;
   flex-direction: column;
+
   align-items: center;
-  gap: 5px;
-}
 
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  gap: 18px;
 }
 
 
 h4 {
   color: white;
+
+  font-size: 1.5rem;
+
+  font-weight: bold;
+
+  margin-bottom: 10px;
 }
 
+
+
 a {
-  color: white;
+  color: #dff4ff;
+
   text-decoration: none;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  font-size: 1.1rem;
+
+  font-weight: 500;
+
+  transition: .2s ease;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: white;
+
+  transform: translateX(4px);
 }
 
 
-@media (max-width: 600px) {
+i {
+  font-size: 1.3rem;
+}
+
+
+
+ul {
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  padding: 0;
+  margin: 0;
+}
+
+
+@media (max-width: 900px) {
+
   .footer-content {
     grid-template-columns: 1fr;
-    gap: 20px;
+
+    gap: 40px;
   }
+
+}
+
+@media (max-width: 600px) {
+
+  footer {
+    padding: 45px 20px;
+  }
+
+  .logo-img img {
+    width: 160px;
+  }
+
+  h4 {
+    font-size: 1.3rem;
+  }
+
+  a {
+    font-size: 1rem;
+  }
+
+  i {
+    font-size: 1.15rem;
+  }
+
 }
 </style>

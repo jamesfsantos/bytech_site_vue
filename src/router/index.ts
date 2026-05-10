@@ -15,6 +15,7 @@ import LayoutPadrao from '@/layout/LayoutPadrao.vue'
 import CadastroProduto from '@/views/Manager/CadastroProdutoDashBoardView.vue'
 import ListaPedidos from '@/views/ListaPedidosView.vue'
 import QuemSomos from '@/views/QuemSomosView.vue'
+import VisaoGeralDashboard from '@/views/Manager/VisaoGeralDashboardView.vue'
 
 
 const routes = [
@@ -42,6 +43,10 @@ const routes = [
     path: '/manager',
     component: ManagerLayout,
     children: [
+      {
+      path: '/manager/visao-geral',
+        component: VisaoGeralDashboard
+      },
       {
         path: '/manager/produto',
         component: ProdutoDashBoard

@@ -13,5 +13,4 @@ import CardProduto from "@/components/CardProduto.vue";
 main {
   display: flex;
 }
-
 </style>

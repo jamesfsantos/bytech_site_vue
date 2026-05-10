@@ -10,7 +10,7 @@ const temCategoria = ref(false);
 
 const categorias: Record<string, number> = {
   "video-games": 1,
-  "computadores": 2,
+  computadores: 2,
 };
 
 const categoriaId = computed(() => {
@@ -24,7 +24,7 @@ const categoriaId = computed(() => {
 const produtos = ref<ProdutoModel[]>([]);
 
 const produtosExibidos = computed(() => {
-  return produtos.value.filter(p => p.ativo === true);
+  return produtos.value.filter((p) => p.ativo === true);
 });
 
 const carregando = ref(true);
@@ -50,9 +50,6 @@ async function buscarProdutos() {
   }
 }
 
-
-
-
 watch(
   () => route.params.categoriaId,
   async () => {
@@ -63,151 +60,265 @@ watch(
 </script>
 
 <template>
-  <div class="catalogo">
+  <main class="catalogo">
     <div v-if="temCategoria">
-
-      <div v-if="carregando" class="text-center w-100 mt-5">
-        <h3 class="text-white">Buscando produtos...</h3>
+      <!-- LOADING -->
+      <div v-if="carregando" class="estado">
+        <h2>Buscando produtos...</h2>
       </div>
 
-      <div v-else-if="produtosExibidos.length > 0" class="card-produto">
-        <div class="detalhes-produto" v-for="produto in produtosExibidos" :key="produto.id">
-          <h2>{{ produto.nome }}</h2>
-          <img class="imagem" :src="produto.imagem" />
-          <p class="descricao">{{ produto.descricao }}</p>
-          <div class="compra">
-            <span class="preco">{{ formatarMoeda(produto.precoVenda) }}</span>
-            <RouterLink :to="`/produto/${produto.id}`">
-              <button class="botao">Detalhes</button>
-            </RouterLink>
-          </div>
-        </div>
-      </div>
+      <!-- PRODUTOS -->
+      <section v-else-if="produtosExibidos.length > 0" class="grid-produtos">
+        <article class="produto-card" v-for="produto in produtosExibidos" :key="produto.id">
+          <RouterLink class="card-link" :to="`/produto/${produto.id}`">
+            <!-- IMAGEM -->
+            <div class="imagem-area">
+              <img class="imagem" :src="produto.imagem" :alt="produto.nome" />
+            </div>
 
-      <div v-else class="text-center w-100 mt-5">
-        <h3 class="text-white">Ops! Nenhum produto disponível nesta categoria no momento.</h3>
-      </div>
+            <!-- CONTEÚDO -->
+            <div class="conteudo">
+              <h2 class="titulo">
+                {{ produto.nome }}
+              </h2>
 
+              <p class="descricao">
+                {{ produto.descricao }}
+              </p>
+
+              <div class="rodape">
+                <span class="preco">
+                  {{ formatarMoeda(produto.precoVenda) }}
+                </span>
+
+                <button class="botao">Ver detalhes</button>
+              </div>
+            </div>
+          </RouterLink>
+        </article>
+      </section>
+
+      <!-- SEM PRODUTOS -->
+      <div v-else class="estado">
+        <h2>Nenhum produto disponível nesta categoria.</h2>
+      </div>
     </div>
 
-    <div v-else>
-      <h2 class="ErroMensagem">Categoria não localizada</h2>
+    <!-- ERRO -->
+    <div v-else class="estado">
+      <h2>Categoria não localizada.</h2>
     </div>
-  </div>
+  </main>
 </template>
+
 <style scoped>
-.ErroMensagem {
-  color: white;
-}
 
 .catalogo {
-  width: 95vw;
-  height: auto;
+  min-height: 100vh;
+
+  background: #f4f7fa;
+
+  padding: 40px;
 }
 
 
-
-/*.card-produto {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(300px, 1fr));
-  gap: 20px;
-  justify-items: center;
-  margin: 0 auto;
-}
-*/
-
-.card-produto {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(250px, 1fr));
-  gap: 20px;
-  justify-content: center;
-}
-
-.detalhes-produto {
-  background-color: white;
-  border-radius: 10px;
-  margin: 10px;
-  padding: 20px;
-  transition: all 0.3s ease;
-  max-width: 400px;
-
+.grid-produtos {
   width: 100%;
-  margin: 0 auto;
 
+  max-width: 1800px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+  gap: 28px;
 }
 
-.detalhes-produto:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  transform: translateY(-10px);
+
+.produto-card {
+  background: #ffffff;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  transition: 0.25s ease;
+
+  border: 1px solid #d9e2ec;
 }
 
-.detalhes-produto img,
-span,
-p {
-  text-align: center;
+.produto-card:hover {
+  transform: translateY(-6px);
+
+  border-color: #00537330;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.imagem-area {
+  width: 100%;
+  height: 300px;
+
+  background: #eef3f7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
 }
 
 .imagem {
   width: 100%;
-  height: 250px;
-  text-align: center;
-  align-items: center;
+  height: 100%;
+
   object-fit: contain;
-  /* ou cover se quiser cortar */
+
+  transition: 0.3s;
 }
+
+.produto-card:hover .imagem {
+  transform: scale(1.04);
+}
+
+
+.conteudo {
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.titulo {
+  color: #1f2937;
+
+  font-size: 1.15rem;
+
+  line-height: 1.4;
+
+  min-height: 55px;
+}
+
+
 
 .descricao {
-  /* border:  1px solid black; */
-  padding: 10px;
+  color: #6b7280;
+
+  font-size: 0.95rem;
+
+  line-height: 1.6;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+
+  min-height: 72px;
 }
 
-.compra {
+
+
+.rodape {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  margin: 5px;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: auto;
 }
 
 .preco {
-  font-size: 20px;
+  color: #00a86b;
+
+  font-size: 1.5rem;
+
   font-weight: bold;
 }
 
 .botao {
-  background-color: rgb(58, 214, 58);
-  padding: 10px;
-  font-weight: bold;
-  border-radius: 5px;
-  color: white;
-  border: 0px;
-}
+  height: 45px;
 
-.botao a {
-  text-decoration: none;
-  color: #fff;
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 0 18px;
+
+  background: #005373;
+
+  color: white;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .botao:hover {
-  cursor: pointer;
-  background-color: rgba(58, 214, 58, 0.562);
+  background: #00698f;
 }
 
-@media (max-width: 1200px) {
-  .card-produto {
-    grid-template-columns: repeat(3, minmax(250px, 1fr));
+
+.estado {
+  min-height: 70vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: #1f2937;
+}
+
+
+
+@media (max-width: 768px) {
+  .catalogo {
+    padding: 20px;
   }
-}
 
-@media (max-width: 900px) {
-  .card-produto {
-    grid-template-columns: repeat(2, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 600px) {
-  .card-produto {
+  .grid-produtos {
     grid-template-columns: 1fr;
+
+    gap: 20px;
   }
 
+  .imagem-area {
+    height: 250px;
+  }
+
+  .titulo {
+    font-size: 1rem;
+  }
+
+  .preco {
+    font-size: 1.3rem;
+  }
+
+  .rodape {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .botao {
+    width: 100%;
+  }
 }
 </style>

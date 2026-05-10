@@ -1,5 +1,8 @@
 import api from '@/api/api'
 import type { PedidoModel } from '@/models/pedidoModel'
+import type { ProdutosVendidosDto } from '@/types/produtosVendidosDto'
+
+
 
 class PedidoService {
   async criarPedido(dados: PedidoModel): Promise<boolean> {
@@ -8,6 +11,19 @@ class PedidoService {
       return response.status === 201 || response.status === 200
     } catch (error) {
       throw error
+    }
+  }
+
+  async obterTodosPedidos(): Promise<PedidoModel[]>{
+    try{
+      const response = await api.get(`/Pedido`);
+      const dados = response.data;
+
+      return dados
+    }
+    catch(error){
+      const mensagemErro = error.response?.data?.message || "Erro inesperado ao buscar Pedidos.";
+      throw new Error(mensagemErro);
     }
   }
 
@@ -34,6 +50,19 @@ class PedidoService {
     }
     catch(error){
       throw error
+    }
+  }
+
+  async obterProdutosVendidos(): Promise<ProdutosVendidosDto[]>{
+    try{
+      const response = await api.get(`/Pedido/produtosVendidos`)
+      const dados = response.data;
+
+      return dados;
+    }
+    catch(error){
+      const mensagemErro = error.response?.data?.message || "Erro inesperado ao buscar os Produtos Vendidos.";
+      throw new Error(mensagemErro);
     }
   }
 }
