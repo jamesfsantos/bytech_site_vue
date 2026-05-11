@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Money3Component as Money } from "v-money3";
+import type { ProdutoModel } from "@/models/produtoModel";
 
 const configMoeda = {
   prefix: "R$ ",
@@ -68,7 +69,7 @@ const cadastrarProduto = async (event: Event) => {
   console.log("Iniciando cadastro de produto!");
   try {
     const dados = {
-      ...formularioProduto.value,
+      ...formularioProduto.value as ProdutoModel,
       categoriaId: Number(formularioProduto.value.categoriaId),
     };
 

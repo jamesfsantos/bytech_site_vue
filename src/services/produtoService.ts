@@ -41,6 +41,7 @@ class ProdutoService {
     } catch (erro: unknown) {
       console.error(erro);
     }
+    return false;
   }
 
   async atualizarProduto(produtoId: number, dados: ProdutoModel): Promise<boolean> {

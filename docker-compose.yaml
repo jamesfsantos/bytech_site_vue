@@ -1,0 +1,14 @@
+services:
+  bytech-front:
+    restart: always
+    environment:
+      - TZ=America/Sao_Paulo
+      - VITE_API=https://api-bytech.manja.tec.br/api
+      - VITE_API_KEY=bytech_9a2b4c6d8e0f1a3b5c7d9e0f
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "bytech-frontend"
+    ports:
+      - 8091:80
+      - 8092:443

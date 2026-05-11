@@ -21,7 +21,8 @@ class PedidoService {
 
       return dados
     }
-    catch(error){
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch(error: any){
       const mensagemErro = error.response?.data?.message || "Erro inesperado ao buscar Pedidos.";
       throw new Error(mensagemErro);
     }
@@ -60,7 +61,8 @@ class PedidoService {
 
       return dados;
     }
-    catch(error){
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch(error: any){
       const mensagemErro = error.response?.data?.message || "Erro inesperado ao buscar os Produtos Vendidos.";
       throw new Error(mensagemErro);
     }

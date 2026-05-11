@@ -36,7 +36,7 @@ async function buscarProdutos() {
   if (temCategoria.value) {
     carregando.value = true;
     try {
-      const dados = await produtoService.buscarPorCategoria(categoriaId.value);
+      const dados = await produtoService.buscarPorCategoria(categoriaId.value!);
       console.log("2. Dados brutos da API:", dados); // VEJA SE VEM UM ARRAY []
 
       produtos.value = dados;
