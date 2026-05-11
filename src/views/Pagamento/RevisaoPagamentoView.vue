@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import usuarioService from "@/services/usuarioService";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { limparCarrinho, listaCarrinho, removerDoCarrinho } from "@/stores/carrinhoStores";
 import type { PedidoModel } from "@/models/pedidoModel";
 import { formatarMoeda } from "@/utils/utils";
 import pedidoService from "@/services/pedidoService";
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
-
+import viaCepService from "@/services/viaCepService";
 
 const { estaLogado } = useAuth();
 const router = useRouter();
 
-const usuario = ref();
+const usuario = ref<any>(null); // Inicializado como null
 const carregando = ref(true);
+const buscandoCep = ref(false); // Spinner específico para o CEP
 const email = localStorage.getItem("user_email") || "";
 
 const buscarUsuario = async () => {
@@ -30,6 +31,45 @@ const buscarUsuario = async () => {
 const totalCarrinho = computed(() => {
   return listaCarrinho.value.reduce((acc, item) => acc + item.precoVenda * item.quantidade, 0);
 });
+
+async function buscarEndereco(cep: string) {
+  buscandoCep.value = true;
+  try {
+    const res = await viaCepService.buscarPorCEP(cep);
+    if (res && !res.erro) {
+      usuario.value.endereco = `${res.logradouro}${res.bairro ? ', ' + res.bairro : ''}`;
+      usuario.value.cidade = res.localidade || "";
+      if (res.complemento) usuario.value.complemento = res.complemento;
+    } else {
+      Swal.fire("CEP", "CEP não encontrado. Verifique os números.", "info");
+    }
+  } catch (error) {
+    console.error("Erro viaCEP:", error);
+  } finally {
+    buscandoCep.value = false;
+  }
+}
+
+// Watch corrigido para verificar se usuario existe antes de acessar .cep
+watch(
+  () => usuario.value?.cep,
+  (novoValor) => {
+    if (!novoValor) return;
+
+    let v = novoValor.replace(/\D/g, "");
+    if (v.length > 8) v = v.slice(0, 8);
+
+    if (v.length === 8) {
+      buscarEndereco(v);
+    }
+
+    // Aplica a máscara 00000-000
+    if (v.length > 5) {
+      v = v.replace(/(\d{5})(\d)/, "$1-$2");
+    }
+    usuario.value.cep = v;
+  }
+);
 
 async function registrarPedido() {
   if (!usuario.value) return;
@@ -65,32 +105,27 @@ async function registrarPedido() {
         text: "Pedido realizado com sucesso!",
         icon: "success",
         confirmButtonColor: "#005373",
-        confirmButtonText: "Ver meu pedido",
       });
       limparCarrinho();
       router.push("/pedidos");
     }
   } catch (error) {
-    console.error("Erro ao registrar pedido:", error);
     Swal.fire("Erro", "Ocorreu um erro ao registrar o pedido.", "error");
   }
 }
 
 onMounted(async () => {
-
   if (!estaLogado.value) {
     await Swal.fire({
       title: "Acesso Restrito",
       text: "Você precisa estar logado para revisar o pagamento.",
       icon: "warning",
       confirmButtonColor: "#005373",
-      confirmButtonText: "Ir para Login",
       allowOutsideClick: false,
     });
     router.push("/login");
     return;
   }
-
 
   await buscarUsuario();
   carregando.value = false;
@@ -101,78 +136,84 @@ onMounted(async () => {
   <main class="main-revisao">
     <div v-if="carregando" class="loading-state">
       <div class="spinner"></div>
-      <p>Validando acesso...</p>
+      <p>Carregando dados do pedido...</p>
     </div>
 
     <div class="rev-background" v-else-if="usuario">
       <h1 class="h1-rev">Revisão do Pedido</h1>
 
       <div class="rev-grid">
-        <form class="form">
+        <form class="form" @submit.prevent>
           <div class="inf-nf">
-            <h2>Informações na nota fiscal do pedido:</h2>
-            <div class="mb-3 col-md-8">
-              <label>Nome:</label>
-              <input type="text" class="form-control" v-model="usuario.nome" disabled />
-            </div>
-            <div class="mb-3 col-md-4">
-              <label>CPF:</label>
-              <input type="text" class="form-control" v-model="usuario.cpf" disabled />
-            </div>
-            <div class="mb-3 col-md-6">
-              <label>Email:</label>
-              <input type="email" v-model="usuario.email" class="form-control" disabled />
-            </div>
-            <div class="mb-3 col-md-6">
-              <label>Celular:</label>
-              <input type="text" v-model="usuario.celular" class="form-control" disabled />
+            <h2>Informações na nota fiscal:</h2>
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label>Nome:</label>
+                <input type="text" class="form-control" v-model="usuario.nome" disabled />
+              </div>
+              <div class="col-md-4">
+                <label>CPF:</label>
+                <input type="text" class="form-control" v-model="usuario.cpf" disabled />
+              </div>
+              <div class="col-md-6">
+                <label>Email:</label>
+                <input type="email" v-model="usuario.email" class="form-control" disabled />
+              </div>
+              <div class="col-md-6">
+                <label>Celular:</label>
+                <input type="text" v-model="usuario.celular" class="form-control" disabled />
+              </div>
             </div>
           </div>
 
-          <div class="end-envio">
-            <h2>Seu pedido será entregue em:</h2>
-            <div class="mb-3 col-md-12">
-              <label>Endereço:</label>
-              <input type="text" v-model="usuario.endereco" class="form-control" disabled />
-            </div>
-            <div class="mb-3 col-md-12">
-              <label>Complemento:</label>
-              <input type="text" v-model="usuario.complemento" class="form-control" disabled />
-            </div>
-            <div class="mb-2 d-flex gap-2">
-              <div class="col-md-8">
-                <label>Cidade:</label>
-                <input type="text" v-model="usuario.cidade" class="form-control" disabled />
-              </div>
+          <div class="end-envio mt-4">
+            <h2>Endereço de Entrega:</h2>
+            <div class="row g-3">
               <div class="col-md-4">
                 <label>CEP:</label>
-                <input type="text" v-model="usuario.cep" class="form-control" disabled />
+                <div class="d-flex align-items-center">
+                  <input type="text" maxlength="9" v-model="usuario.cep" class="form-control" placeholder="00000-000" />
+                  <div v-if="buscandoCep" class="spinner-border spinner-border-sm ms-2 text-primary"></div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <label>Cidade:</label>
+                <input type="text" v-model="usuario.cidade" class="form-control" />
+              </div>
+              <div class="col-md-12">
+                <label>Logradouro/Bairro:</label>
+                <input type="text" v-model="usuario.endereco" class="form-control" />
+              </div>
+              <div class="col-md-12">
+                <label>Complemento/Número:</label>
+                <input type="text" v-model="usuario.complemento" class="form-control" />
               </div>
             </div>
           </div>
         </form>
 
         <div class="rev-produto">
-          <h2 class="p-3">Produtos:</h2>
-          <div class="lista-produtos">
+          <h2 class="p-3">Produtos no Carrinho:</h2>
+          <div class="table-responsive">
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th scope="col">Qtd</th>
-                  <th scope="col">Nome</th>
-                  <th scope="col">Marca</th>
-                  <th scope="col">Preço Un.</th>
+                  <th>Qtd</th>
+                  <th>Nome</th>
+                  <th>Preço</th>
+                  <th>Total</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="produto in listaCarrinho" :key="produto.id">
-                  <td>{{ produto.quantidade }}</td>
+                  <td>{{ produto.quantidade }}x</td>
                   <td>{{ produto.nome }}</td>
-                  <td>{{ produto.marca }}</td>
                   <td>{{ formatarMoeda(produto.precoVenda) }}</td>
-                  <td @click="removerDoCarrinho(produto.id)">
-                    <i class="fa-solid fa-trash lixeira" style="color: red"></i>
+                  <td>{{ formatarMoeda(produto.precoVenda * produto.quantidade) }}</td>
+                  <td>
+                    <i class="fa-solid fa-trash lixeira" @click="removerDoCarrinho(produto.id)"
+                      style="color: red; cursor: pointer;"></i>
                   </td>
                 </tr>
               </tbody>
@@ -181,18 +222,21 @@ onMounted(async () => {
         </div>
 
         <div class="resumo-compra">
-          <h2>Resumo do pedido:</h2>
+          <h2>Resumo Financeiro</h2>
           <div class="itens-resumo">
-            <p v-for="item in listaCarrinho" :key="item.id">
-              {{ item.nome }} = {{ formatarMoeda(item.precoVenda * item.quantidade) }}
-            </p>
+            <div v-for="item in listaCarrinho" :key="item.id" class="d-flex justify-content-between mb-1">
+              <span>{{ item.nome }} ({{ item.quantidade }}x)</span>
+              <span>{{ formatarMoeda(item.precoVenda * item.quantidade) }}</span>
+            </div>
           </div>
           <hr />
-          <h2>Total: {{ formatarMoeda(totalCarrinho) }}</h2>
-          <p>Deseja finalizar o pedido?</p>
-          <div class="btn-finalizar-div">
-            <button class="btn btn-success" @click="registrarPedido">Registrar Pedido</button>
-            <RouterLink to="/carrinho" class="btn btn-primary">Voltar para o carrinho</RouterLink>
+          <div class="d-flex justify-content-between align-items-center">
+            <h3>Total:</h3>
+            <h3 class="text-success">{{ formatarMoeda(totalCarrinho) }}</h3>
+          </div>
+          <div class="btn-finalizar-div mt-3">
+            <button class="btn btn-success w-100 mb-2" @click="registrarPedido">Finalizar Compra</button>
+            <RouterLink to="/carrinho" class="btn btn-outline-primary w-100">Voltar ao Carrinho</RouterLink>
           </div>
         </div>
       </div>
@@ -204,12 +248,10 @@ onMounted(async () => {
 .main-revisao {
   background: #f4f8fb;
   min-height: 90vh;
-
   padding: 30px 15px;
   display: flex;
   justify-content: center;
 }
-
 
 .loading-state {
   display: flex;
@@ -234,7 +276,6 @@ onMounted(async () => {
   }
 }
 
-
 .rev-background {
   width: 100%;
   max-width: 1400px;
@@ -246,6 +287,7 @@ onMounted(async () => {
   text-align: center;
   padding: 18px;
   border-radius: 14px;
+  font-size: 1.8rem;
 }
 
 .rev-grid {
@@ -270,6 +312,7 @@ onMounted(async () => {
   padding: 10px;
   border-radius: 10px;
   font-size: 16px;
+  margin-bottom: 20px;
 }
 
 .resumo-compra {
@@ -278,27 +321,9 @@ onMounted(async () => {
   height: fit-content;
 }
 
-.btn-finalizar-div {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-button,
-.btn {
-  border-radius: 12px !important;
-  font-weight: 600;
-  padding: 12px;
-}
-
-.btn-success {
-  background: #006e1d !important;
-  border: none !important;
-}
-
-.btn-primary {
-  background: #005373 !important;
-  border: none !important;
+.lixeira:hover {
+  transform: scale(1.2);
+  transition: 0.2s;
 }
 
 @media (max-width: 992px) {
