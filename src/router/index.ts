@@ -15,6 +15,7 @@ import LayoutPadrao from '@/layout/LayoutPadrao.vue'
 import CadastroProduto from '@/views/Manager/CadastroProdutoDashBoardView.vue'
 import ListaPedidos from '@/views/ListaPedidosView.vue'
 import QuemSomos from '@/views/QuemSomosView.vue'
+import VisaoGeralDashboard from '@/views/Manager/VisaoGeralDashboardView.vue'
 
 
 const routes = [
@@ -29,7 +30,7 @@ const routes = [
       {path: '/servicos', name: 'servicos',component: Servico },
       {path: '/login', name: 'login',component: Login },
       {path: '/cadastro', name: 'cadastro',component: Cadastro },
-      {path: '/pagamento', name: 'pagamento', component: Pagamento},
+      {path: '/pagamento/:id', name: 'pagamento', component: Pagamento},
       {path: '/revisao-pagamento', name: 'revisao', component: RevisaoPagamento},
       {path: '/carrinho/', name: 'carrinhoPrincipal',component: Carrinho },
       {path: '/carrinho/:produtoId', name: 'carrinho',component: Carrinho },
@@ -42,6 +43,10 @@ const routes = [
     path: '/manager',
     component: ManagerLayout,
     children: [
+      {
+      path: '/manager/visao-geral',
+        component: VisaoGeralDashboard
+      },
       {
         path: '/manager/produto',
         component: ProdutoDashBoard

@@ -8,7 +8,7 @@ import { type ErroResponse } from "@/types/auth";
 
 import Swal from "sweetalert2";
 
-const {login} = useAuth();
+const { login } = useAuth();
 
 const email = ref<string>("");
 const senha = ref<string>("");
@@ -24,7 +24,7 @@ const handleLogin = async () => {
     const response = await authService.login(email.value, senha.value);
 
     if (response && response.token) {
-        login(response.token);
+      login(response.token);
     }
 
     Swal.fire({
@@ -38,7 +38,6 @@ const handleLogin = async () => {
     });
   } catch (e) {
     const axiosError = e as AxiosError<ErroResponse>;
-
     Swal.fire({
       title: "Erro!",
       text: "E-mail ou senha inválidos",
@@ -53,154 +52,186 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <main>
-    <form class="Login" @submit.prevent="handleLogin">
-      <h1>Acesse sua conta</h1>
-      <p>informe seus dados para continuar</p>
-      <br />
+  <main class="container py-5">
+    <div class="login-container mx-auto shadow">
+      <section class="login-box">
+        <h1 class="mb-2">Acesse sua conta</h1>
+        <p class="text-secondary mb-4">Informe seus dados para continuar</p>
 
-      <label for="email">E-mail:</label>
-      <input
-        v-model="email"
-        type="email"
-        id="email"
-        name="email"
-        placeholder="Insira seu E-mail"
-      /><br />
+        <form @submit.prevent="handleLogin" class="w-100">
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label"> E-mail </label>
 
-      <label for="senha">Senha:</label>
-      <input
-        v-model="senha"
-        type="password"
-        id="senha"
-        name="senha"
-        placeholder="Insira sua Senha"
-      /><br />
+            <input
+              v-model="email"
+              type="email"
+              id="email"
+              class="form-control"
+              placeholder="Digite seu e-mail"
+            />
+          </div>
 
-      <button :disabled="carregando" type="submit" class="btnAcessar">Acessar Conta</button><br />
-      <p v-if="erro" class="error-msg">{{ erro }}</p>
+          <!-- Senha -->
+          <div class="mb-2">
+            <label for="senha" class="form-label"> Senha </label>
 
-      <p class="esqSenha">Esqueceu sua senha?</p>
-      <br />
-    </form>
+            <input
+              v-model="senha"
+              type="password"
+              id="senha"
+              class="form-control"
+              placeholder="Digite sua senha"
+            />
+          </div>
 
-    <div class="Nova-Conta">
-      <h2>Criar sua conta</h2>
-      <br />
-      <p>Clique no botão abaixo para criar sua conta:</p>
-      <br />
+          <!-- Erro -->
+          <p v-if="erro" class="error-msg">
+            {{ erro }}
+          </p>
 
-      <RouterLink to="/cadastro"><button class="btnCriar">Criar Conta</button></RouterLink><br />
+          <!-- Esqueceu -->
+          <div class="text-end mb-4">
+            <a href="#" class="forgot-password"> Esqueceu sua senha? </a>
+          </div>
+
+          <!-- Botão -->
+          <button :disabled="carregando" type="submit" class="btn btn-primary w-100">
+            {{ carregando ? "Entrando..." : "Acessar Conta" }}
+          </button>
+        </form>
+      </section>
+
+      <!-- Lado Cadastro -->
+      <section class="register-box">
+        <h2>Novo por aqui?</h2>
+
+        <p class="mt-3 mb-4">Crie sua conta e obtenha o acesso.</p>
+
+        <RouterLink to="/cadastro">
+          <button class="btn btn-light px-4">Criar Conta</button>
+        </RouterLink>
+      </section>
     </div>
   </main>
 </template>
+
 <style scoped>
-.Login h1 {
+main {
+  min-height: 100vh;
+  display: flex;
   align-items: center;
-  text-align: center;
-  background-color: #3b8cbe;
-  color: white;
-  width: 100%;
+  background: #fff;
 }
 
-.Login {
-  align-items: center;
+.login-container {
+  width: 100%;
+  max-width: 950px;
+  min-height: 550px;
+  border-radius: 20px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: white;
+  opacity: 0;
+  transform: translateY(50px);
+
+  animation: subir 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes subir {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Login */
+.login-box {
+  padding: 60px;
   display: flex;
   flex-direction: column;
-  background-color: #d3d3d3;
-  font-size: 1rem;
-  /* padding: 50px; */
-  border: 1px solid #3b8cbe;
-  width: 50%;
-}
-
-.Login label {
-  font-weight: bold;
-}
-
-.Login input {
-  height: 2rem;
-  width: 50%;
-  padding: 0.6rem;
-  border: 2px solid #3b8cbe;
-  outline: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.Login input:focus {
-  border: 3px solid #96e4fd;
-}
-
-.Login button.btnAcessar,
-.Nova-Conta button {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  margin: auto;
-  background-color: #3b8cbe;
-  border: none;
+}
+
+.login-box h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+/* Cadastro */
+.register-box {
+  background-color: #005373;
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.register-box h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.register-box p {
+  color: white;
+}
+
+/* Inputs */
+.form-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-control {
+  height: 50px;
   border-radius: 10px;
-  height: 40px;
-  width: fit-content;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  min-height: 40px;
-  text-transform: uppercase;
-  padding: 10px;
+  border: 1px solid #ced4da;
 }
 
-.Nova-Conta a,
-a:visited {
+.form-control:focus {
+  box-shadow: none;
+  border-color: #3b82f6;
+}
+
+/* Botões */
+.btn {
+  height: 50px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Links */
+.forgot-password {
   text-decoration: none;
-  color: white;
-}
-
-.Login button.btnAcessar:hover {
-  background-color: #005373;
-  border: 1px solid #0681c9;
-}
-
-.Nova-Conta button:hover {
-  background-color: #005373;
-  border: 1px solid #0681c9;
-}
-
-.Login .esqSenha {
   font-size: 14px;
+}
+
+.forgot-password:hover {
   text-decoration: underline;
 }
 
-.Login .esqSenha:hover {
-  color: #3b8cbe;
-  cursor: pointer;
-}
-
-.Nova-Conta {
-  display: flex;
-  flex-direction: column;
-  background-color: #d3d3d3;
-  font-size: 1rem;
-  /* padding: 50px; */
-  border: 1px solid #3b8cbe;
-  width: 50%;
-}
-
-.Nova-Conta h2 {
-  align-items: center;
-  text-align: center;
-  background-color: #3b8cbe;
-  color: white;
-  width: 100%;
-}
-
-.Nova-Conta p {
-  align-items: center;
-  text-align: center;
+/* Erro */
+.error-msg {
+  color: #dc3545;
   font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .login-container {
+    grid-template-columns: 1fr;
+  }
+
+  .register-box {
+    padding: 40px;
+  }
+
+  .login-box {
+    padding: 40px;
+  }
 }
 </style>

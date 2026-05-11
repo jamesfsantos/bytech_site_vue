@@ -63,7 +63,17 @@ class ProdutoService {
     }
   }
 
+  async buscarProdutosNome(query: string): Promise<ProdutoModel[]> {
+    try {
+      const response = await api.get(`/Produto/busca?query=${query}`);
+      const dados = response.data;
 
+      return dados;
+    } catch (error) {
+      console.error("Erro ao buscar produtos na api");
+      throw error;
+    }
+  }
 }
 
 export default new ProdutoService();

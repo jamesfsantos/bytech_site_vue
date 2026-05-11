@@ -16,8 +16,13 @@
     "format": "oxfmt src/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-regular-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/vue-fontawesome": "^3.2.0",
     "axios": "^1.15.1",
     "bootstrap": "^5.3.8",
+    "chart.js": "^4.5.1",
     "jwt-decode": "^4.0.0",
     "sweetalert2": "^11.26.24",
     "v-money3": "^3.24.1",

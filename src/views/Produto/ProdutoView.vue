@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import produtoService from "@/services/produtoService";
 import { type ProdutoModel } from "@/models/produtoModel";
-import { adicionarAoCarrinho } from '@/stores/carrinhoStores'
+import { adicionarAoCarrinho } from "@/stores/carrinhoStores";
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { formatarMoeda } from "@/utils/utils";
@@ -10,10 +10,10 @@ const router = useRouter();
 
 const handleAdicionarCarrinho = () => {
   if (produto.value) {
-    adicionarAoCarrinho(produto.value)
+    adicionarAoCarrinho(produto.value);
     router.push("/carrinho");
   }
-}
+};
 
 const route = useRoute();
 const temProduto = ref(false);
@@ -30,430 +30,467 @@ const produto = ref<ProdutoModel>();
 
 async function buscarProduto() {
   temProduto.value = produtoId.value > 0;
-  if (temProduto.value)
-    produto.value = await produtoService.buscarProdutoPorId(produtoId.value);
+  if (temProduto.value) produto.value = await produtoService.buscarProdutoPorId(produtoId.value);
 }
 
-
-
-watch(() =>
-  route.params.produtoId,
+watch(
+  () => route.params.produtoId,
   async () => {
-    await buscarProduto()
+    await buscarProduto();
   },
-  { immediate: true }
+  { immediate: true },
 );
-
 </script>
 
 <template>
-  <main v-if="produto">
+  <main v-if="produto" class="pagina-produto">
+    <!-- CONTAINER -->
+    <section class="produto-container">
+      <!-- GALERIA -->
+      <div class="galeria">
+        <div class="miniaturas">
+          <img :src="produto.imagem" alt="" />
+          <img :src="produto.imagem" alt="" />
+          <img :src="produto.imagem" alt="" />
+        </div>
 
-    <div class="vitrine">
-      <div class="imagens-produto">
-        <img class="imagem-principal" :src="`${produto.imagem}`" alt="" />
-
-        <div class="img-miniaturas">
-          <img class="miniatura-1" :src="`${produto.imagem}`" alt="" />
-          <img class="miniatura-2" :src="`${produto.imagem}`" alt="" />
-          <img class="miniatura-3" :src="`${produto.imagem}`" alt="" />
+        <div class="imagem-area">
+          <img class="imagem-principal" :src="produto.imagem" alt="" />
         </div>
       </div>
 
-      <div class="descricao-produto">
-        <h2 class="titulo-produto">{{ produto.nome }}</h2>
+      <!-- INFORMAÇÕES -->
+      <div class="informacoes">
+        <span class="marca">
+          {{ produto.marca }}
+        </span>
 
-        <ul class="Lista-Descricao">
-          <li>Marca: {{produto.marca}}</li>
-          <li>Modelo: CFI-ZCT1W12X</li>
-          <li>Resolução: 1440p nativo - 4K</li>
-          <li>Ray Tracing: Sim</li>
-          <li>FPS: Até 120fps</li>
-          <li>Taxa de atualização: 120Hz</li>
-          <li>HDR: Sim</li>
-          <li>Áudio: Tempest 3D AudioTech2</li>
-          <li>Armazenamento: 2TB SSD</li>
-          <li>Retrocompatibilidade: Sim, PS4</li>
-          <li>WI-FI: IEEE 802.11be WI-FI 6</li>
-          <li>Jogos Inclusos: Astro’s Playroom</li>
+        <h1 class="titulo">
+          {{ produto.nome }}
+        </h1>
+
+        <div class="linha"></div>
+
+        <ul class="specs">
+          <li>Produto original</li>
+          <li>Garantia de 12 meses</li>
+          <li>Entrega rápida</li>
+          <li>Pagamento seguro</li>
         </ul>
+
+        <div class="descricao">
+          <h3>Descrição</h3>
+
+          <p>
+            {{ produto.descricao }}
+          </p>
+        </div>
       </div>
 
-      <div class="descricao-compra">
-        <p class="preco">
-          <br>
-          {{ formatarMoeda(produto.precoVenda) }} à vista
-          <br />
-          ou até 12x de {{formatarMoeda(produto.precoVenda / 12)}} sem juros.
-        </p>
+      <!-- COMPRA -->
+      <aside class="compra-card">
+        <div class="preco-area">
+          <span class="pix-label"> À vista no PIX </span>
 
-        <div class="botoes">
-          <button class="btn-add-carrinho" @click="handleAdicionarCarrinho">Adicionar ao carrinho</button>
+          <h2 class="preco">
+            {{ formatarMoeda(produto.precoVenda) }}
+          </h2>
+
+          <p class="parcelamento">
+            ou em até
+            <strong>
+              12x de
+              {{ formatarMoeda(produto.precoVenda / 12) }}
+            </strong>
+            sem juros
+          </p>
         </div>
+
+        <button class="btn-carrinho" @click="handleAdicionarCarrinho">Adicionar ao carrinho</button>
 
         <div class="frete">
-          <h3>Entrega</h3>
-          <form>
-            <input type="text" id="CEP" name="CEP" placeholder="Insira seu CEP" class="input-cep" /><br />
-          </form>
-          <button class="btn-frete">Calcular frete</button>
+          <h3>Calcular frete</h3>
+
+          <input type="text" placeholder="Digite seu CEP" class="input-cep" />
+
+          <button class="btn-frete">Calcular</button>
         </div>
-      </div>
-    </div>
-
-    <div class="detalhes-produto">
-      <br />
-      <h2>{{produto.nome}} - {{ produto.marca }}</h2>
-
-      <p>
-        {{produto.descricao}}
-      </p>
-    </div>
-
+      </aside>
+    </section>
   </main>
-  <div v-else>
-    <h1>Produto não existe!</h1>
-  </div>
+
+  <main v-else class="produto-nao-encontrado">
+    <h1>Produto não encontrado.</h1>
+  </main>
 </template>
 
 <style scoped>
-.vitrine {
-    background-color: #353535;
-    display: flex;
-    /* grid-template-columns: 1fr 2fr 1fr; */
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    display: flex;
-    gap: 40px;
-    padding: 40px 40px;
-    /* max-width: fit-content; */
-    width: 100%;
-    margin: 10px auto;
-    justify-items: center;
-    grid-auto-flow: row;
+.pagina-produto {
+  min-height: 100vh;
 
+  background: #f4f7fa;
+
+  padding: 40px;
+
+  color: #1f2937;
+}
+
+.produto-container {
+  max-width: 1700px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 420px;
+
+  gap: 40px;
+  align-items: start;
 }
 
 
-.imagens-produto {
+
+.galeria {
   display: flex;
-  width: auto;
-  height: auto;
   gap: 20px;
+}
+
+.miniaturas {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.miniaturas img {
+  width: 90px;
+  height: 90px;
+
   object-fit: cover;
+
+  border-radius: 12px;
+
+  background: white;
+
+  padding: 5px;
+
+  cursor: pointer;
+
+  border: 1px solid #d9e2ec;
+
+  transition: 0.2s;
+}
+
+.miniaturas img:hover {
+  border-color: #005373;
+
+  transform: translateY(-2px);
+}
+
+.imagem-area {
+  flex: 1;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 30px;
+
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
-  align-content: center;
-  flex-wrap: nowrap;
+  justify-content: center;
+
+  border: 1px solid #d9e2ec;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .imagem-principal {
-  display: flex;
-  flex-shrink: 1;
-  max-width: 100%;
-  max-height: 600px;
-  width: 600px;
-  height: auto;
-}
-
-.img-miniaturas {
-  display: flex;
-  flex-direction: column;
-  /* flex-grow: 1; */
-  flex-shrink: 0;
-  width: 100px;
-  height: 100px;
-  max-width: 100px;
-  max-height: 100px;
-  gap: 20px;
-  align-content: flex-start;
-  justify-content: center;
-  align-items: stretch;
-}
-
-.miniatura-1:hover {
-  cursor: pointer;
-  border: 2px solid #3b8cbe;
-}
-
-.miniatura-2:hover {
-  cursor: pointer;
-  border: 2px solid #3b8cbe;
-}
-
-.miniatura-3:hover {
-  cursor: pointer;
-  border: 2px solid #3b8cbe;
-}
-
-.descricao-produto {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-transform: uppercase;
-  gap: 20px;
-}
-
-.descricao-produto p {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-.descricao-compra {
-  background-color: #005373;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
   width: 100%;
-  height: 100%;
-  max-width: 450px;
-  max-height: 350px;
-  flex-wrap: nowrap;
-  border-radius: 5px;
+  max-width: 650px;
+
+  object-fit: contain;
+
+  transition: 0.3s;
 }
 
-.titulo-produto {
+.imagem-principal:hover {
+  transform: scale(1.02);
+}
+
+
+
+.informacoes {
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 35px;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-transform: uppercase;
-  text-align: center;
-  width: 80%;
+  gap: 25px;
+
+  border: 1px solid #d9e2ec;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
-.botoes {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-}
+.marca {
+  width: fit-content;
 
-.botoes a {
-  color: #3b8cbe;
-  text-decoration: none;
-}
+  background: #eef6fa;
 
-.btn-compra,
-.btn-formas-pagamento,
-.btn-add-carrinho,
-.btn-frete {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* margin: auto; */
-  background-color: #3b8cbe;
-  border: none;
-  border-radius: 10px;
-  height: 42px;
-  width: auto;
-  color: white;
+  color: #005373;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  font-size: 0.9rem;
+
   font-weight: bold;
-  cursor: pointer;
-  /* margin-top: 20px; */
-  min-height: 42px;
-  padding: 0px 5px;
 }
 
-button:hover {
-  background-color: #4ed0fc;
-  border: 1px solid #78c8f7;
+.titulo {
+  font-size: 2.2rem;
+
+  line-height: 1.2;
+
+  color: #1f2937;
 }
 
-.btn-compra {
-  background-color: #006e1d;
-  height: 40px;
-  width: 150px;
+.linha {
+  width: 100%;
+
+  height: 1px;
+
+  background: #e5e7eb;
 }
 
-.input-cep {
-  border: 0;
-  border-radius: 5px;
-  align-items: center;
-  text-align: center;
-  height: 40px;
+.specs {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  list-style: none;
+
+  padding: 0;
+}
+
+.specs li {
+  background: #f8fafc;
+
+  padding: 14px;
+
+  border-radius: 12px;
+
+  color: #4b5563;
+
+  border: 1px solid #e5e7eb;
+}
+
+.descricao {
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.descricao h3 {
+  font-size: 1.2rem;
+
+  color: #1f2937;
+}
+
+.descricao p {
+  color: #6b7280;
+
+  line-height: 1.7;
+}
+
+
+.compra-card {
+  background: white;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  position: sticky;
+  top: 20px;
+
+  border: 1px solid #d9e2ec;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.preco-area {
+  padding: 35px;
+}
+
+.pix-label {
+  color: #00a86b;
+
+  font-size: 0.95rem;
+
+  font-weight: bold;
 }
 
 .preco {
-  padding: 50px 0px;
-  text-align: center;
-  font-size: 1.5rem;
-  color: white;
+  margin-top: 10px;
+
+  font-size: 2.6rem;
+
+  color: #1f2937;
 }
 
+.parcelamento {
+  margin-top: 15px;
+
+  color: #6b7280;
+
+  line-height: 1.5;
+}
+
+.btn-carrinho {
+  width: calc(100% - 70px);
+
+  margin: 0 35px;
+
+  height: 56px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: #005373;
+
+  color: white;
+
+  font-size: 1rem;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-carrinho:hover {
+  background: #00698f;
+
+  transform: translateY(-2px);
+}
+
+
+
 .frete {
-  background-color: lightgray;
+  margin-top: 35px;
+
+  background: #f8fafc;
+
+  padding: 35px;
+
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  width: 100%;
-  padding: 20px 0px;
-  border-radius: 0px 0px 5px 5px;
+  flex-direction: column;
+
+  gap: 15px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+.frete h3 {
+  font-size: 1rem;
+
+  color: #1f2937;
+}
+
+.input-cep {
+  height: 50px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #1f2937;
+
+  padding: 0 15px;
+
+  outline: none;
+}
+
+.input-cep:focus {
+  border-color: #005373;
 }
 
 .btn-frete {
-  width: 120px;
+  height: 50px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #eef3f7;
+
+  color: #005373;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
 }
 
-.detalhes-produto {
+.btn-frete:hover {
+  background: #dce7ee;
+}
+
+
+.produto-nao-encontrado {
+  min-height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  background-color: white;
-  font-size: 16px;
-}
 
-.detalhes-produto p {
-  padding: 50px 200px;
+  background: #f4f7fa;
+
+  color: #1f2937;
 }
 
 
-
-.Lista-Descricao {
-  color: rgb(46, 46, 46);
-  text-align: center;
-  font-size: large;
-  /* display: flex; */
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.contatoArea {
-  flex-direction: row;
-}
-
-.contatoArea a {
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  color: #3b8cbe;
-  text-decoration: none;
-  font-weight: bold;
-  text-align: center;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-
-@media (max-width: 1800px) {
-  .vitrine {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 1400px) {
-  .vitrine {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 1250px) {
-  .vitrine {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-items: center;
-    align-items: center;
-    margin: 40px auto;
+@media (max-width: 1450px) {
+  .produto-container {
+    grid-template-columns: 1fr;
   }
 
-  .imagens-produto {
-    flex-direction: column;
+  .compra-card {
+    position: static;
   }
-
-  .img-miniaturas {
-    flex-direction: row;
-  }
-
 }
 
 @media (max-width: 900px) {
-  .vitrine {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin: 40px auto;
+  .pagina-produto {
+    padding: 20px;
   }
 
-  /* div.imagen-produto {
-        width: 100%;
-        height: auto;
-    } */
-
-  .imagens {
-    width: 100%;
-    height: auto;
+  .galeria {
+    flex-direction: column-reverse;
   }
 
-  .detalhes-produto p {
-    padding: 0 0;
-  }
-
-  /* .vitrine {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .descricao-produto {
-        font-size: 1rem;
-    }
-
-    .detalhes-produto p {
-        padding: 20px;
-    } */
-}
-
-@media (max-width: 768px) {
-  .detalhes-produto {
-    padding: 50px;
-    gap: 20px;
-  }
-
-  .detalhes-produto h2 {
-    text-align: center;
-  }
-
-  .botoes {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .frete {
-    flex-direction: column;
-  }
-
-  .descricao-compra {
-    width: 100%;
-    height: auto;
-    max-height: 100%;
-  }
-
-  .imagens-produto {
-    flex-direction: column;
-  }
-
-  .img-miniaturas {
+  .miniaturas {
     flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .titulo {
+    font-size: 1.7rem;
+  }
+
+  .preco {
+    font-size: 2rem;
   }
 }
 </style>
