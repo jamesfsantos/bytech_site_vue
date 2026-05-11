@@ -75,6 +75,16 @@ watch(
 async function registrarPedido() {
   if (!usuario.value) return;
 
+  if (listaCarrinho.value.length === 0) {
+    Swal.fire({
+      title: "Carrinho Vazio",
+      text: "Você não pode realizar um pedido sem itens no carrinho.",
+      icon: "warning",
+      confirmButtonColor: "#005373",
+    });
+    return;
+  }
+
   const pedido: PedidoModel = {
     id: 0,
     usuarioId: usuario.value.id,
@@ -110,7 +120,7 @@ async function registrarPedido() {
       limparCarrinho();
       router.push("/pedidos");
     }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     Swal.fire("Erro", "Ocorreu um erro ao registrar o pedido.", "error");
   }
@@ -237,7 +247,8 @@ onMounted(async () => {
             <h3 class="text-success">{{ formatarMoeda(totalCarrinho) }}</h3>
           </div>
           <div class="btn-finalizar-div mt-3">
-            <button class="btn btn-success w-100 mb-2" @click="registrarPedido">Finalizar Compra</button>
+            <button class="btn btn-success w-100 mb-2" :disabled="listaCarrinho.length === 0"
+              @click="registrarPedido">{{ listaCarrinho.length === 0 ? 'Carrinho Vazio' : 'Registrar Pedido' }}</button>
             <RouterLink to="/carrinho" class="btn btn-outline-primary w-100">Voltar ao Carrinho</RouterLink>
           </div>
         </div>
