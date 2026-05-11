@@ -14,7 +14,7 @@ export interface PedidoModel {
   complemento: string
   cidade: string
   itens: ItemPedidoModel[]
-  statusPedido: StatusPedidoModel
+  statusPedido?: StatusPedidoModel
 }
 
 export interface ItemPedidoModel {

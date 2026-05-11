@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import { ref, watch } from "vue";
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
@@ -12,7 +13,7 @@ const textoPesquisa = ref("");
 
 const resultados = ref<ProdutoModel[]>([]);
 const carregando = ref(false);
-let timerBusca: any = null;
+let timerBusca = 0;
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -22,7 +23,6 @@ const closeMenu = () => {
   isMenuOpen.value = false;
   resultados.value = [];
 };
-
 
 watch(textoPesquisa, (novoTexto) => {
   clearTimeout(timerBusca);
@@ -46,7 +46,6 @@ watch(textoPesquisa, (novoTexto) => {
 });
 
 const fecharResultados = () => {
-
   setTimeout(() => {
     resultados.value = [];
   }, 400);
@@ -279,7 +278,6 @@ header {
   color: #005373;
 }
 
-
 .resultados-suspensos {
   position: absolute;
   top: 100%;
@@ -319,7 +317,6 @@ header {
   font-size: 12px;
 }
 
-
 .resultados-suspensos.mobile {
   position: relative;
   top: 5px;
@@ -334,7 +331,6 @@ header {
   padding: 12px;
   display: block;
 }
-
 
 .nav ul {
   display: flex;

@@ -9,6 +9,7 @@ class CategoriaService {
     } catch (error: unknown) {
       console.error(error)
     }
+    return []
   }
 }
 

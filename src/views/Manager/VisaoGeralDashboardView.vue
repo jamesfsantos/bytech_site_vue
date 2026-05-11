@@ -35,15 +35,15 @@ const carregarPedidos = async () => {
 };
 
 const pedidosAndamento = computed(() => {
-  return pedidos.value.filter((p) => p.statusPedido.statusAtual === "Em andamento");
+  return pedidos.value.filter((p) => p.statusPedido?.statusAtual === "Em andamento");
 });
 
 const pedidosPagos = computed(() => {
-  return pedidos.value.filter((p) => p.statusPedido.statusAtual === "Pago");
+  return pedidos.value.filter((p) => p.statusPedido?.statusAtual === "Pago");
 });
 
 const pedidosCancelados = computed(() => {
-  return pedidos.value.filter((p) => p.statusPedido.statusAtual === "Cancelado");
+  return pedidos.value.filter((p) => p.statusPedido?.statusAtual === "Cancelado");
 });
 
 let graficoPedidosInstance: Chart | null = null;

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'; // Opcional, para uma mensagem bonita
 import pagamentoService from '@/services/pagamentoService';
 import { type PedidoModel } from '@/models/pedidoModel';
 import { formatarMoeda } from '@/utils/utils';
+import type { PagamentoModel } from '@/models/pagamentoModel';
 
 const route = useRoute();
 const router = useRouter();
@@ -38,7 +39,7 @@ const realizarPagamento = async () => {
     console.log("Iniciando pagamento para o pedido:", dados.idPedido);
 
 
-    await pagamentoService.gerarPagamento(dados);
+    await pagamentoService.gerarPagamento(dados as PagamentoModel);
 
 
     await pedidoService.atualizarStatus(dados.idPedido, 2);

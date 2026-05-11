@@ -22,15 +22,15 @@ const carregarPedidos = async () => {
 };
 
 const pedidosEmAndamento = computed(() =>
-  pedidos.value.filter((p) => p.statusPedido.statusAtual === "Em andamento"),
+  pedidos.value.filter((p) => p.statusPedido?.statusAtual === "Em andamento"),
 );
 
 const pedidosFinalizados = computed(() =>
-  pedidos.value.filter((p) => p.statusPedido.statusAtual === "Pago"),
+  pedidos.value.filter((p) => p.statusPedido?.statusAtual === "Pago"),
 );
 
 const pedidosCancelados = computed(() =>
-  pedidos.value.filter((p) => p.statusPedido.statusAtual === "Cancelado"),
+  pedidos.value.filter((p) => p.statusPedido?.statusAtual === "Cancelado"),
 );
 
 const pedidosFiltrados = computed(() => {
@@ -141,7 +141,7 @@ onMounted(() => {
             ><strong>Pedido #{{ pedido.id }}</strong></span
           >
           <span
-            ><b>Status: {{ pedido.statusPedido.statusAtual }}</b></span
+            ><b>Status: {{ pedido.statusPedido?.statusAtual }}</b></span
           >
           <span>Data: {{ new Date(pedido.dataPedido).toLocaleDateString() }}</span>
         </div>
@@ -179,7 +179,7 @@ onMounted(() => {
               <strong>Entregar em:</strong> {{ pedido.endereco }}, {{ pedido.cidade }}
             </div>
 
-            <div v-if="pedido.statusPedido.statusAtual === 'Em andamento'">
+            <div v-if="pedido.statusPedido?.statusAtual === 'Em andamento'">
               <RouterLink class="btn btn-success" :to="`/pagamento/${pedido.id}`">
                 Ir para Pagamento
               </RouterLink>
@@ -188,7 +188,7 @@ onMounted(() => {
               </button>
             </div>
 
-            <div v-else-if="pedido.statusPedido.statusAtual === 'Pago'">
+            <div v-else-if="pedido.statusPedido?.statusAtual === 'Pago'">
               <span class="badge bg-success p-2">Pagamento Confirmado! ✅</span>
             </div>
 
