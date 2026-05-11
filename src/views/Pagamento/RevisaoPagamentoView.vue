@@ -13,6 +13,7 @@ import viaCepService from "@/services/viaCepService";
 const { estaLogado } = useAuth();
 const router = useRouter();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const usuario = ref<any>(null); // Inicializado como null
 const carregando = ref(true);
 const buscandoCep = ref(false); // Spinner específico para o CEP
@@ -109,6 +110,7 @@ async function registrarPedido() {
       limparCarrinho();
       router.push("/pedidos");
     }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     Swal.fire("Erro", "Ocorreu um erro ao registrar o pedido.", "error");
   }
