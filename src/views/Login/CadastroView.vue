@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import usuarioService from "@/services/usuarioService";
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 const mensagemErroUI = ref("");
 const carregando = ref(false);
@@ -85,11 +86,28 @@ async function realizarCadastro() {
 
     const cadastro = await usuarioService.cadastrarUsuario(dados);
 
+
+
     if (cadastro) {
-      alert("Cadastro feito com sucesso!");
-      router.push("/login");
+      Swal.fire({
+        title: "Sucesso!",
+        text: "Cadastro feito com sucesso!",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ir para o Login",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
+      });
     } else {
-      alert("Erro ao criar a conta. Verifique os dados!");
+      Swal.fire({
+        title: "Erro!",
+        text: "Erro ao criar a conta. Verifique os dados!",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "Tentar novamente",
+      });
     }
   } catch (error: any) {
     if (error.data && error.data.message) {
