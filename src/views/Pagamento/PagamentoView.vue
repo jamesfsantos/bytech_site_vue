@@ -94,25 +94,25 @@ onMounted(async () => {
 
     <hr />
 
-    <div v-if="pagamento.metodo === 'pix'" class="detalhes-pix m-5">
+    <div v-if="pagamento.metodo === 'pix'" class="detalhes-pix m-5 d-flex flex-column align-items-center">
       <h3>Pagamento via PIX</h3>
       <div class="qrcode-placeholder">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Obrigado!" alt="QR Code" />
         <p class="mt-2">Chave: 123.456.789-00</p>
       </div>
-      <button @click="realizarPagamento" class="btn-confirmar">Confirmar Pagamento PIX</button>
+      <button @click="realizarPagamento" class="btn-confirmar btn btn-success">Confirmar Pagamento PIX</button>
     </div>
 
     <div v-if="pagamento.metodo === 'cartao'" class="detalhes-cartao m-5">
       <h3>Dados do Cartão</h3>
-      <div class="form-cartao">
-        <input type="text" class="form-control mb-2" placeholder="Número do Cartão">
+      <div class="form-cartao d-flex flex-column">
+        <input type="text" class="form-control mb-2" maxlength="16" placeholder="Número do Cartão">
         <input type="text" class="form-control mb-2" placeholder="Nome Impresso">
         <div class="row g-2">
-          <div class="col-6"><input type="text" class="form-control" placeholder="MM/AA"></div>
-          <div class="col-6"><input type="text" class="form-control" placeholder="CVV"></div>
+          <div class="col-6"><input type="text" class="form-control" maxlength="7" placeholder="MM/AA"></div>
+          <div class="col-6"><input type="text" class="form-control" maxlength="3" placeholder="CVV"></div>
         </div>
-        <button @click="realizarPagamento" class="btn-confirmar mt-3">Finalizar Compra no Cartão</button>
+        <button @click="realizarPagamento" class="btn-confirmar btn btn-success mt-3">Finalizar Compra no Cartão</button>
       </div>
     </div>
 
