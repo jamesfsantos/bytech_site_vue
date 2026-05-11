@@ -62,12 +62,12 @@ async function registrarPedido() {
     if (sucesso) {
       Swal.fire({
         title: "Sucesso",
-        text: 'Pedido realizado com sucesso!',
+        text: "Pedido realizado com sucesso!",
         icon: "success",
-        confirmButtonText: 'Ver meu pedido.'
+        confirmButtonText: "Ver meu pedido.",
       });
       limparCarrinho();
-      router.push('/pedidos')
+      router.push("/pedidos");
     }
   } catch (error) {
     console.error("Erro ao registrar pedido:", error);
@@ -164,18 +164,24 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="resumo-compra" v-for="produto in listaCarrinho" :key="produto.id">
+        <div class="resumo-compra">
           <h2>Resumo do pedido:</h2>
           <br />
-          <p>Valor dos produtos:</p>
-          {{ produto.nome }} = R${{ produto.precoVenda * produto.quantidade }}
+
+          <div v-for="produto in listaCarrinho" :key="produto.id">
+            <p>{{ produto.nome }} = R$ {{ produto.precoVenda * produto.quantidade }}</p>
+          </div>
+
           <br />
           <h2>Total: {{ formatarMoeda(totalCarrinho) }}</h2>
+
           <br />
-          <p>Deseja finalizar o pedido ?</p>
+          <p>Deseja finalizar o pedido?</p>
+
           <div class="btn-finalizar-div">
             <button class="btn btn-success" @click="registrarPedido()">Registrar Pedido</button>
-            <RouterLink to="/carrinho" class="btn btn-primary">Voltar para o carrinho</RouterLink>
+
+            <RouterLink to="/carrinho" class="btn btn-primary"> Voltar para o carrinho </RouterLink>
           </div>
         </div>
       </div>
