@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import usuarioService from "@/services/usuarioService";
+import viaCepService from "@/services/viaCepService";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
-
-const mensagemErroUI = ref("");
-const carregando = ref(false);
+import type { ViaCepModel } from "@/types/viaCep";
 
 const router = useRouter();
+const mensagemErroUI = ref("");
+const carregando = ref(false);
+const enderecoCompleto = ref<ViaCepModel | null>(null);
+
 const formularioConta = ref({
   nome: "",
   email: "",
@@ -22,32 +25,64 @@ const formularioConta = ref({
   tipoUsuarioId: 2,
 });
 
+
+async function buscarEndereco(cep: string) {
+  carregando.value = true;
+  mensagemErroUI.value = "";
+
+  try {
+    const res = await viaCepService.buscarPorCEP(cep);
+
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (res && !(res as any).erro) {
+
+      formularioConta.value.endereco = `${res.logradouro}${res.bairro ? ', ' + res.bairro : ''}`;
+      formularioConta.value.cidade = res.localidade || "";
+
+      if (res.complemento) {
+        formularioConta.value.complemento = res.complemento;
+      }
+
+      enderecoCompleto.value = res;
+    } else {
+      mensagemErroUI.value = "CEP não encontrado. Digite manualmente.";
+      enderecoCompleto.value = null;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    mensagemErroUI.value = "Erro ao conectar com o serviço de CEP.";
+    console.error(error);
+  } finally {
+    carregando.value = false;
+  }
+}
+
+
 watch(
   () => formularioConta.value.cpf,
   (novoValor) => {
-    let v = novoValor.replace(/\D/g, ""); // Remove tudo que não é número
-    if (v.length > 11) v = v.slice(0, 11); // Não permite mais que 11 digitos!
-
+    let v = novoValor.replace(/\D/g, "");
+    if (v.length > 11) v = v.slice(0, 11);
     v = v.replace(/(\d{3})(\d)/, "$1.$2");
     v = v.replace(/(\d{3})(\d)/, "$1.$2");
     v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-
     formularioConta.value.cpf = v;
-  },
+  }
 );
+
 
 watch(
   () => formularioConta.value.celular,
   (novoValor) => {
     let v = novoValor.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
-
     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
     v = v.replace(/(\d{5})(\d)/, "$1-$2");
-
     formularioConta.value.celular = v;
-  },
+  }
 );
+
 
 watch(
   () => formularioConta.value.cep,
@@ -55,10 +90,15 @@ watch(
     let v = novoValor.replace(/\D/g, "");
     if (v.length > 8) v = v.slice(0, 8);
 
-    v = v.replace(/(\d{5})(\d)/, "$1-$2");
+    // Se chegar em 8 números, dispara a busca antes de colocar o hífen
+    if (v.length === 8) {
+      buscarEndereco(v);
+    }
 
+    // Aplica a máscara 00000-000
+    v = v.replace(/(\d{5})(\d)/, "$1-$2");
     formularioConta.value.cep = v;
-  },
+  }
 );
 
 async function realizarCadastro() {
@@ -109,6 +149,7 @@ async function realizarCadastro() {
         confirmButtonText: "Tentar novamente",
       });
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.data && error.data.message) {
       mensagemErroUI.value = error.data.message;
@@ -121,6 +162,8 @@ async function realizarCadastro() {
     carregando.value = false;
   }
 }
+
+
 </script>
 
 <template>
@@ -137,129 +180,67 @@ async function realizarCadastro() {
         <form class="row g-3" @submit.prevent="realizarCadastro()" novalidate>
           <div class="col-12">
             <label for="nome" class="form-label">Nome completo</label>
-            <input
-              v-model="formularioConta.nome"
-              type="text"
-              class="form-control"
-              id="nome"
-              placeholder="Digite seu nome completo"
-              required
-            />
+            <input v-model="formularioConta.nome" type="text" class="form-control" id="nome"
+              placeholder="Digite seu nome completo" required />
           </div>
 
           <div class="col-md-6">
             <label for="email" class="form-label">E-mail</label>
-            <input
-              v-model="formularioConta.email"
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="Digite seu e-mail"
-              required
-            />
+            <input v-model="formularioConta.email" type="email" class="form-control" id="email"
+              placeholder="Digite seu e-mail" required />
           </div>
 
           <div class="col-md-6">
             <label for="celular" class="form-label">Celular</label>
-            <input
-              v-model="formularioConta.celular"
-              type="tel"
-              class="form-control"
-              maxlength="15"
-              id="celular"
-              placeholder="(11) 99999-9999"
-              required
-            />
+            <input v-model="formularioConta.celular" type="tel" class="form-control" maxlength="15" id="celular"
+              placeholder="(11) 99999-9999" required />
           </div>
 
           <div class="col-md-4">
             <label for="cep" class="form-label">CEP</label>
-            <input
-              v-model="formularioConta.cep"
-              type="text"
-              class="form-control"
-              maxlength="9"
-              id="cep"
-              placeholder="00000-000"
-              required
-            />
+            <input v-model="formularioConta.cep" type="text" class="form-control" maxlength="9" id="cep"
+              placeholder="00000-000" required />
           </div>
           <div class="col-md-4">
             <label for="cpf" class="form-label">CPF</label>
-            <input
-              v-model="formularioConta.cpf"
-              type="text"
-              class="form-control"
-              maxlength="14"
-              id="cpf"
-              placeholder="000.000.000-00"
-              required
-            />
+            <input v-model="formularioConta.cpf" type="text" class="form-control" maxlength="14" id="cpf"
+              placeholder="000.000.000-00" required />
           </div>
           <!-- Cidade -->
           <div class="col-md-4">
             <label for="cidade" class="form-label">Cidade</label>
-            <input
-              v-model="formularioConta.cidade"
-              type="text"
-              class="form-control"
-              id="cidade"
-              placeholder="Digite sua cidade"
-              required
-            />
+            <input v-model="formularioConta.cidade" type="text" class="form-control" id="cidade"
+              placeholder="Digite sua cidade" required />
           </div>
 
           <!-- Endereço -->
           <div class="col-12">
             <label for="endereco" class="form-label">Endereço</label>
-            <input
-              v-model="formularioConta.endereco"
-              type="text"
-              class="form-control"
-              id="endereco"
-              placeholder="Rua, número e bairro"
-              required
-            />
+            <input v-model="formularioConta.endereco" type="text" class="form-control" id="endereco"
+              placeholder="Rua, número e bairro" required />
           </div>
 
           <!-- Complemento -->
           <div class="col-12">
             <label for="complemento" class="form-label"> Complemento </label>
 
-            <input
-              v-model="formularioConta.complemento"
-              type="text"
-              class="form-control"
-              id="complemento"
-              placeholder="Apartamento, bloco, referência..."
-            />
+            <input v-model="formularioConta.complemento" type="text" class="form-control" id="complemento"
+              placeholder="Apartamento, bloco, referência..." />
           </div>
 
           <!-- Senha -->
           <div class="col-md-6">
             <label for="senha" class="form-label">Senha</label>
-            <input
-              v-model="formularioConta.senha"
-              type="password"
-              class="form-control"
-              id="senha"
-              placeholder="Digite sua senha"
-              required
-            />
+            <input v-model="formularioConta.senha" type="password" class="form-control" id="senha"
+              placeholder="Digite sua senha" required />
           </div>
 
           <!-- Confirmar Senha -->
           <div class="col-md-6">
             <label for="confirmarSenha" class="form-label"> Confirmar senha </label>
 
-            <input
-              v-model="formularioConta.confirmarSenha"
-              type="password"
-              class="form-control"
-              id="confirmarSenha"
-              placeholder="Confirme sua senha"
-              required
-            />
+            <input v-model="formularioConta.confirmarSenha" type="password" class="form-control" id="confirmarSenha"
+              placeholder="Confirme sua senha" required />
           </div>
 
           <!-- Botões -->
