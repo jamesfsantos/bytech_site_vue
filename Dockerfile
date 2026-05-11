@@ -2,6 +2,8 @@ FROM node:lts-alpine3.23 AS build
 WORKDIR /app
 COPY . .
 ENV TZ="America/Sao_Paulo"
+ENV VITE_API=https://api-bytech.manja.tec.br/api
+ENV VITE_API_KEY=bytech_9a2b4c6d8e0f1a3b5c7d9e0f
 RUN npm i
 RUN npm run build
 
