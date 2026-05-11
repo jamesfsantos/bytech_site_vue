@@ -1,27 +1,59 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useAuth } from "@/composables/useAuth";
 import Swal from "sweetalert2";
+import produtoService from "@/services/produtoService";
+import type { ProdutoModel } from "@/models/produtoModel";
 
 const { estaLogado, usuarioNome, logout, tipoUsuario } = useAuth();
 
 const isMenuOpen = ref(false);
 const textoPesquisa = ref("");
 
-// Função para abrir/fechar
+const resultados = ref<ProdutoModel[]>([]);
+const carregando = ref(false);
+let timerBusca: any = null;
+
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
 
-// Função crucial para o usuário "leigo": fecha o menu após o clique
 const closeMenu = () => {
   isMenuOpen.value = false;
+  resultados.value = [];
+};
+
+
+watch(textoPesquisa, (novoTexto) => {
+  clearTimeout(timerBusca);
+
+  if (novoTexto.length < 3) {
+    resultados.value = [];
+    return;
+  }
+
+  timerBusca = setTimeout(async () => {
+    carregando.value = true;
+    try {
+      const resposta = await produtoService.buscarProdutosNome(novoTexto);
+      resultados.value = resposta;
+    } catch (error) {
+      console.error("Erro na busca:", error);
+    } finally {
+      carregando.value = false;
+    }
+  }, 500);
+});
+
+const fecharResultados = () => {
+
+  setTimeout(() => {
+    resultados.value = [];
+  }, 400);
 };
 
 const handleDeslogar = () => {
-  // Fecha o menu antes de abrir o alerta para não ficar por cima
   closeMenu();
-
   Swal.fire({
     title: "Deslogando",
     text: "Você tem certeza que deseja sair?",
@@ -59,8 +91,27 @@ const handleDeslogar = () => {
 
     <div class="nav-pesquisa desktop-only">
       <section class="pesquisa">
-        <input v-model="textoPesquisa" type="text" placeholder="Pesquisar um produto..." />
+        <input
+          v-model="textoPesquisa"
+          type="text"
+          placeholder="Pesquisar um produto..."
+          @blur="fecharResultados"
+          @focus="carregando = true"
+        />
         <i class="fa-solid fa-magnifying-glass"></i>
+
+        <ul v-if="resultados.length > 0" class="resultados-suspensos">
+          <li v-for="prod in resultados" :key="prod.id">
+            <RouterLink
+              :to="`/produto/${prod.id}`"
+              class="resultado-item"
+              @click="fecharResultados"
+            >
+              <span class="nome">{{ prod.nome }}</span>
+              <span class="preco">R$ {{ prod.precoVenda.toLocaleString("pt-BR") }}</span>
+            </RouterLink>
+          </li>
+        </ul>
       </section>
     </div>
 
@@ -124,8 +175,21 @@ const handleDeslogar = () => {
         <div class="mobile-content">
           <div class="nav-pesquisa-mobile">
             <section class="pesquisa">
-              <input v-model="textoPesquisa" type="text" placeholder="Pesquisar..." />
+              <input
+                v-model="textoPesquisa"
+                type="text"
+                placeholder="Pesquisar um produto..."
+                @blur="fecharResultados"
+              />
               <i class="fa-solid fa-magnifying-glass"></i>
+
+              <ul v-if="resultados.length > 0" class="resultados-suspensos mobile">
+                <li v-for="prod in resultados" :key="prod.id">
+                  <RouterLink :to="`/produto/${prod.id}`" @click="closeMenu">
+                    {{ prod.nome }}
+                  </RouterLink>
+                </li>
+              </ul>
             </section>
           </div>
 
@@ -204,6 +268,7 @@ header {
   padding: 0 45px 0 20px;
   outline: none;
   background: white;
+  color: #333;
 }
 
 .pesquisa i {
@@ -213,6 +278,63 @@ header {
   transform: translateY(-50%);
   color: #005373;
 }
+
+
+.resultados-suspensos {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white !important;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  list-style: none;
+  padding: 10px 0;
+  z-index: 9999;
+  max-height: 300px;
+  overflow-y: auto;
+  display: block !important;
+}
+
+.resultado-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+.resultado-item:hover {
+  background: #f1f5f9;
+}
+
+.resultado-item .nome {
+  color: #333 !important;
+  font-weight: bold;
+  font-size: 14px;
+}
+.resultado-item .preco {
+  color: #005373 !important;
+  font-size: 12px;
+}
+
+
+.resultados-suspensos.mobile {
+  position: relative;
+  top: 5px;
+  box-shadow: none;
+  border: 1px solid #ddd;
+  z-index: 1001;
+}
+
+.resultados-suspensos.mobile a {
+  color: #333 !important;
+  font-weight: 500;
+  padding: 12px;
+  display: block;
+}
+
 
 .nav ul {
   display: flex;
@@ -253,10 +375,6 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.icon-btn {
-  padding: 0 12px;
 }
 
 .login i {
