@@ -1,122 +1,263 @@
 <template>
+  <main class="sobre-page">
+    <section class="quem-somos">
+      <div class="titulo">
+        <h1>Sobre a ByTech</h1>
+        <p>
+          Tecnologia, desempenho e confiança para elevar sua experiência.
+        </p>
+      </div>
 
-  <body>
+      <div class="card">
+        <h2>Quem somos</h2>
+        <p>
+          Somos uma loja especializada em equipamentos de informática e
+          tecnologia, oferecendo produtos e serviços de qualidade para atender
+          às necessidades dos nossos clientes.
+        </p>
+      </div>
 
-    <main>
+      <div class="grid">
+        <div class="card">
+          <h2>Missão</h2>
+          <p>
+            Entregar o melhor em computadores, videogames e periféricos,
+            atendendo às necessidades de cada cliente com qualidade,
+            desempenho e eficiência.
+          </p>
+        </div>
 
-      <div class="conteudo">
-
-        <div class="quem-somos">
-          <h2>Quem somos:</h2><br>
-          <p>Somos uma loja especializada em equipamentos de informática e tecnologia, oferecendo produtos e serviços de
-            qualidade para atender às necessidades dos nossos clientes.</p>
-          <br>
-          <h2>Missão:</h2><br>
-          <p>Entregar o melhor em
-            Computadores, Videogames e Periféricos,
-            atendendo às necessidades de
-            cada cliente com qualidade,
-            desempenho e eficiência.</p>
-          <br>
-          <h2>Valores:</h2><br>
-          <ul>
-            <li>Qualidade</li>
-            <li>Inovação</li>
-            <li>Compromisso</li>
-            <li>Transparência</li>
-            <li>Excelência</li>
-          </ul>
-          <br>
-          <h2>Visão:</h2><br>
-          <p>Ser referência em montagem de
-            computadores e e manutenção, sendo
-            reconhecida pela qualidade,
-            confiabilidade e pelo impacto
-            positivo em nossos
-            clientes.</p> <br>
-
-
-
-          <div class="contato">
-            <div class="contatoArea">
-              <h2>Canais de atendimento</h2>
-              <a href=""><i class="fa-brands fa-whatsapp"></i>(11) 99999-9999</a>
-              <a href=""><i class="fa-solid fa-phone-volume"></i>(11) 3999-9999</a>
-              <a href=""><i class="fa-solid fa-envelope"></i>Bytech.Senac@Email.com.br</a>
-              <a href=""><i class="fa-regular fa-comments"></i>Chatbot</a>
-            </div>
-          </div>
-
+        <div class="card">
+          <h2>Visão</h2>
+          <p>
+            Ser referência em montagem de computadores e manutenção,
+            reconhecida pela qualidade, confiabilidade e impacto positivo
+            em nossos clientes.
+          </p>
         </div>
       </div>
-    </main>
-  </body>
 
+      <div class="card">
+        <h2>Valores</h2>
+
+        <div class="valores">
+          <span>Qualidade</span>
+          <span>Inovação</span>
+          <span>Compromisso</span>
+          <span>Transparência</span>
+          <span>Excelência</span>
+        </div>
+      </div>
+
+      <div class="contato">
+        <h2>Canais de atendimento</h2>
+
+        <div class="contato-grid">
+          <a href="#">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>(11) 99999-9999</span>
+          </a>
+
+          <a href="#">
+            <i class="fa-solid fa-phone-volume"></i>
+            <span>(11) 3999-9999</span>
+          </a>
+
+          <a href="#">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Bytech.Senac@Email.com.br</span>
+          </a>
+
+          <a href="#">
+            <i class="fa-regular fa-comments"></i>
+            <span>Chatbot</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 </template>
 
-
 <style scoped>
+.sobre-page {
+  min-height: 100vh;
+
+  padding: 40px 20px;
+
+  background: linear-gradient(to bottom, #f4f8fb, #e8f1f7);
+
+  display: flex;
+  justify-content: center;
+}
 
 .quem-somos {
-    position: relative;
-    background-color: lightgray;
-    display: inline-block;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border: none;
-    width: 75%;
-    height: auto;
-    margin: auto;
-    margin-bottom: 50px;
-    margin-top: 20px;
-    list-style-type: none;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 1200px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.quem-somos h2 {
-    color: #ececec;
-    background-color: #3b8cbe;
+.titulo {
+  text-align: center;
+
+  padding: 40px 20px;
+
+  border-radius: 24px;
+
+  background: linear-gradient(135deg, #005373, #3b8cbe);
+
+  color: white;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-.quem-somos li {
-    list-style-type: none;
+.titulo h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
 }
 
-.quem-somos i {
+.titulo p {
+  font-size: 18px;
+  opacity: 0.95;
+}
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.card {
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 30px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+  transition: 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h2 {
+  color: #005373;
+
+  margin-bottom: 15px;
+
+  font-size: 28px;
+}
+
+.card p {
+  color: #444;
+
+  line-height: 1.7;
+
+  font-size: 16px;
+}
+
+.valores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.valores span {
+  background: #005373;
+
+  color: white;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  font-weight: bold;
+
+  font-size: 14px;
+}
+
+.contato {
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 30px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.contato h2 {
+  color: #005373;
+
+  margin-bottom: 25px;
+
+  text-align: center;
+
+  font-size: 30px;
+}
+
+.contato-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.contato-grid a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 18px;
+
+  border-radius: 18px;
+
+  background: #f4f8fb;
+
+  text-decoration: none;
+
+  color: #005373;
+
+  font-weight: bold;
+
+  transition: 0.2s ease;
+}
+
+.contato-grid a:hover {
+  background: #005373;
+  color: white;
+
+  transform: scale(1.02);
+}
+
+.contato-grid i {
+  font-size: 26px;
+}
+
+@media (max-width: 768px) {
+  .titulo h1 {
     font-size: 30px;
-    color: #3b8cbe;
-    padding-bottom: 20px;
-    padding-top: 20px;
-}
-
-.contatoArea {
-    flex-direction: row;
-}
-
-.contatoArea a {
-display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    color: #3b8cbe;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: center;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-}
-
-@media (max-width:768px) {  
-
-  .quem-somos {
-    width: 100%;
   }
 
-    .contato {
-        width: auto;
-        height: auto;
-    }
+  .titulo p {
+    font-size: 15px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contato-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card,
+  .contato {
+    padding: 22px;
+  }
 }
 </style>

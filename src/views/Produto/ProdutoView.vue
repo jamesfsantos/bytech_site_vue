@@ -108,13 +108,6 @@ watch(
 
         <button class="btn-carrinho" @click="handleAdicionarCarrinho">Adicionar ao carrinho</button>
 
-        <div class="frete">
-          <h3>Calcular frete</h3>
-
-          <input type="text" placeholder="Digite seu CEP" class="input-cep" />
-
-          <button class="btn-frete">Calcular</button>
-        </div>
       </aside>
     </section>
   </main>
@@ -354,7 +347,7 @@ watch(
 .btn-carrinho {
   width: calc(100% - 70px);
 
-  margin: 0 35px;
+  margin: 35px;
 
   height: 56px;
 
