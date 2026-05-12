@@ -37,7 +37,7 @@ async function buscarEndereco(cep: string) {
   buscandoCep.value = true;
   try {
     const res = await viaCepService.buscarPorCEP(cep);
-    if (res && !res.erro) {
+    if (res) {
       usuario.value.endereco = `${res.logradouro}${res.bairro ? ', ' + res.bairro : ''}`;
       usuario.value.cidade = res.localidade || "";
       if (res.complemento) usuario.value.complemento = res.complemento;
